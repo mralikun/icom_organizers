@@ -32,4 +32,13 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      */
     protected $hidden = ['password', 'remember_token'];
 
+    
+	/**
+     * return all orgaizers that can work in specific Deparment
+     * use this function for users that have role "department"
+     *
+     */
+    public function organizers(){
+    	return $this->belongsToMany('App\Organizer','department_organizer', 'user_id' , 'organizer_id');
+    }    
 }

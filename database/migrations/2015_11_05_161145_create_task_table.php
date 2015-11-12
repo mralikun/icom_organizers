@@ -19,7 +19,6 @@ class CreateTaskTable extends Migration {
 			$table->timestamps();
 			$table->date("date");
 			$table->string("type");
-			$table->boolean("finished");
 			$table->boolean("confirmed");
 			$table->integer("organizer_id")->unsigned();
 

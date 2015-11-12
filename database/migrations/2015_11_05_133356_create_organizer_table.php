@@ -14,13 +14,16 @@ class CreateOrganizerTable extends Migration {
 	{
 		Schema::create("organizer",function($table){
 		    $table->increments('id');
+		    $table->string("name");
 		    $table->date("dob");
+		    $table->string("email");
 		    $table->string("cell_phone");
-		    $table->date("college");
+		    $table->string("college");
 		    $table->integer("id_number");
 		    $table->string("language");
 		    $table->boolean("activity");
-		    $table->string("agreement");
+		    $table->string("agreement")->nullable();
+		    $table->timestamps();
 
 		});
 	}

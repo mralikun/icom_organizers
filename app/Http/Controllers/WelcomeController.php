@@ -1,4 +1,8 @@
 <?php namespace App\Http\Controllers;
+use Illuminate\Support\Facades\Hash;
+
+use App\Conference;
+use App\Organizer;
 
 class WelcomeController extends Controller {
 
@@ -30,7 +34,10 @@ class WelcomeController extends Controller {
 	 */
 	public function index()
 	{
-		return view('welcome');
+		$organizer = Organizer::find(1);
+
+		$organizer_conferences =  $organizer->conferences;
+
 	}
 
 }
