@@ -15,11 +15,11 @@ Route::get('/', 'WelcomeController@index');
 
 
 Route::post('/auth/login', 'AuthController@login');
-Route::get('/auth/logout', 'AuthController@logout');
 
 Route::group(['middleware' => ['auth', 'admin']], function()
 {
 	// these routes are accessable by the Admin Only
+
 	Route::resource('Admin', 'AdminController');
 });
 
@@ -30,5 +30,14 @@ Route::group(['middleware' => ['auth', 'operations']], function()
 
 Route::group(['middleware' => ['auth']], function()
 {
-	// these routes are accessable by operations , department , or the Admin
+	// these routes are accessable by any user (operations , department , or the Admin)
+
+	Route::resource('users', 'UsersController');
+
+	Route::get('/user/{username}', 'UsersController@Home');
+
+	Route::get('/auth/logout', 'AuthController@logout');
+
+	Route::get('/auth/onlineUser', 'AuthController@onlineUser');
+
 });

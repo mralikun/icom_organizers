@@ -4,6 +4,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\View;
 
 class UsersController extends Controller {
 
@@ -81,4 +82,7 @@ class UsersController extends Controller {
 		//
 	}
 
+	public function Home($username){
+		return View::make("templates.master");
+	}
 }

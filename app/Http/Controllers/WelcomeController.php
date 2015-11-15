@@ -14,11 +14,6 @@ class WelcomeController extends Controller {
 	|
 	*/
 
-	/**
-	 * Create a new controller instance.
-	 *
-	 * @return void
-	 */
 	public function __construct()
 	{
 		$this->middleware('guest');
@@ -31,7 +26,7 @@ class WelcomeController extends Controller {
 	 */
 	public function index()
 	{
-		return View::make('templates.master');
+		return View::make('Auth.login');
 	}
 
 }
