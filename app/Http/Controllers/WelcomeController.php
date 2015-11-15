@@ -31,7 +31,7 @@ class WelcomeController extends Controller {
 	 */
 	public function index()
 	{
-		return View::make('template.master');
+		return View::make('templates.master');
 	}
 
 }
