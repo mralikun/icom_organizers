@@ -41,11 +41,11 @@ class AuthController extends Controller {
 			{
 				return Auth::user();
 			}else{
-				return false;
+				return "false";
 			}
 
 		}else{
-			return false;
+			return "false";
 		}
 
 	}
