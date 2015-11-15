@@ -1,5 +1,5 @@
 <?php namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\View;
 
 class WelcomeController extends Controller {
 
