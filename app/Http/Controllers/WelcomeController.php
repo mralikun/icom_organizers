@@ -1,8 +1,4 @@
 <?php namespace App\Http\Controllers;
-use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Support\Facades\Hash;
-use App\Conference;
-use App\Organizer;
 
 
 class WelcomeController extends Controller {
@@ -35,9 +31,7 @@ class WelcomeController extends Controller {
 	 */
 	public function index()
 	{
-		$organizer = Organizer::find(1);
-		$organizer->grades()->attach(12, ['grade' => 1, 'criteria' => 12]);
-		
+		return View::make('template.master');
 	}
 
 }

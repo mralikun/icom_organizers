@@ -2,13 +2,24 @@
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
-use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 class AuthController extends Controller {
 
-	private function validation($inputs){
-		
+	private function loginValidation($inputs){
+		$validator = Validator::make(
+				$inputs,
+				[
+					'name' => "required",
+					'password' => "required"
+				]
+		);
+
+		if($validator->fails()){
+			return false;
+		}else{
+			return true;
+		}
 	}
 
 
@@ -19,10 +30,28 @@ class AuthController extends Controller {
 	 */
 	public function login()
 	{
-		$inputs = Request::all();
+		$inputs = Input::all();
 
-		
+		$validator = $this->loginValidation($inputs);
 
+		if($validator){
+
+			if (Auth::attempt(['name' => $inputs['name'], 'password' => $inputs['password']]))
+			{
+				return Auth::user();
+			}else{
+				return false;
+			}
+
+		}else{
+			return false;
+		}
+
+	}
+
+	public function logout()
+	{
+		Auth::logout();
 	}
 
 }

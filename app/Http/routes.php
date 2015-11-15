@@ -13,16 +13,14 @@
 
 Route::get('/', 'WelcomeController@index');
 
-Route::get('home', 'HomeController@index');
 
-Route::controllers([
-	'auth' => 'Auth\AuthController',
-	'password' => 'Auth\PasswordController',
-]);
+Route::post('/auth/login', 'AuthController@login');
+Route::get('/auth/logout', 'AuthController@logout');
 
 Route::group(['middleware' => ['auth', 'admin']], function()
 {
 	// these routes are accessable by the Admin Only
+	Route::resource('Admin', 'AdminController');
 });
 
 Route::group(['middleware' => ['auth', 'operations']], function()
