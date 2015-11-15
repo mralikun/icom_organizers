@@ -1,55 +1,46 @@
 @extends('app')
 
-@section('content')
-<div class="container-fluid">
-	<div class="row">
-		<div class="col-md-8 col-md-offset-2">
-            @if (count($errors) > 0)
-                <div class="alert alert-danger">
-                    <strong>Whoops!</strong> There were some problems with your input.<br><br>
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-
-            <form class="form-horizontal" role="form" method="POST" action="{{ url('/auth/login') }}">
-                <input type="hidden" name="_token" value="{{ csrf_token() }}">
-
-                <div class="form-group">
-                    <label class="col-md-4 control-label">Name</label>
-                    <div class="col-md-6">
-                        <input type="text" class="form-control" name="name">
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="col-md-4 control-label">Password</label>
-                    <div class="col-md-6">
-                        <input type="password" class="form-control" name="password">
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="col-md-6 col-md-offset-4">
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" name="remember"> Remember Me
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="col-md-6 col-md-offset-4">
-                        <button type="submit" class="btn btn-primary">Login</button>
-                        <a class="btn btn-link" href="{{ url('/password/email') }}">Forgot Your Password?</a>
-                    </div>
-                </div>
-            </form>
-		</div>
-	</div>
+@section('login_form')
+<div class="tail">
+    
+    <h1 class="title">Login</h1>
+    
 </div>
+
+<form method="POST" action="/auth/login">
+   <input type="hidden" name="_token" value="{{ csrf_token() }}">
+    <div class="form-group">
+        
+        <label for="username" class="control-label col-sm-2">Username</label>
+        <div class="col-sm-10">
+            <input type="text" name="name" class="form-control" placeholder="Username">
+        </div>
+        
+    </div>
+    
+    <div class="form-group">
+        
+        <label for="password" class="control-label col-sm-2 col-xs-2">Password</label>
+        <div class="col-sm-10">
+            <input type="password" name="password" class="form-control" placeholder="Password">
+        </div>
+        
+    </div>
+    
+    <div class="form-group text-center">        
+        <input type="submit" class="btn btn-icom" value="Login">
+    </div>
+    
+</form>
+@if(sizeof($errors->all()) > 0 )
+
+<div class="error">
+    <ul>
+        @foreach($errors->all as $error)
+        <li>{{$error}}</li>
+        @endforeach
+    </ul>
+</div>
+
+@endif
 @endsection

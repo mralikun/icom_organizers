@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html>
 
   <head>
@@ -66,11 +65,6 @@
     <script src="/js/app.js"></script>
     <script src="/js/routes.js"></script>
     <script src="/js/controllers/UserController.js"></script>
-    <script>
-      
-        app.constant("_TOKEN" , "{{csrf_token()}}");
-      
-    </script>
   </body>
 
 </html>
