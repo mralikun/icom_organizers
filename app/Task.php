@@ -8,4 +8,8 @@ class Task extends Model {
 
     protected $fillable = ['title', 'description', 'date', 'type','confirmed','orgainzer_id'];
 
+    public function conference(){
+    	$this->hasOne('App\Conference', 'conference_id');
+    }
+
 }

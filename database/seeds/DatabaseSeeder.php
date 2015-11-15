@@ -53,12 +53,20 @@ class UserTableSeeder extends Seeder {
     public function run()
     {
     	foreach ($this->departments as $department ) {
-			$password = Hash::make("123456");
+            $password = Hash::make("123456");
 			User::create(["name" => $department , "password" => $password , "role" => "department"]);
     	}
+
+        $password = Hash::make("123456");
+        User::create(["name" =>  "operations", "password" => $password , "role" => "operations"]);
+        
+        $password = Hash::make("123456");
+        User::create(["name" => "admin" , "password" => $password , "role" => "admin"]);
     }
 
 }
+
+
 class OrganizerTableSeeder extends Seeder {
 	
 
@@ -85,6 +93,7 @@ class OrganizerTableSeeder extends Seeder {
 
 }
 
+
 class TaskTableSeeder extends Seeder {
 	
 
@@ -97,7 +106,7 @@ class TaskTableSeeder extends Seeder {
                     'title' => $faker->word,
                     'description' => $faker->text,
                     'date' => $faker->date($format = 'Y-m-d', $max = 'now'),
-                    'type' => $faker->randomElement(array("one time", "office hours", "conference")),
+                    'type' => $faker->randomElement(array("one time", "office hours")),
                     'confirmed' => $faker->boolean($chanceOfGettingTrue = 75),
                     'organizer_id' => $faker->numberBetween($min = 1, $max = 10),
 

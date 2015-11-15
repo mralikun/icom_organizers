@@ -39,6 +39,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      *
      */
     public function organizers(){
-    	return $this->belongsToMany('App\Organizer','department_organizer', 'user_id' , 'organizer_id');
-    }    
+        return $this->belongsToMany('App\Organizer','department_organizer', 'user_id' , 'organizer_id');
+    } 
+
 }

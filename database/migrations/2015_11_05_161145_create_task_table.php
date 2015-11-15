@@ -21,9 +21,14 @@ class CreateTaskTable extends Migration {
 			$table->string("type");
 			$table->boolean("confirmed");
 			$table->integer("organizer_id")->unsigned();
+			$table->integer("conference_id")->unsigned()->nullable();
 
 			$table->foreign("organizer_id")
 				  ->references("id")->on("organizer")
+				  ->onDelete("cascade");
+
+			$table->foreign("conference_id")
+				  ->references("id")->on("Conference")
 				  ->onDelete("cascade");
 		});
 	}

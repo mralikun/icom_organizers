@@ -16,13 +16,9 @@ class CreateConferenceGradeOrganizerTable extends Migration {
 
 			$table->increments("id");
 			$table->integer("grade");
-			$table->integer("grade_id")->unsigned();
+			$table->integer("criteria")->unsigned();
 			$table->integer("conference_id")->unsigned();
 			$table->integer("organizer_id")->unsigned();
-
-			$table->foreign('grade_id')
-			      ->references('id')->on('grade')
-			      ->onDelete('cascade');
 			      
 			$table->foreign('organizer_id')
 			      ->references('id')->on('organizer')

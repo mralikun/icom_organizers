@@ -19,3 +19,18 @@ Route::controllers([
 	'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController',
 ]);
+
+Route::group(['middleware' => ['auth', 'admin']], function()
+{
+	// these routes are accessable by the Admin Only
+});
+
+Route::group(['middleware' => ['auth', 'operations']], function()
+{
+	// these routes are accessable by operations users or The Admin
+});
+
+Route::group(['middleware' => ['auth']], function()
+{
+	// these routes are accessable by operations , department , or the Admin
+});

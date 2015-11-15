@@ -20,5 +20,9 @@ class Organizer extends Model {
     	return $this->hasMany('App\Task', 'organizer_id' );
     }
 
+    public function grades(){
+        return $this->belongsToMany('App\Conference','conference_grade_organizer', 'organizer_id', 'conference_id' )->withPivot('grade','criteria');
+    }    
+
 
 }
