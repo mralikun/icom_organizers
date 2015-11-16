@@ -11,7 +11,7 @@ class Handler extends ExceptionHandler {
 	 * @var array
 	 */
 	protected $dontReport = [
-		'Symfony\Component\HttpKernel\Exception\HttpException'
+			'Symfony\Component\HttpKernel\Exception\HttpException'
 	];
 
 	/**
@@ -24,6 +24,7 @@ class Handler extends ExceptionHandler {
 	 */
 	public function report(Exception $e)
 	{
+
 		return parent::report($e);
 	}
 
@@ -36,7 +37,23 @@ class Handler extends ExceptionHandler {
 	 */
 	public function render($request, Exception $e)
 	{
+		if ($e instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException )
+		{
+			return response()->view('errors.404', [], 404);
+		}elseif($e instanceof \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException ){
+			return response()->view('errors.404', [], 404);
+		}
+		if ($e instanceof \Symfony\Component\HttpKernel\Exception\HttpException)
+		{
+			return response()->view('errors.404', [], 404);
+		}
+		if ($e instanceof \Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException)
+		{
+			return response()->view('errors.404', [], 404);
+		}
+
 		return parent::render($request, $e);
 	}
+
 
 }

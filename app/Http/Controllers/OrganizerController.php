@@ -29,7 +29,7 @@ class OrganizerController extends Controller {
 	 */
 	public function store()
 	{
-		$inputs = Input::all();
+		$inputs = Input::except("agreement", "departments");
 
 		$organizer = Organizer::create($inputs);
 

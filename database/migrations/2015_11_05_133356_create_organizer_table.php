@@ -17,7 +17,9 @@ class CreateOrganizerTable extends Migration {
 		    $table->string("name");
 		    $table->date("dob");
 		    $table->string("email");
-		    $table->string("cell_phone");
+			$table->string("cell_phone");
+			$table->string("address");
+			$table->boolean("gender");
 		    $table->string("college");
 		    $table->integer("id_number");
 		    $table->string("language");
