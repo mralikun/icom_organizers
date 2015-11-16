@@ -66,6 +66,8 @@
                 
             }
             
+            scope.errors = [];
+            
             scope.createOrganizer = function(){
                 scope.newUser.departments = scope.Selector.IDS;
                 var file = document.getElementById("agreement").files[0];
@@ -76,7 +78,11 @@
                 try{
                     reader.readAsDataURL(file);
                 }catch(exp){}
-                console.log(scope.newUser);
+                request.post("/organizers" , scope.newUser).then(function(resp){
+                    
+                    console.log(resp.data);
+                    
+                } , function(err){});
             }
             
             
