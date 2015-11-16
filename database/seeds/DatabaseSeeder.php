@@ -61,7 +61,7 @@ class UserTableSeeder extends Seeder {
         User::create(["name" =>  "operations", "password" => $password , "role" => "operations"]);
         
         $password = Hash::make("123456");
-        User::create(["name" => "admin" , "password" => $password , "role" => "admin"]);
+        User::create(["name" => "System Admin" , "password" => $password , "role" => "admin"]);
     }
 
 }
