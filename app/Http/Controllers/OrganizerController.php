@@ -4,9 +4,9 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
 use App\Organizer;
 use App\User;
-use Illuminate\Support\Facades\Input;
 
 class OrganizerController extends Controller {
 

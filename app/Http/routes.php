@@ -23,13 +23,14 @@ Route::group(['middleware' => ['auth', 'admin']], function()
 	Route::resource('Admin', 'AdminController');
 });
 
-Route::group(['middleware' => ['auth', 'operations']], function()
+Route::group(['middleware' => ['auth', 'operation']], function()
 {
 	// these routes are accessable by operations users or The Admin
 
 	Route::resource('organizers', 'OrganizerController');
 
-	Route::get('/organizers/getAllDepartments', 'OrganizerController@getAllDepartments');
+	Route::get('/organizer/getAllDepartments', 'OrganizerController@getAllDepartments');
+
 
 });
 

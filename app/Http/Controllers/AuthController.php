@@ -38,7 +38,15 @@ class AuthController extends Controller {
 
 		if($validator){
 
-			if (Auth::attempt(['name' => $inputs['name'], 'password' => $inputs['password']], $inputs['remember']))
+			$remember = false;
+
+			if(isset($inputs['remember']) &&  $inputs['remember'] == "on"){
+
+				$remember = true;
+
+			}
+
+			if (Auth::attempt(['name' => $inputs['name'], 'password' => $inputs['password']], $remember))
 			{
 				return Redirect::to('/user/'.Auth::user()->name);
 
