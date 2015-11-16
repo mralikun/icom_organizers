@@ -79,4 +79,12 @@ class OrganizerController extends Controller {
 		//
 	}
 
+	public function getAllDepartments(){
+
+		$departments = User::where('role',"=","department")->get();
+
+		return $departments;
+
+	}
+
 }

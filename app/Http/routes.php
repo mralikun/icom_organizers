@@ -29,6 +29,8 @@ Route::group(['middleware' => ['auth', 'operations']], function()
 
 	Route::resource('organizers', 'OrganizerController');
 
+	Route::get('/organizers/getAllDepartments', 'OrganizerController@getAllDepartments');
+
 });
 
 Route::group(['middleware' => ['auth']], function()
