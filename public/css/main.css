@@ -116,11 +116,25 @@ input {
 }
 
 .tag {
+    display: inline-block;
     color: black;
     background-color: gray;
     border-radius: 5px;
     padding: 5px;
-    margin: 0 1px;
+    margin: 2px 1px;
+    cursor: pointer;
+}
+
+input[type="radio"] {
+    margin: 5px;
+}
+
+.gender {
+    margin: 0 20px;
+}
+
+sup {
+    color: red;
 }
 
 @media screen and (min-width: 320px) and (max-width: 480px) {
@@ -129,6 +143,32 @@ input {
 @media screen and (min-width: 480px) and (max-width: 780px){
     nav {
         width: 40%;
+    }
+}
+
+@media screen and (min-width: 780px) and (max-width: 994px){
+
+    main {
+        margin: 5%;
+        background-color: white!important;
+        border-radius: 10px;
+        padding-bottom: 100px;
+    }
+    
+    .tail {
+        border-radius: 10px;
+    }
+    
+    body {
+        background-color: #286066;
+    }
+    
+    nav {
+        width: 30%;
+    }
+    
+    .menu-button {
+        width: 5%;
     }
 }
 
@@ -160,24 +200,3 @@ input {
     }
 }
 
-@media screen and (min-width: 780px) and (max-width: 994px){
-
-    main {
-        margin: 5%;
-        background-color: white!important;
-        border-radius: 10px;
-        padding-bottom: 100px;
-    }
-    
-    .tail {
-        border-radius: 10px;
-    }
-    
-    body {
-        background-color: #286066;
-    }
-    
-    nav {
-        width: 30%;
-    }
-}

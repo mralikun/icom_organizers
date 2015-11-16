@@ -20,7 +20,7 @@
             </button>
            <div class="row">
                 <div class="col-xs-4 col-xs-offset-8 col-sm-4 col-sm-offset-1 col-md-4 col-lg-4 col-lg-offset-0 col-md-offset-0 text-center">
-                    <a href="#"><img src="/icons/logo.png" alt="ICOM organizers logo" class="img-responsive logo"></a>
+                    <img src="/icons/logo.png" alt="ICOM organizers logo" class="img-responsive logo">
                 </div>
 
                 <div class="col-xs-0 heading">ICOM Organizers</div>
