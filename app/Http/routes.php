@@ -26,6 +26,9 @@ Route::group(['middleware' => ['auth', 'admin']], function()
 Route::group(['middleware' => ['auth', 'operations']], function()
 {
 	// these routes are accessable by operations users or The Admin
+
+	Route::resource('organizers', 'OrganizerController');
+
 });
 
 Route::group(['middleware' => ['auth']], function()

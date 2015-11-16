@@ -4,6 +4,8 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
+use App\Organizer;
+use Illuminate\Support\Facades\Input;
 
 class OrganizerController extends Controller {
 
@@ -14,17 +16,9 @@ class OrganizerController extends Controller {
 	 */
 	public function index()
 	{
-		//
-	}
+		$organizers = Organizer::all();
 
-	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return Response
-	 */
-	public function create()
-	{
-		//
+		return $organizers;
 	}
 
 	/**
@@ -34,7 +28,11 @@ class OrganizerController extends Controller {
 	 */
 	public function store()
 	{
-		//
+		$inputs = Input::all();
+
+		$organizer = Organizer::create($inputs);
+
+		return "true";
 	}
 
 	/**
