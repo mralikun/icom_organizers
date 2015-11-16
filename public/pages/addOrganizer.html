@@ -17,8 +17,8 @@
             <div class="from-group"><label class="control-label">Address</label><input type="text" class="form-control" ng-model="newUser.address"></div>
             <div class="from-group"><label class="control-label">Cell Phone <sup>*</sup></label><input type="tel" class="form-control" ng-model="newUser.cell_phone" required></div>
             <div class="from-group"><label class="control-label">College</label><input type="text" class="form-control" ng-model="newUser.college"></div>
-            <div class="from-group"><label class="control-label">Gender <sup>*</sup></label><div class="text-center"><span class="gender"><input type="radio" name="gender" value="0" ng-model="newUser.gender" required>Male</span> <span class="gender"><input type="radio" name="gender" value="1" ng-model="newUser.gender" required>Female</span></div></div>
-            <div class="from-group"><label class="control-label">ID Number</label><input type="text" class="form-control" ng-model="newUser.id_number"></div>
+            <div class="from-group"><label class="control-label" ng-init="newUser.gender = 0;">Gender <sup>*</sup></label><div class="text-center"><span class="gender"><input type="radio" name="gender" value="0" ng-model="newUser.gender" required>Male</span> <span class="gender"><input type="radio" name="gender" value="1" ng-model="newUser.gender" required>Female</span></div></div>
+            <div class="from-group"><label class="control-label">ID Number <sup>*</sup></label><input type="text" class="form-control" ng-model="newUser.id_number" required></div>
             <div class="from-group">
                 <label class="control-label">Working Fields <sup>*</sup></label>
                 <select name="fields" id="workingFields" class="form-control" ng-model="tempField" ng-change="Selector.select(tempField)">
