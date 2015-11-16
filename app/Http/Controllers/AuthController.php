@@ -38,7 +38,7 @@ class AuthController extends Controller {
 
 		if($validator){
 
-			if (Auth::attempt(['name' => $inputs['name'], 'password' => $inputs['password']]))
+			if (Auth::attempt(['name' => $inputs['name'], 'password' => $inputs['password']], $inputs['remember']))
 			{
 				return Redirect::to('/user/'.Auth::user()->name);
 
