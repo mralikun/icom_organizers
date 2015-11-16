@@ -36,7 +36,7 @@
 
                 <ul>
 
-                    <li><a href="#">Add Organizer</a></li>
+                    <li><a href="#/create_organizer">Add Organizer</a></li>
                     <li><a href="#">Manage Organizers</a></li>
                     <li><a href="#">Assign Tasks</a></li>
                     <li><a href="#">Grade Organizers</a></li>
