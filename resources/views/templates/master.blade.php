@@ -15,11 +15,11 @@
     <div class="container-fluid" ng-controller="UserController as uc">
         
         <header class="navbar navbar-default">
-           <button type="button" class="menu-button" ng-show="user.logged_in">
+           <button type="button" class="menu-button">
                 <i class="fa fa-bars"></i>
             </button>
            <div class="row">
-                <div class="col-xs-4 col-xs-offset-8 col-sm-4 col-sm-offset-4 col-md-4 col-lg-4 text-center">
+                <div class="col-xs-4 col-xs-offset-8 col-sm-4 col-sm-offset-1 col-md-4 col-lg-4 col-lg-offset-0 col-md-offset-0 text-center">
                     <a href="#"><img src="/icons/logo.png" alt="ICOM organizers logo" class="img-responsive logo"></a>
                 </div>
 
@@ -27,7 +27,7 @@
             </div>
             
             <nav>
-
+               
                 <div>
 
                     <img src="/icons/navlogo.png" alt="Logo" class="img-responsive">
@@ -42,7 +42,7 @@
                     <li><a href="#">Grade Organizers</a></li>
                     <li><a href="#">Export Reports</a></li>
                     <li><a href="#">Organizers Attendance</a></li>
-                    <li><a href="#">Logout</a></li>
+                    <li><a href="/auth/logout">Logout</a></li>
 
                 </ul>
 
