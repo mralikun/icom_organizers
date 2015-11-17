@@ -13,7 +13,7 @@ class Organizer extends Model {
     }
 
     public function departments(){
-    	return $this->belongsToMany('App\User','conference_organizer', 'organizer_id' , 'user_id');
+    	return $this->belongsToMany('App\User','department_organizer', 'organizer_id' , 'user_id');
     }
 
     public function tasks(){
