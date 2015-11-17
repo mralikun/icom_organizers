@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use App\Organizer;
 use App\User;
@@ -125,6 +126,7 @@ class OrganizerController extends Controller {
 		if(isset($filename)){
 			$inputs['agreement'] = $filename.'.'.$file;
 		}
+
 		$inputs['gender'] = (int)$inputs['gender'];
 
 		$organizer = Organizer::create($inputs);
@@ -153,7 +155,11 @@ class OrganizerController extends Controller {
 	 */
 	public function edit($id)
 	{
-		//
+		$organizer = Organizer::find($id);
+		$deparments = $organizer->departments;
+
+		return $organizer;
+
 	}
 
 	/**
