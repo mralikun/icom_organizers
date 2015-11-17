@@ -6,7 +6,7 @@ class Organizer extends Model {
 
     protected $table = 'organizer';
 
-    protected $fillable = ['name', 'dob', 'email', 'cell_phone','college','id_number','language','activity','agreement'];
+    protected $fillable = ['name','gender' ,'address' ,'dob', 'email', 'cell_phone','college','id_number','language','activity','agreement'];
 
     public function conferences(){
     	return $this->belongsToMany('App\Conference','conference_organizer', 'organizer_id' , 'conference_id');
@@ -22,7 +22,11 @@ class Organizer extends Model {
 
     public function grades(){
         return $this->belongsToMany('App\Conference','conference_grade_organizer', 'organizer_id', 'conference_id' )->withPivot('grade','criteria');
-    }    
+    }
+
+    public function setGenderAttribute($value){
+        $this->attributes['gender'] = (int)$value;
+    }
 
 
 }

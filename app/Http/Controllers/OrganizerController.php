@@ -125,6 +125,7 @@ class OrganizerController extends Controller {
 		if(isset($filename)){
 			$inputs['agreement'] = $filename.'.'.$file;
 		}
+		$inputs['gender'] = (int)$inputs['gender'];
 
 		$organizer = Organizer::create($inputs);
 

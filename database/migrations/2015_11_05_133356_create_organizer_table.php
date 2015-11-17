@@ -21,7 +21,7 @@ class CreateOrganizerTable extends Migration {
 			$table->string("address")->nullable();
 			$table->boolean("gender");
 		    $table->string("college")->nullable();
-		    $table->integer("id_number")->nullable();
+		    $table->string("id_number")->nullable();
 		    $table->string("language")->nullable();
 		    $table->boolean("activity")->default("1");
 		    $table->string("agreement")->nullable();
