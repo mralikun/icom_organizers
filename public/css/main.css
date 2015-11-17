@@ -117,8 +117,8 @@ input {
 
 .tag {
     display: inline-block;
-    color: black;
-    background-color: gray;
+    color: white;
+    background-color: #286066;
     border-radius: 5px;
     padding: 5px;
     margin: 2px 1px;
