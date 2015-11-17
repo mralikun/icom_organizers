@@ -122,8 +122,9 @@ class OrganizerController extends Controller {
 			return $validator;
 
 		}
-
-		$inputs['agreement'] = $filename.'.'.$file;
+		if(isset($filename)){
+			$inputs['agreement'] = $filename.'.'.$file;
+		}
 
 		$organizer = Organizer::create($inputs);
 
