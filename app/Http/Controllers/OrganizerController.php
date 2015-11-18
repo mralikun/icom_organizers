@@ -31,11 +31,13 @@ class OrganizerController extends Controller {
 	 * @return Void
 	 */
 	private function assignDepartments($departments , $organizer){
+
 		foreach($departments as $department){
 
 			$organizer->departments()->attach($department);
 
 		}
+
 	}
 
 
@@ -49,7 +51,7 @@ class OrganizerController extends Controller {
 				$inputs,
 				[
 						'name' => "required",
-						'email' => "required|email",
+						'email' => "required|email|unique",
 						'cell_phone' => "required",
 						'id_number' => "required",
 
@@ -65,7 +67,11 @@ class OrganizerController extends Controller {
 
 	}
 
-
+	/**
+	 * upload and Validate Organizer's agreement img
+	 *
+	 * @return Void
+	 */
 	private function base64_to_jpeg($base64_string, $output_file, $filename) {
 
 		$data = explode(',', $base64_string);
@@ -95,6 +101,15 @@ class OrganizerController extends Controller {
 	public function store()
 	{
 
+		$inputs = Input::except("agreement","departments");
+
+		$validator = $this->validateOrganizer($inputs);
+
+		if($validator != 'true'){
+
+			return $validator;
+
+		}
 
 
 		if (Input::has('agreement'))
@@ -114,15 +129,6 @@ class OrganizerController extends Controller {
 
 		}
 
-		$inputs = Input::except("agreement","departments");
-
-		$validator = $this->validateOrganizer($inputs);
-
-		if($validator != 'true'){
-
-			return $validator;
-
-		}
 		if(isset($filename)){
 			$inputs['agreement'] = $filename.'.'.$file;
 		}
@@ -144,7 +150,7 @@ class OrganizerController extends Controller {
 	 */
 	public function show($id)
 	{
-		//
+
 	}
 
 	/**
@@ -155,7 +161,7 @@ class OrganizerController extends Controller {
 	 */
 	public function edit($id)
 	{
-		$organizer = Organizer::find($id);
+		$organizer = Organizer::where('email','=',$id)->get()->firstOrFail();
 		$deparments = $organizer->departments;
 
 		return $organizer;
@@ -170,7 +176,60 @@ class OrganizerController extends Controller {
 	 */
 	public function update($id)
 	{
-		//
+		$inputs = Input::except("agreement","departments");
+
+		//  validating Inputs
+		$validator = $this->validateOrganizer($inputs);
+
+		if($validator != 'true'){
+
+			return $validator;
+
+		}
+
+		$organizer = Organizer::find($id);
+
+		// upload and validating img if Exists in Inputs
+		if (Input::has('agreement'))
+		{
+
+			$agreement = Input::get('agreement');
+			$filename = str_random(32).date('Y-m-d');
+
+			$destinationPath = public_path().DIRECTORY_SEPARATOR."agreements";
+
+			// Delete The Old Agreement Img If Exists Or Uploaded Before
+			if(!isNull($organizer->agreement)){
+				\File::Delete(public_path().$destinationPath.DIRECTORY_SEPARATOR.$organizer->agreement);
+			}
+
+			$file = $this->base64_to_jpeg($agreement, $destinationPath, $filename);
+
+			if($file == 'false'){
+				return 'the agreement image must be jpeg ,JPEG ,jpg or png';
+			}
+
+		}
+
+
+		// start updating data
+
+		if(isset($filename)){
+			$inputs['agreement'] = $filename.'.'.$file;
+		}
+
+		$inputs['gender'] = (int)$inputs['gender'];
+
+		$organizer->update($inputs);
+
+		$organizer->departments()->detach();
+
+		$this->assignDepartments(Input::get("departments"), $organizer);
+
+		return "true";
+
+
+
 	}
 
 	/**
@@ -181,7 +240,8 @@ class OrganizerController extends Controller {
 	 */
 	public function destroy($id)
 	{
-		//
+		$organizer = Organizer::find($id);
+		$organizer->delete();
 	}
 
 	public function getAllDepartments(){
