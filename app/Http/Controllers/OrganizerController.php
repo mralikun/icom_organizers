@@ -176,7 +176,15 @@ class OrganizerController extends Controller {
 	 */
 	public function update($id)
 	{
-		$inputs = Input::except("agreement","departments");
+		$organizer = Organizer::find($id);
+
+		$inputEmail = Input::get('email');
+
+		if($inputEmail == $organizer->email){
+			$inputs = Input::except("agreement","departments",'email');
+		}else{
+			$inputs = Input::except("agreement","departments");
+		}
 
 		//  validating Inputs
 		$validator = $this->validateOrganizer($inputs);
@@ -187,7 +195,7 @@ class OrganizerController extends Controller {
 
 		}
 
-		$organizer = Organizer::find($id);
+		$inputs = Input::except("agreement","departments");
 
 		// upload and validating img if Exists in Inputs
 		if (Input::has('agreement'))
