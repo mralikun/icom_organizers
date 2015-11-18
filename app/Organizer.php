@@ -13,7 +13,11 @@ class Organizer extends Model {
     }
 
     public function departments(){
-    	return $this->belongsToMany('App\User','department_organizer', 'organizer_id' , 'user_id');
+        return $this->belongsToMany('App\User','department_organizer', 'organizer_id' , 'user_id');
+    }
+
+    public function departmentsIds(){
+        return $this->belongsToMany('App\User','department_organizer', 'organizer_id' , 'user_id')->select('users.id');
     }
 
     public function tasks(){
@@ -28,5 +32,15 @@ class Organizer extends Model {
         $this->attributes['gender'] = (int)$value;
     }
 
+    public static function findByEmailOrFail(
+        $email,
+        $columns = array('*')
+    ) {
+        if ( ! is_null($organizer = static::whereEmail($email)->first($columns))) {
+            return $organizer;
+        }
+
+        abort(404);
+    }
 
 }

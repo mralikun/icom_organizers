@@ -161,8 +161,8 @@ class OrganizerController extends Controller {
 	 */
 	public function edit($id)
 	{
-		$organizer = Organizer::where('email','=',$id)->get()->first();
-		$deparments = $organizer->departments;
+		$organizer = Organizer::findByEmailOrFail($id);
+		$deparments = $organizer->departmentsIds;
 
 		return $organizer;
 
