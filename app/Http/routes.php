@@ -27,9 +27,9 @@ Route::group(['middleware' => ['auth', 'operation']], function()
 {
 	// these routes are accessable by operations users or The Admin
 
-	Route::resource('organizers', 'OrganizerController');
+	Route::resource('organizers', 'OrganizerController',array('except' => array('update')));
 
-	Route::post('/organizer/updateAgreement/{id}', 'OrganizerController@updateAgreement');
+	Route::post('/organizer/update/{id}', 'OrganizerController@update');
 
 	Route::get('/organizer/getAllDepartments', 'OrganizerController@getAllDepartments');
 

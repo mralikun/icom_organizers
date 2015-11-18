@@ -168,43 +168,6 @@ class OrganizerController extends Controller {
 
 	}
 
-	public function updateAgreement($id){
-		$organizer = Organizer::find($id);
-
-		// upload and validating img if Exists in Inputs
-		if (Input::has('agreement'))
-		{
-
-			$agreement = Input::get('agreement');
-			$filename = str_random(32).date('Y-m-d');
-
-			$destinationPath = public_path().DIRECTORY_SEPARATOR."agreements";
-
-			$file = $this->base64_to_jpeg($agreement, $destinationPath, $filename);
-
-			// Delete The Old Agreement Img If Exists Or Uploaded Before
-			if(!isNull($organizer->agreement)){
-				\File::Delete(public_path().$destinationPath.DIRECTORY_SEPARATOR.$organizer->agreement);
-			}
-
-			if($file == 'false'){
-				return 'the agreement image must be jpeg ,JPEG ,jpg or png';
-			}
-
-			if(isset($filename)){
-				$agreement = $filename.'.'.$file;
-			}
-
-			$organizer->agreement = $agreement;
-			$organizer->save();
-
-			return "true";
-
-		}
-
-
-	}
-
 	/**
 	 * Update the specified resource in storage.
 	 *
@@ -226,6 +189,34 @@ class OrganizerController extends Controller {
 
 		$organizer = Organizer::find($id);
 
+		// upload and validating img if Exists in Inputs
+		if (Input::has('agreement'))
+		{
+
+			$agreement = Input::get('agreement');
+			$filename = str_random(32).date('Y-m-d');
+
+			$destinationPath = public_path().DIRECTORY_SEPARATOR."agreements";
+
+			$file = $this->base64_to_jpeg($agreement, $destinationPath, $filename);
+
+			// Delete The Old Agreement Img If Exists Or Uploaded Before
+			if(!is_null($organizer->agreement)){
+				\File::Delete(public_path().$destinationPath.DIRECTORY_SEPARATOR.$organizer->agreement);
+			}
+
+			if($file == 'false'){
+				return 'the agreement image must be jpeg ,JPEG ,jpg or png';
+			}
+
+		}
+
+
+		// start updating data
+
+		if(isset($filename)){
+			$inputs['agreement'] = $filename.'.'.$file;
+		}
 
 		$inputs['gender'] = (int)$inputs['gender'];
 
