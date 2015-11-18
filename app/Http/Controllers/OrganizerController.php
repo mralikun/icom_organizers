@@ -181,7 +181,8 @@ class OrganizerController extends Controller {
 		$inputEmail = Input::get('email');
 
 		if($inputEmail == $organizer->email){
-			$inputs = Input::except("agreement","departments",'email');
+			$inputs = Input::except("agreement","departments");
+			$inputs['email'] = 'faker123@faker.com';
 		}else{
 			$inputs = Input::except("agreement","departments");
 		}
