@@ -29,6 +29,8 @@ Route::group(['middleware' => ['auth', 'operation']], function()
 
 	Route::resource('organizers', 'OrganizerController');
 
+	Route::post('/organizer/updateAgreement/{id}', 'OrganizerController@updateAgreement');
+
 	Route::get('/organizer/getAllDepartments', 'OrganizerController@getAllDepartments');
 
 
