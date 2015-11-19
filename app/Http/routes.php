@@ -27,8 +27,14 @@ Route::group(['middleware' => ['auth', 'operation']], function()
 {
 	// these routes are accessable by operations users or The Admin
 
-	Route::resource('organizers', 'OrganizerController',array('except' => array('update')));
+	Route::resource('organizers', 'OrganizerController',array('except' => array('update', 'show')));
 
+	/**
+	 * 	I detached This Route From Organizers Resource Route Because of some issues in
+	 *	Sending Data With Ajax Through Put/Patch Method So I Had to detach it from the
+	 *	Resource by adding  array('except' => array('update') and Register another Post
+	 *	Route Below .
+	 */
 	Route::post('/organizer/update/{id}', 'OrganizerController@update');
 
 	Route::get('/organizer/getAllDepartments', 'OrganizerController@getAllDepartments');

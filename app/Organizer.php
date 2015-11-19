@@ -32,10 +32,12 @@ class Organizer extends Model {
         $this->attributes['gender'] = (int)$value;
     }
 
-    public static function findByEmailOrFail(
-        $email,
-        $columns = array('*')
-    ) {
+    public function setActivityAttribute($value){
+        $this->attributes['activity'] = (int)$value;
+    }
+
+    public static function findByEmailOrFail($email,$columns = array('*')){
+
         if ( ! is_null($organizer = static::whereEmail($email)->first($columns))) {
             return $organizer;
         }
