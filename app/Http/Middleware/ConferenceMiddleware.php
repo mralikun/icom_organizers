@@ -5,7 +5,8 @@ use Closure;
 class ConferenceMiddleware {
 
 	/**
-	 * Handle an incoming request.
+	 *
+	 * This MiddleWare Will be fired at Every Request .
 	 *
 	 * @param  \Illuminate\Http\Request  $request
 	 * @param  \Closure  $next
@@ -23,9 +24,10 @@ class ConferenceMiddleware {
 		    ),
 		);
 		$context  = stream_context_create($options);
-		$conferences = file_get_contents($url, false, $context);
-		
-		foreach (json_decode($conferences) as $conference) {
+		$newConferences = file_get_contents($url, false, $context);
+
+
+		foreach (json_decode($newConferences) as $conference) {
 			$arr=[];
 		
 			foreach ($conference as $key => $value) {

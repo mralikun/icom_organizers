@@ -50,10 +50,10 @@ class OrganizerController extends Controller {
 		$validator = Validator::make(
 				$inputs,
 				[
-						'name' => "required",
-						'email' => "required|email|unique:organizer",
-						'cell_phone' => "required",
-						'id_number' => "required",
+						'name' 			=> 	"required",
+						'email' 		=> 	"required|email|unique:organizer",
+						'cell_phone' 	=> 	"required",
+						'id_number' 	=> 	"required",
 
 				]
 		);
@@ -142,16 +142,6 @@ class OrganizerController extends Controller {
 		return "true";
 	}
 
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function show($id)
-	{
-
-	}
 
 	/**
 	 * Show the form for editing the specified resource.
@@ -172,7 +162,7 @@ class OrganizerController extends Controller {
 	 * Update the specified resource in storage.
 	 *
 	 * @param  int  $id
-	 * @return Response
+	 * @return Array
 	 */
 	public function update($id)
 	{
@@ -253,6 +243,13 @@ class OrganizerController extends Controller {
 		$organizer->delete();
 	}
 
+	/**
+	 * Get All Departments to be Listed in the "Working Fields" DropDown list
+	 * This used in Add Organizer And Edit Organizer
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
 	public function getAllDepartments(){
 
 		$departments = User::where('role',"=","department")->get();
