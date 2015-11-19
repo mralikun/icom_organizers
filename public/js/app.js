@@ -4,6 +4,9 @@ var app = angular.module("organizers" , ["ngRoute"])
             data: null,
             setData: function(obj){
                 this.data = obj;
+            },
+            reset: function(){
+                this.data = null;
             }
         };
     });

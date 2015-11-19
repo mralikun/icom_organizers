@@ -17,6 +17,7 @@ app.config(["$routeProvider" , function(route){
     .when("/edit_organizer/:email?" , {
         templateUrl: "/pages/searchOrganizer.html",
         controller: ["$http" , "$scope" , "$routeParams", "UserToEdit", "$location" ,function(request , scope , params , user , loc){
+            user.reset();
             scope.requesting_edit = false;
             scope.do_request = function(){
                 scope.requesting_edit = true;

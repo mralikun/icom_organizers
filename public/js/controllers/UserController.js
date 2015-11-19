@@ -4,15 +4,24 @@
             scope.processing = false;
             scope.success_msg = undefined;
             scope.pageTitle = "Add Organizer";
+            scope.codex_msg = "It might take a few seconds to encode the agreement image after you choose it, Please wait for the encoding to finish before submitting!";
             scope.editMode = (user.data == null) ? false : true;
-            if(user.data != null)
-                scope.pageTitle = "Edit Organizer";
-            
             var reader = new FileReader();
             reader.onload = function(res){
-                scope.newUser.agreement = res.target.result;
+                scope.$apply(function(){
+                    scope.newUser.agreement = res.target.result;
+                    scope.codex_msg = "Finished Encoding!";
+                });
             }
-            
+            $("#agreement").on("change" , function(){
+                var file = this.files[0];
+                scope.$apply(function(){
+                    scope.codex_msg = "encoding image... ";
+                });
+                reader.readAsDataURL(file);
+            });
+            if(user.data != null)
+                scope.pageTitle = "Edit Organizer";
             scope.Selector = {
                 IDS: [],
                 names: {},
@@ -135,6 +144,7 @@
                             scope.errors = response;
                         }else {
                             scope.success_msg = "Edited Successfully!";
+                            user.reset();
                             timeout(function(){
                                 scope.success_msg = undefined;
                             } , 2000);
@@ -146,13 +156,8 @@
             
             scope.createOrganizer = function(){
                 scope.errors = [];
-                var file = document.getElementById("agreement").files[0];
-                try{
-                    reader.readAsDataURL(file);
-                }catch(exp){}
                 if(document.getElementById("agreement").files.length){
                     if(!scope.newUser.agreement || scope.newUser.agreement.indexOf("base64") === -1){
-                        alert("Please wait a minute while we process the agreement image!");
                         return false;
                     }
                 }
@@ -170,6 +175,7 @@
                         alert("Some error occurred, Please review the list of errors below!");
                         scope.errors = response;
                     }else {
+                        scope.codex_msg = "It might take a few seconds to encode the agreement image after you choose it, Please wait for the encoding to finish before submitting!";
                         scope.success_msg = "Created Successfully!";
                         delete scope.newUser;
                         scope.Selector.default();
