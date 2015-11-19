@@ -239,7 +239,7 @@ class OrganizerController extends Controller {
 	 */
 	public function destroy($id)
 	{
-		$organizer = Organizer::find($id);
+		$organizer = Organizer::findByEmailOrFail($id);
 		$organizer->delete();
 	}
 
