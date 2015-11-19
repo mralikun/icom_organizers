@@ -124,7 +124,7 @@ class OrganizerController extends Controller {
 			$file = $this->base64_to_jpeg($agreement, $destinationPath, $filename);
 
 			if($file == 'false'){
-				return 'the agreement image must be jpeg ,JPEG ,jpg or png';
+				return array('agreement' => array('the agreement image must be jpeg ,JPEG ,jpg or png') );
 			}
 
 		}
@@ -215,7 +215,7 @@ class OrganizerController extends Controller {
 			}
 
 			if($file == 'false'){
-				return 'the agreement image must be jpeg ,JPEG ,jpg or png';
+				return array('agreement' => array('the agreement image must be jpeg ,JPEG ,jpg or png') );
 			}
 
 		}
