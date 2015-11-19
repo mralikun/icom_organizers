@@ -18,6 +18,22 @@ app.config(["$routeProvider" , function(route){
         templateUrl: "/pages/searchOrganizer.html",
         controller: ["$http" , "$scope" , "$routeParams", "UserToEdit", "$location" ,function(request , scope , params , user , loc){
             user.reset();
+            scope.delete = function(ev){
+                var btn = ev.target;
+                var email = btn.getAttribute("data-uni");
+                request.delete("/organizers/"+email)
+                    .then(function(resp){
+                        $(".del-msg").show();
+                        setTimeout(function(){
+                            $(".del-msg").hide();
+                        } , 2000);
+                        var acc = $(scope.orgs).filter(function(ind , el){
+                            return el.email == email;
+                        })[0];
+                        scope.which = "";
+                        scope.orgs.splice(scope.orgs.indexOf(acc) , 1);
+                } , function(err){});
+            }
             scope.requesting_edit = false;
             scope.do_request = function(){
                 scope.requesting_edit = true;

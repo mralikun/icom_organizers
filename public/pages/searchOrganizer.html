@@ -17,8 +17,10 @@
         </div>
         <div class="form-group text-center">
             <a href="#/edit_organizer/{{which.split('').slice(which.split('').lastIndexOf('<')+1 , which.split('').lastIndexOf('>')).join('')}}" class="btn btn-icom">Edit</a>
+            <button type="button" class="btn btn-danger" id="delete" data-uni="{{which.split('').slice(which.split('').lastIndexOf('<')+1 , which.split('').lastIndexOf('>')).join('')}}" ng-click="delete($event)">Delete</button>
         </div>
         
+        <p class="text-center del-msg text-danger" style="display: none;"><strong>Account has been deleted!</strong></p>
         
     </div>
     
