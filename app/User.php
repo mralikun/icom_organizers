@@ -40,6 +40,21 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      */
     public function organizers(){
         return $this->belongsToMany('App\Organizer','department_organizer', 'user_id' , 'organizer_id');
-    } 
+    }
+
+    /**
+     * Get All Departments to be Listed in the "Working Fields" DropDown list
+     * This used in Add Organizer And Edit Organizer
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function getAllDepartments(){
+
+        $departments = $this->where('role',"=","department")->get();
+
+        return $departments;
+
+    }
 
 }

@@ -85,4 +85,8 @@ class UsersController extends Controller {
 	public function Home($username){
 		return View::make("templates.master");
 	}
+
+
+
+
 }

@@ -25,21 +25,6 @@ class OrganizerController extends Controller {
 		return $organizers;
 	}
 
-	/**
-	 * create rows in department_organizer table
-	 *
-	 * @return Void
-	 */
-	private function assignDepartments($departments , $organizer){
-
-		foreach($departments as $department){
-
-			$organizer->departments()->attach($department);
-
-		}
-
-	}
-
 
 	/**
 	 * Validate Organizer's Data
@@ -50,10 +35,11 @@ class OrganizerController extends Controller {
 		$validator = Validator::make(
 				$inputs,
 				[
-						'name' 			=> 	"required",
-						'email' 		=> 	"required|email|unique:organizer",
-						'cell_phone' 	=> 	"required",
-						'id_number' 	=> 	"required",
+						'name' 				=> 	"required",
+						'email' 			=> 	"required|email|unique:organizer",
+						'cell_phone' 		=> 	"required",
+						'id_number' 		=> 	"required",
+						'working_fields' 	=> 	"required",
 
 				]
 		);
@@ -72,7 +58,7 @@ class OrganizerController extends Controller {
 	 *
 	 * @return Void
 	 */
-	private function base64_to_jpeg($base64_string, $output_file, $filename) {
+	private function base64_to_jpeg($base64_string, $output_file, $filename){
 
 		$data = explode(',', $base64_string);
 
@@ -101,7 +87,7 @@ class OrganizerController extends Controller {
 	public function store()
 	{
 
-		$inputs = Input::except("agreement","departments");
+		$inputs = Input::except("agreement");
 
 		$validator = $this->validateOrganizer($inputs);
 
@@ -137,8 +123,6 @@ class OrganizerController extends Controller {
 
 		$organizer = Organizer::create($inputs);
 
-		$this->assignDepartments(Input::get("departments"), $organizer);
-
 		return "true";
 	}
 
@@ -152,7 +136,6 @@ class OrganizerController extends Controller {
 	public function edit($id)
 	{
 		$organizer = Organizer::findByEmailOrFail($id);
-		$deparments = $organizer->departmentsIds;
 
 		return $organizer;
 
@@ -223,8 +206,6 @@ class OrganizerController extends Controller {
 
 		$organizer->departments()->detach();
 
-		$this->assignDepartments(Input::get("departments"), $organizer);
-
 		return "true";
 
 
@@ -240,22 +221,15 @@ class OrganizerController extends Controller {
 	public function destroy($id)
 	{
 		$organizer = Organizer::findByEmailOrFail($id);
+
+		$destinationPath = public_path().DIRECTORY_SEPARATOR."agreements";
+
+		// Delete The Old Agreement Img If Exists Or Uploaded Before
+		if(!is_null($organizer->agreement)){
+			\File::Delete(public_path().$destinationPath.DIRECTORY_SEPARATOR.$organizer->agreement);
+		}
+
 		$organizer->delete();
-	}
-
-	/**
-	 * Get All Departments to be Listed in the "Working Fields" DropDown list
-	 * This used in Add Organizer And Edit Organizer
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function getAllDepartments(){
-
-		$departments = User::where('role',"=","department")->get();
-
-		return $departments;
-
 	}
 
 }

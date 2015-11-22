@@ -6,18 +6,28 @@ class Organizer extends Model {
 
     protected $table = 'organizer';
 
-    protected $fillable = ['name','gender' ,'address' ,'dob', 'email', 'cell_phone','college','id_number','language','activity','agreement'];
+    protected $fillable = ['name','gender' ,'address' ,'dob', 'email', 'working_fields', 'cell_phone','college','id_number','language','activity','agreement'];
 
     public function conferences(){
     	return $this->belongsToMany('App\Conference','conference_organizer', 'organizer_id' , 'conference_id');
     }
 
-    public function departments(){
-        return $this->belongsToMany('App\User','department_organizer', 'organizer_id' , 'user_id');
-    }
+//    public function departments(){
+//        return $this->belongsToMany('App\User','department_organizer', 'organizer_id' , 'user_id');
+//    }
+//
+//    public function departmentsIds(){
+//        return $this->belongsToMany('App\User','department_organizer', 'organizer_id' , 'user_id')->select('users.id');
+//    }
 
-    public function departmentsIds(){
-        return $this->belongsToMany('App\User','department_organizer', 'organizer_id' , 'user_id')->select('users.id');
+    public function working_fields(){
+
+        $workingFieldsString = $this->working_fields;
+
+        $workingFieldsArray = explode(',', $workingFieldsString);
+
+        return $workingFieldsArray;
+
     }
 
     public function tasks(){
