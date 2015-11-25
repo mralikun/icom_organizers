@@ -7,37 +7,31 @@
     <title>ICOM Organizers</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/fa/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/icom.css">
   </head>
 
   <body ng-app="organizers">
 
     <div class="container-fluid" ng-controller="UserController as uc">
         
-        <header class="navbar navbar-default">
+        <header>
            <button type="button" class="menu-button">
                 <i class="fa fa-bars"></i>
             </button>
-           <div class="row">
-                <div class="col-xs-4 col-xs-offset-8 col-sm-4 col-sm-offset-1 col-md-4 col-lg-4 col-lg-offset-0 col-md-offset-0 text-center">
-                    <a href="#/"><img src="/icons/logo.png" alt="ICOM organizers logo" class="img-responsive logo"></a>
-                </div>
-
-                <div class="col-xs-0 heading">ICOM Organizers</div>
+           <div class="text-right">
+                <a href="#/"><img src="/icons/logo.png" alt="ICOM organizers logo" class="logo"></a>
             </div>
             
             <nav>
                
                 <div>
-
                     <a href="#/"><img src="/icons/navlogo.png" alt="Logo" class="img-responsive"></a>
-
                 </div>
 
                 <ul>
 
                     <li><a href="#/create_organizer">Add Organizer</a></li>
-                    <li><a href="#/edit_organizer">Manage Organizers</a></li>
+                    <li><a href="#/search_organizer">Manage Organizers</a></li>
                     <li><a href="#">Assign Tasks</a></li>
                     <li><a href="#">Grade Organizers</a></li>
                     <li><a href="#">Export Reports</a></li>
@@ -48,8 +42,9 @@
 
             </nav>
             
+            
         </header>
-
+        <div class="tail"><h4 class="text-center">@{{view_data.page_title}}</h4></div>
         <main>
             
             <div ng-view></div>
@@ -65,6 +60,9 @@
     <script src="/js/app.js"></script>
     <script src="/js/routes.js"></script>
     <script src="/js/controllers/UserController.js"></script>
+    <script>
+      app.constant("_TOKEN" , "{{csrf_token()}}");
+      </script>
   </body>
 
 </html>

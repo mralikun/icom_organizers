@@ -1,14 +1,10 @@
-<div class="tail">
-    <h1>Edit Organizer.</h1>
-</div>
-   
 <div class="row" style="margin-top: 35px;">
     
     <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4">
         
         <datalist id="organizers">
             
-            <option ng-repeat="org in orgs" value="{{org.name}} <{{org.email}}>">
+            <option ng-repeat="org in view_data.orgs" value="{{org.name}} <{{org.email}}>">
             
         </datalist>
         <div class="form-group">
@@ -19,7 +15,6 @@
             <a href="#/edit_organizer/{{which.split('').slice(which.split('').lastIndexOf('<')+1 , which.split('').lastIndexOf('>')).join('')}}" class="btn btn-icom">Edit</a>
             <button type="button" class="btn btn-danger" id="delete" data-uni="{{which.split('').slice(which.split('').lastIndexOf('<')+1 , which.split('').lastIndexOf('>')).join('')}}" ng-click="delete($event)">Delete</button>
         </div>
-        
         <p class="text-center del-msg text-danger" style="display: none;"><strong>Account has been deleted!</strong></p>
         
     </div>

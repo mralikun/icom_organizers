@@ -1,189 +1,151 @@
-    app
-        .controller("UserController" , ["$scope" , "$http" , "$location" , "UserToEdit" , "$timeout" , function(scope , request , loc , user , timeout){
-            scope.fields = [];
-            scope.processing = false;
-            scope.success_msg = undefined;
-            scope.pageTitle = "Add Organizer";
-            scope.codex_msg = "It might take a few seconds to encode the agreement image after you choose it, Please wait for the encoding to finish before submitting!";
-            scope.editMode = (user.data == null) ? false : true;
-            var reader = new FileReader();
-            reader.onload = function(res){
-                scope.$apply(function(){
-                    scope.newUser.agreement = res.target.result;
-                    scope.codex_msg = "Finished Encoding!";
-                });
+app.controller("UserController" , ["$scope" , "$timeout" , "$location" , "$routeParams" , "_TOKEN" , "Patcher" , "Organizer", function(scope , timeout , loc , params , token , request , organizer){
+    scope.view_data = {
+        processing_request: false,
+        success_msg: undefined,
+        page_title: "Home Page",
+        encoding_status: "It might take a few seconds to encode the agreement image after you choose it, Please wait for the encoding to finish before submitting!",
+        errors: [],
+        orgs: []
+    };
+    
+    function changeTitle(title){
+        scope.view_data.page_title = title;
+    }
+    
+    scope.$on("$routeChangeSuccess" , function(ev , next , prev){
+        
+        var to = next.originalPath;
+        
+        if(to.indexOf("search_organizer") !== -1)
+            changeTitle("Search Organizer");
+        else if(to.indexOf("edit_organizer") !== -1)
+            changeTitle("Edit Organizer");
+        else if(to.indexOf("create_organizer") !== -1)
+            changeTitle("Add Organizer");
+        else
+            changeTitle("Home Page");
+    });
+    
+    scope.$on("$routeChangeStart" , function(ev , next , current){
+        if(!current && next.originalPath.indexOf("edit") !== -1){
+            loc.path("/search_organizer");
+        }
+    });
+    
+    scope.clear = function(){
+        // clears the data and the view and resets everything to 
+        // its default state;
+        scope.newUser = {
+            gender: 0
+        }
+        organizer.reset();
+        request.reset();
+    }
+    
+    var edit_mode = false;
+    var rt = loc.path();
+    if(rt.indexOf("edit") !== -1 && params.hasOwnProperty("email")){
+        organizer.import(params.email);
+        scope.newUser = organizer;
+        scope.view_data.page_title = "Edit Organizer";
+        edit_mode = true;
+    }else if(rt.indexOf("search") !== -1 && !scope.view_data.orgs.length){
+        request.set("url" , "/organizers").set("verb" , "get").send().then(function(resp){
+            scope.view_data.orgs = resp.data;
+        } , function(err){});
+    }
+    
+    var reader = new FileReader();
+    reader.onload = function(res){
+        scope.$apply(function(){
+            scope.newUser.agreement = res.target.result;
+            scope.view_data.encoding_status = "Finished Encoding!";
+        });
+    }
+    
+    $("#agreement").on("change" , function(){
+        var file = this.files[0];
+        scope.$apply(function(){
+            scope.view_data.encoding_status = "encoding image... ";
+        });
+        reader.readAsDataURL(file);
+    });
+    
+    if(!edit_mode) {
+        scope.clear();   
+    }
+    
+    scope.createOrganizer = function(){
+        scope.view_data.errors = [];
+        //check to see if the agreement image changed and the
+        //encoding didn't finish yet.
+        if(document.getElementById("agreement").files.length){
+            if(!scope.newUser.agreement || scope.newUser.agreement.indexOf("base64") === -1){
+                return false;
             }
-            $("#agreement").on("change" , function(){
-                var file = this.files[0];
-                scope.$apply(function(){
-                    scope.codex_msg = "encoding image... ";
-                });
-                reader.readAsDataURL(file);
-            });
-            if(user.data != null)
-                scope.pageTitle = "Edit Organizer";
-            scope.Selector = {
-                IDS: [],
-                names: {},
-                selection: false,
-                mine: function(_par){
-                    
-                    var matches = null;
-                    
-                    if(isNaN(_par)){
-                        var o = {};
-                        for(var k in this.names){
-                            if(this.names[k] == _par){
-                                o.id = k;
-                                o.name = this.names[k];
-                            }
-                        }
-                        matches = [o];
-                        
-                    }else {
-                        
-                        matches = filter(scope.fields , function(element){
-                            var res = false;
-                            var parsed = parseInt(_par , 10);
-                            return element.id == _par;
-                        });
-                        
-                    }
-                    
-                    if(matches.length)
-                        return (matches.length > 1) ? matches : matches[0];
-                    else
-                        return null;
-                    
-                },
-                
-                default: function(){
-                    for(var k in this.names){
-                        this.deselect(this.names[k]);
-                    }
-                },
-                
-                select: function(_id){
-                    
-                    var obj = this.mine(_id);
-                    if(obj !== null){
-                        this.remove(obj.id);
-                        this.attach(obj);
-                    }
-                    this.updateStatus();
-                    
-                },
-                
-                deselect: function(_tag){
-                    var obj = this.mine(_tag);
-                    if(obj !== null){
-                        this.add(obj);
-                        this.detach(obj.id);
-                    }
-                    this.updateStatus();
-                },
-                
-                remove : function(_id){
-                    $(scope.fields).each(function(index , val){
-                        if(val.id == _id){
-                            scope.fields.splice(index , 1);
-                        }
-                    });
-                },
-                
-                attach: function(_o){
-                    if(this.IDS.indexOf(_o.id) === -1){
-                        this.IDS.push(_o.id);
-                        this.names[_o.id] = _o.name;
-                    }
-                },
-                
-                add: function(_o){
-                    scope.fields.push(_o);
-                },
-                
-                detach: function(_id){
-                    delete this.names[_id];
-                    this.IDS.splice(this.IDS.indexOf(_id) + 1 , 1);
-                },
-                
-                updateStatus: function(){
-
-                    var namesLength = Object.keys(this.names).length
-                    if( namesLength > 0 ){
-                        this.selection = true;
-                    }else
-                        this.selection = false;
-                }
+        }else {
+            delete scope.newUser.agreement;
+        }
+        // we are sending a request depending on the mode! ..... Hold On!
+        scope.view_data.processing_request = true;
+        if(edit_mode){
+            scope.editUser();
+            return false;
+        }
+        request.set("url" , "/organizers").set("verb" , "post").set("data" , scope.newUser).send().then(function(resp){
+            scope.view_data.processing_request = false;
+            var response = resp.data;
+            if(response instanceof Object){
+                alert("Some error occurred, Please review the list of errors below!");
+                scope.view_data.errors = response;
+            }else {
+                scope.view_data.encoding_status = "It might take a few seconds to encode the agreement image after you choose it, Please wait for the encoding to finish before submitting!";
+                scope.view_data.success_msg = "Created Successfully!";
+                // cycle ?!
+                timeout(function(){
+                    scope.view_data.success_msg = undefined;
+                    scope.clear();
+                } , 2000);
             }
-            request.get("/organizer/getAllDepartments")
-                .then(function(resp){
-                scope.fields = resp.data;
-                if(user.data != null){
-                    for(var i = 0; i < user.data.departments_ids.length ; i++){
-                        scope.Selector.select(user.data.departments_ids[i].id);
-                    }
-                }
-            } , function(err){
-                alert("Something went wrong while retriving departments data, Please refresh and try again!");
-            });
+        } , function(){
             
-            if(user.data != null){
-                user.data.dob = new Date(user.data.dob);
-                scope.newUser = user.data;
-                delete scope.newUser.agreement;
+        });
+    }
+    
+    scope.editUser = function(){
+        console.log(scope.newUser);
+        request.set("url" , "/organizer/update/" + scope.newUser.id).set("verb" , "post").set("data" , scope.newUser).send().then(function(response){
+            scope.view_data.processing_request = false;
+            var response = response.data;
+            if(response instanceof Object){
+                alert("Some error occurred, Please review the list of errors below!");
+                scope.view_data.errors = response;
+            }else {
+                scope.view_data.success_msg = "Edited Successfully!";
+                // reseting the user to null ?!
+                timeout(function(){
+                    scope.view_data.success_msg = undefined;
+                } , 2000);
             }
+        } , function(err){
+            console.log(err);
+        });
+    }
+    
+    scope.delete = function(ev){
+        var btn = ev.target;
+        var email = btn.getAttribute("data-uni");
+        request.set("url" , "/organizers/"+email).set("verb" , "delete").send().then(function(resp){
+            $(".del-msg").show();
+            setTimeout(function(){
+                $(".del-msg").hide();
+            } , 2000);
+            var acc = $(scope.view_data.orgs).filter(function(ind , el){
+                return el.email == email;
+            })[0];
+            scope.which = "";
+            scope.view_data.orgs.splice(scope.view_data.orgs.indexOf(acc) , 1);
+        } , function(err){});
+    }
             
-            scope.editUser = function(){
-                request.post("/organizer/update/"+scope.newUser.id , scope.newUser)
-                    .then(function(resp){
-                        scope.processing = false;
-                        var response = resp.data;
-                        if(response instanceof Object){
-                            alert("Some error occurred, Please review the list of errors below!");
-                            scope.errors = response;
-                        }else {
-                            scope.success_msg = "Edited Successfully!";
-                            user.reset();
-                            timeout(function(){
-                                scope.success_msg = undefined;
-                            } , 2000);
-                        }
-                    
-                } , function(err){});
-                
-            }
-            
-            scope.createOrganizer = function(){
-                scope.errors = [];
-                if(document.getElementById("agreement").files.length){
-                    if(!scope.newUser.agreement || scope.newUser.agreement.indexOf("base64") === -1){
-                        return false;
-                    }
-                }
-                scope.processing = true;
-                scope.newUser.departments = scope.Selector.IDS;
-                if(user.data != null){
-                    scope.editUser();
-                    return false;
-                }
-
-                request.post("/organizers" , scope.newUser).then(function(resp){
-                    scope.processing = false;
-                    var response = resp.data;
-                    if(response instanceof Object){
-                        alert("Some error occurred, Please review the list of errors below!");
-                        scope.errors = response;
-                    }else {
-                        scope.codex_msg = "It might take a few seconds to encode the agreement image after you choose it, Please wait for the encoding to finish before submitting!";
-                        scope.success_msg = "Created Successfully!";
-                        delete scope.newUser;
-                        scope.Selector.default();
-                        timeout(function(){
-                            scope.success_msg = undefined;
-                        } , 2000);
-                    }
-                } , function(err){});
-            }
-            
-        }]);
+}]);
