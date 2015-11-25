@@ -15,7 +15,6 @@ app.controller("UserController" , ["$scope" , "$timeout" , "$location" , "$route
     scope.$on("$routeChangeSuccess" , function(ev , next , prev){
         
         var to = next.originalPath;
-        
         if(to.indexOf("search_organizer") !== -1)
             changeTitle("Search Organizer");
         else if(to.indexOf("edit_organizer") !== -1)
@@ -24,6 +23,8 @@ app.controller("UserController" , ["$scope" , "$timeout" , "$location" , "$route
             changeTitle("Add Organizer");
         else
             changeTitle("Home Page");
+        $("li.active-link").removeClass("active-link");
+        $("a:not(.home)[href='#"+to+"']").parent().addClass("active-link");
     });
     
     scope.$on("$routeChangeStart" , function(ev , next , current){

@@ -18,14 +18,14 @@
            <button type="button" class="menu-button">
                 <i class="fa fa-bars"></i>
             </button>
-           <div class="text-right">
-                <a href="#/"><img src="/icons/logo.png" alt="ICOM organizers logo" class="logo"></a>
+           <div class="logo-holder">
+                <a href="#/" class="home"><img src="/icons/logo.png" alt="ICOM organizers logo" class="logo"></a>
             </div>
             
             <nav>
                
                 <div>
-                    <a href="#/"><img src="/icons/navlogo.png" alt="Logo" class="img-responsive"></a>
+                    <a href="#/" class="home"><img src="/icons/navlogo.png" alt="Logo" class="img-responsive"></a>
                 </div>
 
                 <ul>
