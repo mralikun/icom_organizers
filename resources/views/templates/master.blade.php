@@ -32,8 +32,8 @@
 
                     <li><a href="#/create_organizer">Add Organizer</a></li>
                     <li><a href="#/search_organizer">Manage Organizers</a></li>
-                    <li><a href="#">Assign Tasks</a></li>
-                    <li><a href="#">Grade Organizers</a></li>
+                    <li><a href="#/assign_tasks">Assign Tasks</a></li>
+                    <li><a href="#/grade">Grade Organizers</a></li>
                     <li><a href="#">Export Reports</a></li>
                     <li><a href="#">Organizers Attendance</a></li>
                     <li><a href="/auth/logout">Logout</a></li>
@@ -41,11 +41,9 @@
                 </ul>
 
             </nav>
-            
-            
         </header>
         <div class="tail"><h4 class="text-center">@{{view_data.page_title}}</h4></div>
-        <main>
+        <main class="container-fluid">
             
             <div ng-view></div>
             
@@ -60,6 +58,7 @@
     <script src="/js/app.js"></script>
     <script src="/js/routes.js"></script>
     <script src="/js/controllers/UserController.js"></script>
+    <script src="/js/controllers/TaskController.js"></script>
     <script>
       app.constant("_TOKEN" , "{{csrf_token()}}");
       </script>

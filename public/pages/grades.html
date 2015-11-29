@@ -1,0 +1,64 @@
+<div class="row">
+    
+    <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-6 col-lg-offset-3 text-center">
+        <strong>Conference: </strong>CardioAlex
+        <div class="from-to">
+            <strong>From: </strong>date1
+            <strong>To: </strong>date2
+        </div>
+        <strong>Department: </strong>Organizers in this department.
+    </div>
+    
+</div>
+<div class="row">
+    
+    <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-6 col-lg-offset-3">
+        
+        <table class="table table-bordered text-center" id="grading-table">
+            <thead>
+                <tr>
+                    <th colspan="2">Organizers</th>
+                </tr>
+            </thead>
+            
+            <tbody>
+               <!-- This row will be repeated for each organizer (in a certain conference ?)! -->
+                <tr>
+                    <td>Organizer 1</td>
+                    <td><button class="btn btn-primary" data-id="5" ng-click="showGradingSheet($event)">Grade</button></td>
+                </tr>
+            </tbody>
+        </table>
+        
+    </div>
+    
+</div>
+<div class="cover">
+    
+    <div class="grade-sheet">
+        <button class="btn close" style="padding: 5px;" ng-click="hideGradingSheet()">X</button>
+        <h1 class="text-center">Grading Sheet</h1>
+        <table class="table table-bordered">
+            
+            <thead>
+                <tr>
+                    <th>Organizer: </th>
+                    <td>Ali Reda</td>
+                </tr>
+            </thead>
+            
+            <tbody>
+               <!-- Will be repeated for each criteria ( fixed number ? ) -->
+                <tr>
+                    <th style="vertical-align:middle;text-align:center;">Crit 1</th>
+                    <td><input type="number" min="0" value="0" class="form-control" style="display:block;width: 68px;margin: 0 auto;"></td>
+                </tr>
+            </tbody>
+            
+        </table>
+        <div class="row text-right">
+            <button class="btn btn-icom">Submit</button>
+        </div>
+    </div>
+    
+</div>

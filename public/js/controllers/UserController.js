@@ -1,15 +1,51 @@
-app.controller("UserController" , ["$scope" , "$timeout" , "$location" , "$routeParams" , "_TOKEN" , "Patcher" , "Organizer", function(scope , timeout , loc , params , token , request , organizer){
+app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$location" , "$routeParams" , "_TOKEN" , "Patcher" , "Organizer", function(scope , root , timeout , loc , params , token , request , organizer){
     scope.view_data = {
         processing_request: false,
         success_msg: undefined,
         page_title: "Home Page",
         encoding_status: "It might take a few seconds to encode the agreement image after you choose it, Please wait for the encoding to finish before submitting!",
         errors: [],
-        orgs: []
+        orgs: [],
+        crits: []
     };
+    // Grading an Organizer
+    var Grades = {
+        data : {},
+        assign: function(crit , grade){
+            this.data[crit] = grade;
+        },
+        userID: 0,
+        patch: function(){
+            
+        },
+        init: function(){
+            if(scope.view_data.crits.length){
+                for(var i = 0; i < scope.view_data.crits.length ; i++){
+                    this.data[scope.view_data.crits[i].name.toLowerCase()] = 0;
+                }
+            }
+        }
+    };
+    
+    ///
+    
+    root.$on("changeTitle" , function(events , title){
+        changeTitle(title);
+    });
     
     function changeTitle(title){
         scope.view_data.page_title = title;
+    }
+    
+    scope.showGradingSheet = function(event){
+        $(".cover").show();
+        var tar = event.target;
+        var id = parseInt(tar.getAttribute("data-id") , 10);
+        console.log(id);
+    }
+    
+    scope.hideGradingSheet = function(){
+        $(".cover").hide();
     }
     
     scope.$on("$routeChangeSuccess" , function(ev , next , prev){
@@ -54,6 +90,8 @@ app.controller("UserController" , ["$scope" , "$timeout" , "$location" , "$route
         request.set("url" , "/organizers").set("verb" , "get").send().then(function(resp){
             scope.view_data.orgs = resp.data;
         } , function(err){});
+    }else if(rt.indexOf("grade") !== -1){
+        root.$emit("changeTitle" , "Grade Organizers");
     }
     
     var reader = new FileReader();

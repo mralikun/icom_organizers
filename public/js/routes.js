@@ -17,6 +17,16 @@ app.config(["$routeProvider" , function(route){
     .when("/edit_organizer/:email" , {
         templateUrl: "/pages/addOrganizer.html",
         controller: "UserController"
+    })
+    // check with ali if this to assign organizers to conference or the tasks to organizers.
+    .when("/assign_tasks" , {
+        templateUrl: "/pages/assign_tasks.html",
+        controller: "TaskController"
+    })
+    
+    .when("/grade" , {
+        templateUrl: "/pages/grades.html",
+        controller: "UserController"
     });
     
 }]);
