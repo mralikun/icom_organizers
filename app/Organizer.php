@@ -38,6 +38,7 @@ class Organizer extends Model {
         return $this->belongsToMany('App\Conference','conference_grade_organizer', 'organizer_id', 'conference_id' )->withPivot('grade','criteria');
     }
 
+
     public function setGenderAttribute($value){
         $this->attributes['gender'] = (int)$value;
     }
@@ -53,6 +54,9 @@ class Organizer extends Model {
         }
 
         abort(404);
+    }
+    public function workingfields(){
+        return $this->belongsToMany('App\WorkingFields','organizer_workingfields', 'organizer_id', 'workingfields_id' );
     }
 
 }
