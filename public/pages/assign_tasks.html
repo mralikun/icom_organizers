@@ -1,41 +1,82 @@
 <div class="row">
     <div class="col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
-       <form class="form-horizontal" style="margin-top: 0;margin-bottom: 35px;">
-            <div class="form-group">
-               <div class="col-sm-4 col-sm-offset-2">
+       <form class="form-horizontal" style="margin-top: 0;margin-bottom: 35px;" ng-submit="create()">
+         <div class="form-group">
+             <label class="col-sm-2">Task Type</label>
+             <div class="col-sm-10">
+                <select name="task_type" id="task_type" class="form-control" ng-model="task.type">
+                    <option value="1">Conference</option>
+                    <option value="2">Office Hours</option>
+                    <option value="3">One Time Errand</option>
+                </select>
+             </div>
+         </div>
+          <div class="form-group text-center" ng-show="task.type == 1">
+              <span><strong><em><u>Choose a date range to show all conferences in that range.</u></em></strong></span>
+               <div class="col-sm-4 col-sm-offset-2 text-left">
                     <label class="control-label col-sm-4">From</label>
                     <div class="col-sm-8">
-                        <input type="text" name="start" ng-model="task.start" class="form-control" placeholder="Starting Date">
+                        <input type="date" name="start" ng-model="start" class="form-control">
                     </div>
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-4 text-left">
                     <label class="control-label col-sm-4">To</label>
                     <div class="col-sm-8">
-                        <input type="text" name="end" ng-model="task.end" class="form-control" placeholder="Ending Date">
+                        <input type="date" name="end" ng-model="end" class="form-control" ng-change="getConferences()">
                     </div>
                 </div>
+                <div class="text-danger text-center" ng-show="wrong_dates">
+                    <span>The ending date can't come before the starting date.</span>
+                </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" ng-show="task.type == 1">
                 <label class="control-label col-sm-2">Choose Conference</label>
                 <div class="col-sm-10">
-                    <select name="conference" id="conferenceSelect" class="form-control">
-                        <option value="0">Cardio 1</option>
+                    <select name="conference" id="conferenceSelect" class="form-control" ng-disabled="!confs.legnth" ng-model="task.conference_id">
+                        <option ng-repeat="conf in confs" value="{{conf.id}}">{{conf.name}}</option>
                     </select>
                 </div>
             </div>
             <div class="form-group">
-                <label class="control-label col-sm-2">Choose Department</label>
+                <label class="control-label col-sm-2">Title</label>
                 <div class="col-sm-10">
-                    <select name="department" id="departmentSelect" class="form-control">
+                    <input type="text" ng-model="task.title" class="form-control" placeholder="Task Title" required>
+                </div>
+            </div>
+            <div class="form-group">
+               <div class="panel panel-default col-sm-10 col-sm-offset-2">
+                   <label class="control-label panel-heading">Task Duration</label>
+                   <div class="panel-body">
+                       <div>
+                            <label class="col-sm-2">From</label><input type="date" ng-model="task.from" class="form-control" required>
+                            <label class="col-sm-2">To</label><input type="date" ng-model="task.to" class="form-control" required>
+                        </div>
+                   </div>
+                   <div class="text-danger text-center" ng-show="task.to < task.from">
+                       <span>The ending date can't come before the starting date.</span>
+                   </div>
+               </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2">Description</label>
+                <div class="col-sm-10">
+                    <textarea cols="30" rows="5" ng-model="task.description" class="form-control" placeholder="Task Description" required></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2">Working Field</label>
+                <div class="col-sm-10">
+                    <select name="department" id="departmentSelect" class="form-control" ng-model="task.working_field" ng-change="load_organizer()" ng-disabled="fields.length == 0" required>
+                       <option></option>
                         <option value="0">Dept. 1</option>
                     </select>
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" ng-show="loaded_organizers">
                 <label class="col-sm-2 control-label"><u>Choose Organizers</u></label>
                 <div class="col-sm-10">
                      <div ng-repeat="org in organizers" class="select-organizer">
-                         <input type="checkbox" data-id="{{org.id}}" ng-click="append($event)"><label>{{org.name}}</label>
+                         <input type="radio" value="{{org.id}}" name="organizer" ng-model="task.organizer_id"><label>{{org.name}}</label>
                      </div>
                 </div>
             </div>

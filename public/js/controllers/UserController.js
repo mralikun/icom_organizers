@@ -16,7 +16,13 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
         },
         userID: 0,
         patch: function(){
-            
+            // the data to a link // the data object {each key is the id of the criteria => the value is the grade}.
+            // we might also need the conference ID
+            request.set("url" , "/organizer/setGrades").set("verb" , "POST").set("data" , this.data).send().then(function(resp){
+                
+            } , function(err){
+                alert("Something wrong happened when connecting to server, Please refresh and try again!");
+            });
         },
         init: function(){
             if(scope.view_data.crits.length){
@@ -26,7 +32,6 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
             }
         }
     };
-    
     ///
     
     root.$on("changeTitle" , function(events , title){
