@@ -17,7 +17,8 @@ class CreateTaskTable extends Migration {
 			$table->string("title");
 			$table->text("description");
 			$table->timestamps();
-			$table->date("date");
+			$table->date("from");
+			$table->date("to");
 			$table->string("type");
 			$table->boolean("confirmed");
 			$table->integer("organizer_id")->unsigned();
