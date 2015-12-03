@@ -3,6 +3,14 @@ app.controller("TaskController" , ["$scope" , "$rootScope" , "Patcher" , functio
     root.$emit("changeTitle" , "Assign Tasks");
     var ids = [];
     var types = ["conference" , "office hours" , "one time"];
+    
+    function date_formater(d){
+        var day = d.getDate();
+        var month = d.getMonth();
+        var year = d.getFullYear();
+        return year + "-" + ((month < 10) ? "0"+month : month) + "-" + ((day < 10) ? "0"+day : day);
+    }
+    
     scope.append = function(_ev){
         var tar = _ev.target;
         var id = parseInt(tar.getAttribute("data-id") , 10);
@@ -30,7 +38,7 @@ app.controller("TaskController" , ["$scope" , "$rootScope" , "Patcher" , functio
                 return false;
             }else{
                 scope.wrong_dates = false;
-                request.set("url" , "/conference").set("verb" , "get").set("data" , {from: scope.start , to: scope.end}).send().then(function(resp){
+                request.set("url" , "/conferences").set("verb" , "get").set("data" , {from: date_formater(scope.start) , to: date_formater(scope.end)}).send().then(function(resp){
                     scope.confs = resp.data;
                 } , function(err){
                     alert("Something went wrong while retrieving conferences data, Please refresh and try again!");
