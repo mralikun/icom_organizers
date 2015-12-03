@@ -45,12 +45,8 @@ app.controller("TaskController" , ["$scope" , "$rootScope" , "Patcher" , functio
                 return false;
             }else{
                 scope.wrong_dates = false;
-                var d = {
-                    from: date_formater(scope.start),
-                    to: date_formater(scope.end)
-                }
-                console.log(d);
-                request.set("url" , "/conferences").set("verb" , "get").set("data" , d).send().then(function(resp){
+                var params = "from="+date_formater(scope.start)+"&to="+date_formater(scope.end);
+                request.set("url" , "/conferences?"+params).set("verb" , "get").send().then(function(resp){
                     scope.confs = resp.data;
                 } , function(err){
                     alert("Something went wrong while retrieving conferences data, Please refresh and try again!");
