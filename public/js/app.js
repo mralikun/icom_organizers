@@ -13,7 +13,7 @@ app.factory("Patcher" , ["$http" , function(request){
                 console.error("Unable to send request, missing arguments!");
             }
             var p_v = this.verb.toLowerCase();
-            return request[p_v](this.url , (p_v === "post") ? this.data : undefined );
+            return request[p_v](this.url , this.data);
         },
         reset: function(){
             this.url = this.verb = "";
