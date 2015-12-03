@@ -14,40 +14,72 @@ class ExcelController extends Controller
 //        $datas = Conference::select('id','name','from','to','venue')->get()->toArray();
         $conferences = Conference::all();
 
-        $arr=array();
-        foreach($conferences as $conference){
-            $conference->organizers->toarray();
+//        $conferenceArray=array();
+//        foreach($conferences as $conference){
+////            return $conference->organizers()->first()->name;
+//
+//            array_push($conferenceArray,$conference);
+//        }
+//        return $conferences;
 
-            array_push($arr,$conference);
+        $conferenceArray = [];
+        $i = 0;
+
+        foreach($conferences as $conference){
+            $conferenceArray[$i][0] = $conference->id;
+            $conferenceArray[$i][1] = $conference->name;
+            $conferenceArray[$i][2] = $conference->from;
+            $conferenceArray[$i][3] = $conference->to;
+            $conferenceArray[$i][4] = $conference->venue;
+            $conferenceArray[$i][5] = ;
+            $i++;
         }
 
 
+         $conferences = $conferenceArray;
 
-      Excel::create('Sheets', function($excel) use($arr) {
+      Excel::create('Sheets', function($excel) use($conferences) {
 
             $excel->setTitle('Our new awesome title');
 
            $excel->setDescription('A demonstration to change the file properties');
 
-            $excel->sheet('organizer', function($sheet) use($arr) {
+            $excel->sheet('organizer', function($sheet) use($conferences) {
+                $sheet->prependRow(array(
+                    'id', 'name','from','to','venue','organizer'
+                ));
+//                $sheet->fromArray($conferences, null, 'A2', false, false);
+                $sheet->rows($conferences);
+                $sheet->fromArray([
+                    'dsd','dsds','dsd'
+                ], null, 'F2', false, false);
 
                 //$sheet->with($arr);
-                foreach($arr as $value){
-                    $i=1;
-                    $array=array($value['id'],$value['name']);
-                    $sheet->row(1, $value['id']);
-                    $sheet->row(1, );
-                    $sheet->row($i,$value['from']);
-                    $sheet->row($i,$value['to']);
-                    $sheet->row($i, $value['venue']);
-                    $i++;
-                }
-
-
+//                foreach($conferenceArray as $conference){
+//                    $i=2;
+////                    $conferance = array($conference['id'],$value['name'],$value['from'],
+////                        $value['to'],$value['venue']);
+//
+//                    $organizers=array();
+//                    if(count($conference['organizers'])) {
+//                        foreach ($conference['organizers'] as $organizer) {
+//
+//                            array_push($organizers, $organizer->name);
+//                        }
+//                    }
+////                        $sheet->row($i, $conferance);
+//                    $sheet->fromArray($organizers, null, 'A2', false, false);
+//
+////                    $sheet->rows($organizers);
+//                          $i++;
+//                }
             });
 
         })->export('xls');
    }
+    public function sheet(){
+
+    }
 
 
 }

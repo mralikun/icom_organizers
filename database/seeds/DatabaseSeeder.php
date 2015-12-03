@@ -110,7 +110,8 @@ class TaskTableSeeder extends Seeder {
                 Task::create(array(
                     'title' => $faker->word,
                     'description' => $faker->text,
-                    'date' => $faker->date($format = 'Y-m-d', $max = 'now'),
+                    'from' => $faker->date($format = 'Y-m-d', $max = 'now'),
+                    'to' => $faker->date($format = 'Y-m-d'),
                     'type' => $faker->randomElement(array("one time", "office hours")),
                     'confirmed' => $faker->boolean($chanceOfGettingTrue = 75),
                     'organizer_id' => $faker->numberBetween($min = 1, $max = 10),

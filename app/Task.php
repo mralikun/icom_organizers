@@ -7,7 +7,7 @@ class Task extends Model {
 
     protected $table = 'task';
 
-    protected $fillable = ['title', 'description', 'date', 'type','confirmed','orgainzer_id','conference_id'];
+    protected $fillable = ['title', 'description', 'from','to', 'type','confirmed','orgainzer_id','conference_id'];
 
     public function conference(){
     	$this->hasOne('App\Conference', 'p');

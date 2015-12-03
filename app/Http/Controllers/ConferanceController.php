@@ -16,6 +16,7 @@ class ConferanceController extends Controller {
 	 */
 	public function index()
 	{
+
 		$from=Input::get('from');
 		$to=Input::get('to');
 
