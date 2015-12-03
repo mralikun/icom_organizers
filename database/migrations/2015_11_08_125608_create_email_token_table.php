@@ -15,7 +15,7 @@ class CreateEmailTokenTable extends Migration {
 		Schema::create("email_token",function($table){
 		    $table->increments('id');
 		    $table->string("token");
-		    $table->integer("user_id")->unsigned();
+		    $table->integer("organizer_id")->unsigned();
 		    $table->integer("task_id")->unsigned();
 		    $table->timestamps();
 		    
@@ -23,8 +23,8 @@ class CreateEmailTokenTable extends Migration {
 			      ->references('id')->on('task')
 			      ->onDelete('cascade');
 			
-			$table->foreign('user_id')
-			      ->references('id')->on('users')
+			$table->foreign('organizer_id')
+			      ->references('id')->on('organizer')
 			      ->onDelete('cascade');
 
 		});

@@ -1,10 +1,14 @@
 <?php namespace App\Http\Controllers;
 
 use App\Http\Requests;
+use App\User;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Input;
 
 class UsersController extends Controller {
 
@@ -15,7 +19,15 @@ class UsersController extends Controller {
 	 */
 	public function index()
 	{
-		//
+	}
+	public function add(){
+
+
+	}
+	public function save(){
+
+
+
 	}
 
 	/**
@@ -83,6 +95,9 @@ class UsersController extends Controller {
 	}
 
 	public function Home($username){
+		if(Auth::user()->name != $username){
+			abort('404');
+		}
 		return View::make("templates.master");
 	}
 

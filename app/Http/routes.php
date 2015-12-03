@@ -13,14 +13,13 @@
 
 Route::get('/', 'WelcomeController@index');
 
-
 Route::post('/auth/login', 'AuthController@login');
 
 Route::group(['middleware' => ['auth', 'admin']], function()
 {
 	// these routes are accessable by the Admin Only
 
-	Route::resource('Admin', 'AdminController');
+Route::resource('Admin', 'AdminController');
 });
 
 Route::group(['middleware' => ['auth', 'operation']], function()
@@ -35,16 +34,25 @@ Route::group(['middleware' => ['auth', 'operation']], function()
 	 *	Resource by adding  array('except' => array('update') and Register another Post
 	 *	Route Below .
 	 */
+
+	Route::resource('/task', 'TaskController');
+
+	Route::resource('/workingfields', 'WorkingFieldsController');
+
+	Route::resource('/conferences', 'ConferanceController');
+
+	Route::get('/tasks/json', 'TaskController@testjson');
+
+	Route::get('/workingfields/organizers/{id}', 'WorkingFieldsController@organizers_work_in_workfields');
+
+	Route::get('/task/mailresponse/{flag}/{token}', 'TaskController@check_email');
+
 	Route::post('/organizer/update/{id}', 'OrganizerController@update');
 
-	Route::get('/organizer/getAllDepartments', 'OrganizerController@getAllDepartments');
-
-
 });
-
 Route::group(['middleware' => ['auth']], function()
 {
-	// these routes are accessable by any user (operations , department , or the Admin)
+	//these routes are accessable by any user (operations , department , or the Admin)
 
 	Route::resource('users', 'UsersController');
 
@@ -55,3 +63,5 @@ Route::group(['middleware' => ['auth']], function()
 	Route::get('/auth/onlineUser', 'AuthController@onlineUser');
 
 });
+Route::get('/sheet','ExcelController@organize_sheet');
+Route::get('/getsheet','ExcelController@organize_sheet');

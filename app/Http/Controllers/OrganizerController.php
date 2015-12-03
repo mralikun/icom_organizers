@@ -25,7 +25,6 @@ class OrganizerController extends Controller {
 		return $organizers;
 	}
 
-
 	/**
 	 * Validate Organizer's Data
 	 *
@@ -39,7 +38,7 @@ class OrganizerController extends Controller {
 						'email' 			=> 	"required|email|unique:organizer",
 						'cell_phone' 		=> 	"required",
 						'id_number' 		=> 	"required",
-						'working_fields' 	=> 	"required",
+						'working_fields' 	=> 	"required"
 
 				]
 		);
@@ -62,22 +61,21 @@ class OrganizerController extends Controller {
 
 		$data = explode(',', $base64_string);
 
-		$extention = explode('/',$data[0]);
-		$extention = explode(';',$extention[1]);
+		$extension = explode('/',$data[0]);
+		$extension = explode(';',$extension[1]);
 
-		switch($extention[0]){
+		switch($extension[0]){
 			case 'png':case 'jpg':case 'jpeg':case 'JPEG':break;
 			default: return 'false';
 		}
 
-		$ifp = fopen($output_file.DIRECTORY_SEPARATOR.$filename.".".$extention[0], "wb");
+		$ifp = fopen($output_file.DIRECTORY_SEPARATOR.$filename.".".$extension[0], "wb");
 
 		fwrite($ifp, base64_decode($data[1]));
 		fclose($ifp);
 
-		return $extention[0];
+		return $extension[0];
 	}
-
 
 	/**
 	 * Store a newly created resource in storage.
@@ -125,7 +123,6 @@ class OrganizerController extends Controller {
 
 		return "true";
 	}
-
 
 	/**
 	 * Show the form for editing the specified resource.
@@ -208,10 +205,7 @@ class OrganizerController extends Controller {
 
 		return "true";
 
-
-
 	}
-
 	/**
 	 * Remove the specified resource from storage.
 	 *

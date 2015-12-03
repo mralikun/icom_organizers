@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\User;
 use App\Organizer;
 use App\Task;
+use App\WorkingFields;
 
 
 class DatabaseSeeder extends Seeder {
@@ -30,6 +31,10 @@ class DatabaseSeeder extends Seeder {
 		$this->call('TaskTableSeeder');
 
         $this->command->info('task table seeded!');
+
+		$this->call('WorkingFieldsTableSeeder');
+
+		$this->command->info('WorkingFields table seeded!');
 	}
 
 }
@@ -116,6 +121,34 @@ class TaskTableSeeder extends Seeder {
 
     }
 
+}
+
+class WorkingFieldsTableSeeder extends Seeder
+{
+
+	private $workingfields  = [
+			"Accommodation",
+			"Audiovisual",
+			"Barcode",
+			"Food and Beverage",
+			"Hall",
+			"Information Desk",
+			"Ladies Program",
+			"Meet and Assist",
+			"Registration",
+			"Transportation",
+			"Studio"
+	];
+
+	public function run()
+	{
+
+		foreach ($this->workingfields as $workingfield) {
+
+			WorkingFields::create(["name" => $workingfield, "teamleader" => "hend",
+					"teamleader_email" => "hen@yahoo.com","teamleader_phone" => "1234"]);
+		}
+	}
 }
 
             
