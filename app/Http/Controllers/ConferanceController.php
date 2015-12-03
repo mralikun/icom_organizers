@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use App\Conference;
+use Illuminate\Support\Facades\Input;
 
 class ConferanceController extends Controller {
 

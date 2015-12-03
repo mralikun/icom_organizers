@@ -34,11 +34,12 @@ class ExcelController extends Controller
                 //$sheet->with($arr);
                 foreach($arr as $value){
                     $i=1;
-                    $sheet->row($i, $value->id);
-                    $sheet->row($i, $value->name);
-                    $sheet->row($i, $value->from);
-                    $sheet->row($i, $value->to);
-                    $sheet->row($i, $value->venue);
+                    $array=array($value['id'],$value['name']);
+                    $sheet->row(1, $value['id']);
+                    $sheet->row(1, );
+                    $sheet->row($i,$value['from']);
+                    $sheet->row($i,$value['to']);
+                    $sheet->row($i, $value['venue']);
                     $i++;
                 }
 
