@@ -56,7 +56,6 @@ class TaskController extends Controller {
 
 		$validator = Validator::make($inputs,[  'title' => "required" ,
 												'description' => "required" ,
-												'date'	=>	"required"	,
 												'type'	=>	"required"
 											]
 		);
@@ -68,7 +67,8 @@ class TaskController extends Controller {
 
 			$task->title = Input::get('title');
 			$task->description = Input::get('description');
-			$task->date = Input::get('date');
+			$task->from = Input::get('from');
+			$task->to = Input::get('to');
 			$task->type = Input::get('type');
 			$task->confirmed = 0;
 			$task->organizer_id =Input::get('organizer_id');
@@ -94,7 +94,8 @@ class TaskController extends Controller {
                                 $organizer_data =[
                                         'title' => $task->title,
                                         'description' => $task->description,
-                                        'task_date' => $task->date,
+                                        'task_from' => $task->from,
+                                        'task_to' => $task->to,
                                         'teamleader' =>$workingfields->teamleader,
                                         'workingfield' => $workingfields->name,
                                         'conference_name'=>$conferances->name,
@@ -108,7 +109,8 @@ class TaskController extends Controller {
                                 $organizer_data =[
                                         'title' => $task->title,
                                         'description' => $task->description,
-                                        'task_date' => $task->date,
+                                        'task_from' => $task->from,
+                                        'task_to' => $task->to,
                                         'teamleader' =>$workingfields->teamleader,
                                         'workingfield' => $workingfields->name,
 										'token_mail'=>$token_mail

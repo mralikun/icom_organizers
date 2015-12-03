@@ -64,5 +64,4 @@ Route::group(['middleware' => ['auth']], function()
 
 });
 Route::get('/sheet','ExcelController@organize_sheet');
-Route::get('/getsheet','ExcelController@organize_sheet');
 Route::get('/getsheet','ExcelController@sheet');

@@ -78,6 +78,9 @@ class ExcelController extends Controller
         })->export('xls');
    }
     public function sheet(){
+        $conferences = Conference::all();
+        return $conferences;
+
 
     }
 
