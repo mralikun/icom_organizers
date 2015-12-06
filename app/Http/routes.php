@@ -44,7 +44,9 @@ Route::group(['middleware' => ['auth', 'operation']], function()
 
 	Route::resource('/conferences', 'ConferanceController');
 
-	Route::get('/organizerrequest', 'TaskController@organizer_request');
+	Route::post('/organizerrequest', 'TaskController@organizer_request');
+    
+    Route::get("/getRequests" , "TaskController@get_all_organizers_requests");
 
 	Route::get('/getOrganizerrequest/{file_name}', 'TaskController@get_organizer_request');
 

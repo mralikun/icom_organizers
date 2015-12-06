@@ -16,7 +16,7 @@ class ConferenceMiddleware {
 	{
 //		$last_conference_id = Conference::last_id();
 		$token = str_random(6)."1q2w3e4r".str_random(6);
-		$url = "http://icomevents.tooonme.com/conference/information/".$token;
+		$url = "http://icomevents.com/conference/information/".$token;
 		// use key 'http' even if you send the request to https://...
 		$options = array(
 		    'http' => array(

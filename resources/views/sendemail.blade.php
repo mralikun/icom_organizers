@@ -3,9 +3,9 @@
 <head>
 </head>
 <body>
-<h2>Learning Laravel!</h2>
- <a href="/task/mailresponse/yes/{{$organizer_data->token}}">Yes</a>
- <a href="/task/mailresponse/no/{{$organizer_data->token}}">No</a>
+<h2>ICOM Organizers</h2>
+ <a href="{{asset('/task/mailresponse/yes/'.$token_mail)}}">Yes</a>
+ <a href="{{asset('/task/mailresponse/no/'.$token_mail)}}">No</a>
     <div>
 
 </div>

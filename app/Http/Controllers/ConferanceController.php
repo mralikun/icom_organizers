@@ -53,7 +53,8 @@ class ConferanceController extends Controller {
 	 */
 	public function show($id)
 	{
-		//
+		$conference = Conference::where("id", "=", $id)->get();
+        return $conference;
 	}
 
 	/**
