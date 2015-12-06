@@ -59,4 +59,27 @@ class Organizer extends Model {
         return $this->belongsToMany('App\WorkingFields','organizer_workingfields', 'organizer_id', 'workingfields_id' );
     }
 
+    /*
+     * return average for organizer in all tasks
+     * */
+
+    public static function organizer_grade($organizer_id){
+
+        $tasks = Task::where('organizer_id','=',$organizer_id)->get();
+
+        $number_of_task = count($tasks);
+
+        $total_of_tasks = 0;
+
+        foreach($tasks as $task){
+
+            $task_id = $task->id;
+            $average_for_task = grading::grading_average($task_id,$organizer_id);
+
+            $total_of_tasks += $average_for_task;
+        }
+        return $average_for_tasks = $total_of_tasks/$number_of_task;
+
+    }
+
 }

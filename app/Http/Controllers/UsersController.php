@@ -20,15 +20,7 @@ class UsersController extends Controller {
 	public function index()
 	{
 	}
-	public function add(){
 
-
-	}
-	public function save(){
-
-
-
-	}
 
 	/**
 	 * Show the form for creating a new resource.
@@ -37,7 +29,32 @@ class UsersController extends Controller {
 	 */
 	public function create()
 	{
-		//
+
+	}
+
+	/*
+	 * Validate the inputs
+	 * */
+
+	private function validate_inputs($inputs){
+		$validator = Validator::make(
+				$inputs,
+				[
+						'name' => "required",
+						'email' => "required|email|unique:users",
+						'password' => "required"
+				]
+		);
+
+
+		if($validator->fails()){
+
+			return false;
+
+		}else{
+
+			return true;
+		}
 	}
 
 	/**
@@ -47,8 +64,23 @@ class UsersController extends Controller {
 	 */
 	public function store()
 	{
-		//
+		$inputs = Input::all();
+
+		if($this->validate_inputs($inputs)){
+
+			if(Input::get('role') == "department" ||Input::get('role') == "operations" ){
+
+				User::create($inputs);
+
+			}else{
+
+				return "error";
+
+			}
+		}
 	}
+
+
 
 	/**
 	 * Display the specified resource.
@@ -69,7 +101,7 @@ class UsersController extends Controller {
 	 */
 	public function edit($id)
 	{
-		//
+
 	}
 
 	/**
@@ -80,7 +112,20 @@ class UsersController extends Controller {
 	 */
 	public function update($id)
 	{
-		//
+		$inputs =Input::all();
+
+		if($this->validate_inputs($inputs)){
+
+			if(Input::get('role') == "department" ||Input::get('role') == "operations" ){
+
+				$user = User::find($id);
+				$user->update($inputs);
+
+			}else{
+
+				return "error";
+			}
+		}
 	}
 
 	/**
@@ -91,7 +136,9 @@ class UsersController extends Controller {
 	 */
 	public function destroy($id)
 	{
-		//
+		$user = User::find($id);
+
+		$user->delete();
 	}
 
 	public function Home($username){
@@ -100,8 +147,5 @@ class UsersController extends Controller {
 		}
 		return View::make("templates.master");
 	}
-
-
-
 
 }

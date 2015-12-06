@@ -3,6 +3,7 @@
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use App\Task;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Input;
@@ -139,7 +140,6 @@ class OrganizerController extends Controller {
 	}
 
 	/**
-	 * Update the specified resource in storage.
 	 *
 	 * @param  int  $id
 	 * @return Array
@@ -224,6 +224,24 @@ class OrganizerController extends Controller {
 		}
 
 		$organizer->delete();
+	}
+	public function check_in(){
+
+		$organizer_id = 1;
+		$date = Carbon::today()->format('Y-m-d');
+		$task = Task::where('organizer_id','=','organizer_id')
+				->where('from','<=','$date')
+				->where('to','>=','$date')
+				->get()->first();
+		$task_id = $task->id;
+		$attendance = new Attendance;
+		$attendance->organizer_id =$organizer_id ;
+		$attendance->task_id =$task_id ;
+		$attendance->check_in ="2015-12-13" ;
+		$attendance->save();
+
+
+
 	}
 
 }

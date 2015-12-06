@@ -17,10 +17,15 @@ class CreateAttendanceTable extends Migration {
 		    $table->date("check_in");
 		    $table->date("check_out");
 		    $table->integer("organizer_id")->unsigned();
-		    
+		    $table->integer("task_id")->unsigned();
+
 			$table->foreign('organizer_id')
 			      ->references('id')->on('organizer')
 			      ->onDelete('cascade');
+
+			$table->foreign('task_id')
+					->references('id')->on('task')
+					->onDelete('cascade');
 
 		});
 	}

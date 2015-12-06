@@ -4,18 +4,19 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\Task;
+use App\grading;
 use App\WorkingFields;
 use App\Organizer;
 use App\Email_token;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-
-
 
 class TaskController extends Controller {
 
@@ -82,14 +83,15 @@ class TaskController extends Controller {
 			$Email_token = new Email_token;
 			$token_mail =csrf_token();
 			$Email_token->token = $token_mail;
-			 $Email_token->task_id = $task->id;
+			$Email_token->task_id = $task->id;
 			$Email_token->organizer_id=$task->organizer_id;
 			$Email_token->save();
 
-                         $workingfields = WorkingFields::where('id','=',$task->working_fields_id)->get()->first();
-                         $organizer = Organizer::where('id','=',$task->organizer_id)->get()->first();
+			$workingfields = WorkingFields::where('id','=',$task->working_fields_id)->get()->first();
+			$organizer = Organizer::where('id','=',$task->organizer_id)->get()->first();
 
                         $organizer_data=array();
+
                             if($task->type === 'conferance'){
                                 $organizer_data =[
                                         'title' => $task->title,
@@ -151,13 +153,13 @@ class TaskController extends Controller {
 	public function check_email($flag,$token)
 	{
 		$emailtoken = Email_token::where('token', '=', $token)->get()->first();
-		$task_id = $emailtoken->task_id;
 
 
 		if (isEmpty($emailtoken)) {
 			abort(404);
 		} else {
 			if ($flag === 'yes') {
+				$task_id = $emailtoken->task_id;
 
 				$task = Task::find($task_id);
 				$task->confirmed = 1;
@@ -225,19 +227,23 @@ class TaskController extends Controller {
 	 */
 
 
-	public function testjson(){
-		/*$inputs = array(
+	public function organizer_request(){
 
-			'name'=>"hend",
-			'address'=>"alex"
-
-		);*/
 		$inputs = Input::all();
-
 		$contents = json_encode($inputs);
+		$date = Carbon::now();
+		$user = Auth::user()->name;
 
-		Storage::append('file.txt', $contents);
+		Storage::put('Organizer Request/'.$user.'_'.$date.'.txt',$contents);
 
 	}
+
+	public function get_organizer_request($file_name){
+
+		$organizer_request = Storage::get('Organizer Request/'.$file_name);
+		return json_decode($organizer_request);
+
+	}
+
 
 }
