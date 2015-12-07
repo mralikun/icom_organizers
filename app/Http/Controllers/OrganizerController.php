@@ -88,7 +88,7 @@ class OrganizerController extends Controller {
 	public function store()
 	{
 
-		$inputs = Input::except("agreement");
+		$inputs = Input::except("agreement","working_field");
 
 		$validator = $this->validateOrganizer($inputs);
 
@@ -124,7 +124,12 @@ class OrganizerController extends Controller {
 
 		$organizer = Organizer::create($inputs);
 
-		return "true";
+		$working_field = Input::get('working_field');
+		$organizer = Organizer::find($organizer->id);
+
+		$organizer->workingfields()->attach($organizer->id,$working_field);
+
+		//return "true";
 	}
 
 	/**
@@ -155,10 +160,10 @@ class OrganizerController extends Controller {
 		$inputEmail = Input::get('email');
 
 		if($inputEmail == $organizer->email){
-			$inputs = Input::except("agreement","departments");
+			$inputs = Input::except("agreement","departments","working_field");
 			$inputs['email'] = 'faker123@faker.com';
 		}else{
-			$inputs = Input::except("agreement","departments");
+			$inputs = Input::except("agreement","departments","working_field");
 		}
 
 		//  validating Inputs
@@ -170,7 +175,7 @@ class OrganizerController extends Controller {
 
 		}
 
-		$inputs = Input::except("agreement","departments");
+		$inputs = Input::except("agreement","departments","working_field");
 
 		// upload and validating img if Exists in Inputs
 		if (Input::has('agreement'))
@@ -207,7 +212,14 @@ class OrganizerController extends Controller {
 
 		$organizer->departments()->detach();
 
-		return "true";
+		$working_field = Input::get('working_field');
+		$organizer_id = $organizer->id;
+		$organizer->workingfields()->detach();
+		$organizer->workingfields()->attach($organizer_id,$working_field);
+
+
+
+		//return "true";
 
 	}
 	/**

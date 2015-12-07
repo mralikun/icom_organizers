@@ -195,29 +195,17 @@ class TaskController extends Controller {
 
 				$task->save();
 
-				/* return the name of organizer */
+				/* return the teamleader email */
 
 				$organizer_id = $emailtoken->organizer_id;
-				$organizer_name = Organizer::select('name')->where('id', '=', $organizer_id)
-						->get()->first();
-
-				/* return the teamleader email  */
 
 				$teamleader_email = Task::select('teamleader_email')
 						->where('organizer_id', '=', $organizer_id)
 						->get()
 						->first();
 
-				/* data which send to teamleader email  */
-
-				$data = array(
-						'organizer_name' => $organizer_name,
-						'flag' => $flag
-
-				);
-
 				self::$teamleader_email = $teamleader_email;
-				Mail::send('view', $data, function ($message) {
+				Mail::send('teamleader_mail', $flag, function ($message) {
 
 					$teamleader_email = self::$teamleader_email;
 
@@ -231,7 +219,7 @@ class TaskController extends Controller {
 
 			} else {
 
-				Mail::send('view', $flag, function ($message) {
+				Mail::send('teamleader_mail', $flag, function ($message) {
 
 					$teamleader_email = self::$teamleader_email;
 

@@ -54,7 +54,6 @@ Route::group(['middleware' => ['auth', 'operation']], function()
 
 	Route::get('/task/mailresponse/{flag}/{token}', 'TaskController@check_email');
 
-
 });
 
 
