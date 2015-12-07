@@ -1,0 +1,195 @@
+<h1 class="text-center">Organizers Request</h1>
+<div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-6 col-lg-offset-3">
+   <div class="form-group">
+        <label>What type of request would you like to make ?</label>
+        <select ng-model="request.type" class="form-control" ng-change="requestChanged()" readonly>
+            <option value="1">Conference</option>
+            <option value="2">Office Hours</option>
+            <option value="3">One Time Errand</option>
+        </select>
+    </div>
+    <form style="margin-top: 0;" ng-submit="sendRequest()" ng-show="request.type == 1">
+        <div class="panel panel-default">
+            <div class="panel-heading"><h4 class="text-center"><em>Conference Imformation</em></h4></div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label class="control-label">Conference</label>
+                    <select class="form-control" ng-model="request.conference_id" ng-change="setUp()" readonly>
+                        <option ng-repeat="conf in confs" value="{{conf.id}}">{{conf.name}}</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+
+                    <label class="control-label">Venue</label>
+                    <input type="text" readonly class="form-control" ng-model="request.venue" readonly>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label class="control-label">Congress Account Manager</label>
+                    <input type="text" class="form-control" ng-model="request.cam" readonly>
+
+                </div>
+
+                <div class="form-group">
+
+                    <div class="row">
+                        <div class="col-sm-3" style="padding: 15px;">
+                            <label class="control-label">Start Date</label>
+                            <input type="date" readonly class="form-control" ng-model="request.from" readonly>
+                        </div>
+                        <div class="col-sm-3" style="padding: 15px;">
+                            <label class="control-label">End Date</label>
+                            <input type="date" readonly class="form-control" ng-model="request.to" readonly>
+                        </div>
+                        <div class="col-sm-3" style="padding: 15px;">
+                            <label class="control-label">Gathering Time</label>
+                            <input type="time" class="form-control" ng-model="request.gathering_time" readonly>
+                        </div>
+                        <div class="col-sm-3" style="padding: 15px;">
+                            <label class="control-label">Start Time</label>
+                            <input type="time" class="form-control" ng-model="request.start_time" readonly>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading"><h4 class="text-center"><em>Organizers Information</em></h4></div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label class="control-label">Total number of required organizers</label>
+                    <input type="number" min="0" class="form-control" ng-model="request.total_organizers_number" readonly>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6" style="padding: 15px;">
+                        <label>Registration Organizers</label>
+                        <input type="number" min="0" class="form-control" ng-model="request.registration_organizers_number" readonly>
+                    </div>
+                    <div class="col-sm-6" style="padding: 15px;">
+                        <label>Chairpersons and Speakers registration organizers</label>
+                        <input type="number" class="form-control" min="0" ng-model="request.chairpersons_speaker_registration_organizers_number" readonly>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">Registration Manager</label>
+                    <input type="text" class="form-control" ng-model="request.registration_manager" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">Barcode Organizers</label>
+                    <input type="number" class="form-control" min="0" ng-model="request.barcode_organizers" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">Hall Organizers</label>
+                    <input type="number" class="form-control" min="0" ng-model="request.hall_organizers" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">Hall Manager</label>
+                    <input type="text" class="form-control" ng-model="request.hall_manager" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">Audio Visual Organizers(Center + Podium)</label>
+                    <input type="number" class="form-control" min="0" ng-model="request.av_organizers_total" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">Center</label>
+                    <input type="number" class="form-control" min="0" ng-model="request.av_center_organizers" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">Podium</label>
+                    <input type="number" class="form-control" min="0" ng-model="request.av_podium_organizer" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">IT Manager</label>
+                    <input type="text" class="form-control" ng-model="request.it_manager" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">Please list any ICOM staff will join the team.</label>
+                    <textarea id="" cols="30" rows="5" class="form-control" ng-model="request.other_staff_members" readonly></textarea>
+                </div>
+            </div>
+        </div>
+
+
+        <div ng-init="request.pre = 0">
+            <div class="form-group" style="border: 1px solid gray;padding: 5px;">
+                <label class="control-label">Pre-Event Meeting ?</label>
+                <input type="radio" name="pr" ng-model="request.pre" value="1" readonly>Yes  <input type="radio" name="pr" ng-model="request.pre" value="0" readonly>No
+            </div>
+
+            <div class="panel panel-default" ng-show="request.pre == 1">
+                <div class="panel-heading"><h4 class="text-center"><em>Meeting Information</em></h4></div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label class="control-label">Meeting Location</label>
+                        <input type="text" class="form-control" ng-model="request.meeting_location" readonly>
+                    </div>
+
+                   <div class="form-group">
+                       <label class="control-label">Meeting Date</label>
+                       <input type="date" class="form-control" ng-model="request.meeting_date" readonly>
+                   </div>
+                   
+                    <div class="form-group">
+                        <label class="control-label">Start Time</label>
+                        <input type="time" class="form-control" ng-model="request.meeting_starting_time" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">End Time</label>
+                        <input type="time" class="form-control" ng-model="request.meeting_ending_time" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">Meeting main topic(s)</label>
+                        <textarea id="" cols="30" rows="5" class="form-control" ng-model="request.meeting_topics" readonly></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">Meeting Committee</label>
+                        <textarea id="" cols="30" rows="5" class="form-control" ng-model="request.meeting_committee" readonly></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">If you have any comments , suggestions or remarks, Please list them all below</label>
+                        <textarea cols="30" rows="5" class="form-control" ng-model="request.comments" readonly></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </form>
+    <form style="margin-top: 0;" ng-submit="sendRequest()" ng-show="request.type == 2 || request.type == 3">
+        <div class="form-group">
+            <label class="control-label">Task Title</label>
+            <input type="text" class="form-control" ng-model="request.task_title" readonly>
+        </div>
+        
+        <div class="form-group">
+            <label class="control-label">Task Description</label>
+            <textarea id="" cols="30" rows="5" class="form-control" ng-model="request.task_description" readonly></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label class="control-label">Task Manager</label>
+            <input type="text" class="form-control" ng-model="request.task_manager" readonly>
+        </div>
+    </form>
+    <div class="text-right">
+        <a href="#/assign_tasks" class="btn btn-icom" style="margin: 5px;">Assign Task</a>
+    </div>
+</div>

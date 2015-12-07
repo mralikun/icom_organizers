@@ -4,7 +4,7 @@
          <div class="form-group">
              <label class="col-sm-2">Task Type</label>
              <div class="col-sm-10">
-                <select name="task_type" id="task_type" class="form-control" ng-model="task.type">
+                <select name="task_type" id="task_type" class="form-control" ng-model="task.type" ng-change="reset()">
                     <option value="1">Conference</option>
                     <option value="2">Office Hours</option>
                     <option value="3">One Time Errand</option>
@@ -16,7 +16,7 @@
                <div class="col-sm-4 col-sm-offset-2 text-left">
                     <label class="control-label col-sm-4">From</label>
                     <div class="col-sm-8">
-                        <input type="date" name="start" ng-model="start" class="form-control">
+                        <input type="date" name="start" ng-model="start" class="form-control" ng-change="getConferences()">
                     </div>
                 </div>
                 <div class="col-sm-4 text-left">
@@ -32,7 +32,7 @@
             <div class="form-group" ng-show="task.type == 1">
                 <label class="control-label col-sm-2">Choose Conference</label>
                 <div class="col-sm-10">
-                    <select name="conference" id="conferenceSelect" class="form-control" ng-disabled="!confs.legnth" ng-model="task.conference_id">
+                    <select name="conference" id="conferenceSelect" class="form-control" ng-disabled="confs.legnth" ng-model="task.conference_id" ng-change="setUp()">
                         <option ng-repeat="conf in confs" value="{{conf.id}}">{{conf.name}}</option>
                     </select>
                 </div>
@@ -64,9 +64,15 @@
                 </div>
             </div>
             <div class="form-group">
+                <label class="control-label col-sm-2">Team leader E-mail</label>
+                <div class="col-sm-10">
+                    <input type="email" class="form-control" ng-model="task.teamleader_email">
+                </div>
+            </div>
+            <div class="form-group">
                 <label class="control-label col-sm-2">Working Field</label>
                 <div class="col-sm-10">
-                    <select name="department" id="departmentSelect" class="form-control" ng-model="task.working_field" ng-change="load_organizer()" ng-disabled="fields.length == 0" required>
+                    <select name="department" id="departmentSelect" class="form-control" ng-model="task.working_fields_id" ng-change="load_organizer()" ng-disabled="fields.length == 0" required>
                         <option ng-repeat="f in fs" value="{{f.id}}">{{f.name}}</option>
                     </select>
                 </div>
@@ -80,6 +86,13 @@
                      </div>
                 </div>
             </div>
+            
+            <div class="col-sm-10 col-sm-offset-2 text-danger">
+                <ul>
+                    <li ng-repeat="error in errors">{{error[0]}}</li>
+                </ul>
+            </div>
+            
            <div class="form-group text-right">
                <input type="submit" class="btn btn-icom" value="Send E-mails">
            </div>

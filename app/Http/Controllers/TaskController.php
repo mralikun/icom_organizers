@@ -8,6 +8,7 @@ use App\grading;
 use App\WorkingFields;
 use App\Organizer;
 use App\Email_token;
+use App\Conference;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -70,13 +71,16 @@ class TaskController extends Controller {
 			return $validator->messages();
 		}else {
 
+
 			/* create new task */
 			$task = Task::create($inputs);
 
 			/*insert new token related to task */
 
 			$Email_token = new Email_token;
-			$token_mail =str_random(32);
+
+			$token_mail = str_random(32);
+
 			$Email_token->token = $token_mail;
 			$Email_token->task_id = Input::get('task_id');
 			$Email_token->organizer_id=Input::get('organizer_id');
@@ -114,6 +118,7 @@ class TaskController extends Controller {
 							'token_mail'=>$token_mail
 					];
 
+
 				}else{
 					$organizer_data =[
 							'title' => Input::get('title'),
@@ -141,11 +146,16 @@ class TaskController extends Controller {
 
 				$organizer_email = self::$organizer_email;
 
+
 				$message->subject("ICOM Organizer _ send confirm message to organizer");
+
+
+                $message->from('aliredamis@gmail.com');
 
 				$message->to($organizer_email);
 
 			});
+
 
 			self::$teamleader_email = Input::get('teamleader_email');
 
@@ -161,6 +171,10 @@ class TaskController extends Controller {
 		}
 	}
 
+                        }
+                }
+
+
 	public function check_email($flag,$token)
 	{
 		$emailtoken = Email_token::where('token', '=', $token)->get()->first();
@@ -171,13 +185,17 @@ class TaskController extends Controller {
 
 		} else {
 
-			if ($flag === 'yes') {
+
+			if ($flag == 'yes') {
+				$task_id = $emailtoken->task_id;
+
 
 				/*change the value of confirmed attribute from 0 to 1 */
 
 				$task_id = $emailtoken->task_id;
 				$task = Task::find($task_id);
 				$task->confirmed = 1;
+                
 				$task->save();
 
 				/* return the name of organizer */
@@ -283,17 +301,22 @@ class TaskController extends Controller {
 
 		$inputs = Input::all();
 		$contents = json_encode($inputs);
-		$date = Carbon::now();
+		$date = date("Y_m_d g_i A" , time() + (2*60*60));
 		$user = Auth::user()->name;
 
-		Storage::put('Organizer Request/'.$user.'_'.$date.'.txt',$contents);
+		Storage::put('Organizer Request\\'.$user.'_'.$date.'.json',$contents);
 
 	}
+    
+    public function get_all_organizers_requests(){
+        $files = Storage::files('Organizer Request/');
+        return $files;
+    }
 
 	public function get_organizer_request($file_name){
 
 		$organizer_request = Storage::get('Organizer Request/'.$file_name);
-		return json_decode($organizer_request);
+		return $organizer_request;
 
 	}
 

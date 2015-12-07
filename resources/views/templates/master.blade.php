@@ -32,10 +32,11 @@
 
                     <li><a href="#/create_organizer">Add Organizer</a></li>
                     <li><a href="#/search_organizer">Manage Organizers</a></li>
+                    <li><a href="#/request_organizers">Request Organizers</a></li>
+                    <li><a href="#/requests">View Requests</a></li>
                     <li><a href="#/assign_tasks">Assign Tasks</a></li>
                     <li><a href="#/grade">Grade Organizers</a></li>
-                    <li><a href="#">Export Reports</a></li>
-                    <li><a href="#">Organizers Attendance</a></li>
+<!--                    <li><a href="#">Organizers Attendance</a></li>-->
                     <li><a href="/auth/logout">Logout</a></li>
 
                 </ul>
@@ -59,6 +60,7 @@
     <script src="/js/routes.js"></script>
     <script src="/js/controllers/UserController.js"></script>
     <script src="/js/controllers/TaskController.js"></script>
+    <script src="/js/controllers/RequestController.js"></script>
     <script>
       app.constant("_TOKEN" , "{{csrf_token()}}");
       </script>

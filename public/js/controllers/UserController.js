@@ -8,6 +8,7 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
         orgs: [],
         crits: []
     };
+    var choosen_fields = [];
     // Grading an Organizer
     var Grades = {
         data : {},
@@ -34,12 +35,38 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
     };
     ///
     
+    request.set("url" , "/workingfields").set("verb" , "get").send().then(function(resp){
+        scope.fields = resp.data;
+    } , function(err){
+        alert("Something went wrong, Please refresh the page and try again!");
+    });
+    
     root.$on("changeTitle" , function(events , title){
         changeTitle(title);
     });
     
     function changeTitle(title){
         scope.view_data.page_title = title;
+    }
+    
+    function setFields(arr){
+        var f = $(arr).map(function(index , value){
+            return value.id;
+        });
+        for(var i = 0; i< f.length; i++){
+            $("input[type='checkbox'][data-f='"+f[i]+"']").attr("checked" , true);
+        }
+        choosen_fields = f;
+    }
+    
+    scope.appendField = function(event){
+        var id = parseInt(event.target.getAttribute("data-f") , 10);
+        if(choosen_fields.indexOf(id) !== -1){
+            choosen_fields.splice(choosen_fields.indexOf(id) , 1);
+        }else {
+            choosen_fields.push(id);
+        }
+        console.log(choosen_fields);
     }
     
     scope.showGradingSheet = function(event){
@@ -89,6 +116,7 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
     if(rt.indexOf("edit") !== -1 && params.hasOwnProperty("email")){
         organizer.import(params.email);
         scope.newUser = organizer;
+        setFields(organizer.working_fields);
         scope.view_data.page_title = "Edit Organizer";
         edit_mode = true;
     }else if(rt.indexOf("search") !== -1 && !scope.view_data.orgs.length){
@@ -130,6 +158,7 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
         }else {
             delete scope.newUser.agreement;
         }
+        scope.newUser.working_fields = choosen_fields;
         // we are sending a request depending on the mode! ..... Hold On!
         scope.view_data.processing_request = true;
         if(edit_mode){
