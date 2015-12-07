@@ -1,5 +1,4 @@
 app.controller("RequestController" , ["$scope" , "Patcher" , "$rootScope" , "$location" , "$routeParams" , "$timeout" , function(scope , request , root , loc , params , timeout){
-    
     function date_formater(d){
         var day = d.getDate();
         var month = d.getMonth();

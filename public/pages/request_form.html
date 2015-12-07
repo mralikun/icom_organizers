@@ -142,7 +142,7 @@
         <div ng-init="request.pre = 0">
             <div class="form-group" style="border: 1px solid gray;padding: 5px;">
                 <label class="control-label">Pre-Event Meeting ?</label>
-                <input type="radio" name="pr" ng-model="request.pre" value="1">Yes  <input type="radio" name="pr" ng-model="request.pre" value="0">No
+                <input type="radio" name="pr" value="1" ng-model="request.pre">Yes  <input type="radio" name="pr" value="0" ng-model="request.pre" ng-checked="true">No
             </div>
 
             <div class="panel panel-default" ng-show="request.pre == 1">
@@ -182,6 +182,7 @@
                         <label class="control-label">If you have any comments , suggestions or remarks, Please list them all below</label>
                         <textarea cols="30" rows="5" class="form-control" ng-model="request.comments"></textarea>
                     </div>
+                    
                 </div>
             </div>
         </div>
