@@ -27,7 +27,7 @@ app.controller("TaskController" , ["$scope" , "$rootScope" , "Patcher" , functio
     scope.load_organizer = function(event){
         scope.loaded_organizers = false;
         scope.no_organizers = false;
-        request.set("url" , "/workingfields/organizers"+scope.task.working_fields_id).set("verb" , "get").send().then(function(resp){
+        request.set("url" , "/workingfields/organizers/"+scope.task.working_fields_id).set("verb" , "get").send().then(function(resp){
             scope.organizers = resp.data;
             scope.loaded_organizers = true;
             if(!resp.data.length){

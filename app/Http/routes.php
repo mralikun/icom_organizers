@@ -19,7 +19,9 @@ Route::group(['middleware' => ['auth', 'admin']], function()
 {
 	// these routes are accessable by the Admin Only
 
-Route::resource('Admin', 'AdminController');
+	Route::resource('Admin', 'AdminController');
+
+	Route::resource('users', 'UsersController',array('except' => array('index', 'show')));
 });
 
 Route::group(['middleware' => ['auth', 'operation']], function()
@@ -34,6 +36,7 @@ Route::group(['middleware' => ['auth', 'operation']], function()
 	 *	Resource by adding  array('except' => array('update') and Register another Post
 	 *	Route Below .
 	 */
+	Route::post('/organizer/update/{id}', 'OrganizerController@update');
 
 	Route::resource('/task', 'TaskController');
 
@@ -41,20 +44,24 @@ Route::group(['middleware' => ['auth', 'operation']], function()
 
 	Route::resource('/conferences', 'ConferanceController');
 
-	Route::get('/tasks/json', 'TaskController@testjson');
+	Route::post('/organizerrequest', 'TaskController@organizer_request');
+    
+    Route::get("/getRequests" , "TaskController@get_all_organizers_requests");
+
+	Route::get('/getOrganizerrequest/{file_name}', 'TaskController@get_organizer_request');
 
 	Route::get('/workingfields/organizers/{id}', 'WorkingFieldsController@organizers_work_in_workfields');
 
 	Route::get('/task/mailresponse/{flag}/{token}', 'TaskController@check_email');
 
-	Route::post('/organizer/update/{id}', 'OrganizerController@update');
 
 });
+
+
 Route::group(['middleware' => ['auth']], function()
 {
 	//these routes are accessable by any user (operations , department , or the Admin)
 
-	Route::resource('users', 'UsersController');
 
 	Route::get('/user/{username}', 'UsersController@Home');
 
@@ -63,5 +70,7 @@ Route::group(['middleware' => ['auth']], function()
 	Route::get('/auth/onlineUser', 'AuthController@onlineUser');
 
 });
-Route::get('/sheet','ExcelController@organize_sheet');
-Route::get('/getsheet','ExcelController@sheet');
+
+
+
+
