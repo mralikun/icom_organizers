@@ -35,7 +35,7 @@
                     <li><a href="#/request_organizers">Request Organizers</a></li>
                     <li><a href="#/requests">View Requests</a></li>
                     <li><a href="#/assign_tasks">Assign Tasks</a></li>
-                    <li><a href="#/grade">Grade Organizers</a></li>
+<!--                    <li><a href="#/grade">Grade Organizers</a></li>-->
 <!--                    <li><a href="#">Organizers Attendance</a></li>-->
                     <li><a href="/auth/logout">Logout</a></li>
 

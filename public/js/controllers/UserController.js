@@ -120,6 +120,8 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
         }
         organizer.reset();
         request.reset();
+        $("input[type='checkbox']").attr("checked" , false);
+        choosen_fields = [];
     }
     
     var edit_mode = false;

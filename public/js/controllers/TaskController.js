@@ -10,6 +10,8 @@ app.controller("TaskController" , ["$scope" , "$rootScope" , "Patcher" , functio
         var year = d.getFullYear();
         return year + "-" + ((month < 10) ? "0"+month : month) + "-" + ((day < 10) ? "0"+day : day);
     }
+    scope.loading = false;
+    scope.msg = undefined;
     
     request.set("url" , "/workingfields").set("verb" , "get").send().then(function(resp){
         scope.fs = resp.data;
@@ -73,9 +75,12 @@ app.controller("TaskController" , ["$scope" , "$rootScope" , "Patcher" , functio
             alert("Please choose a task type!");
             return false;
         }
+        scope.loading = true;
         var data = angular.copy(scope.task);
         data.type = types[data.type - 1];
         request.set("url" , "/task").set("verb" , "post").set("data" , data).send().then(function(resp){
+            scope.loading = false;
+            scope.msg = "Task has been assigned successfully!";
             if(resp.data instanceof Object){
                 alert("There're some errors, Please review the list below the form!");
                 scope.errors = resp.data;
