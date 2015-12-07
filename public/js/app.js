@@ -35,6 +35,7 @@ app.factory("Patcher" , ["$http" , function(request){
     user.address = user.working_fields = user.college = user.language = user.agreement = "";
     user.import = function(mail){
         request.set("url" , "/organizers/"+mail+"/edit").set("verb" , "get").send().then(function(response){
+            console.log(response.data);
             for(var key in response.data){
                 user[key] = response.data[key];
                 if(key == "dob"){

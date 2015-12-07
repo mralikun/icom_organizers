@@ -8,6 +8,14 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
         orgs: [],
         crits: []
     };
+    var myMap = function(arr , cb){
+        var a = [];
+        for(var i = 0; i < arr.length; i++){
+            a.push(cb(arr[i]));
+        }
+        return a;
+    }
+    var intID = 0;
     var choosen_fields = [];
     // Grading an Organizer
     var Grades = {
@@ -50,9 +58,11 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
     }
     
     function setFields(arr){
-        var f = $(arr).map(function(index , value){
-            return value.id;
+        window.clearInterval(intID);
+        var f = myMap(arr , function(e){
+            return e.id;
         });
+        console.log(f instanceof Array);
         for(var i = 0; i< f.length; i++){
             $("input[type='checkbox'][data-f='"+f[i]+"']").attr("checked" , true);
         }
@@ -61,6 +71,7 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
     
     scope.appendField = function(event){
         var id = parseInt(event.target.getAttribute("data-f") , 10);
+        console.log(typeof choosen_fields);
         if(choosen_fields.indexOf(id) !== -1){
             choosen_fields.splice(choosen_fields.indexOf(id) , 1);
         }else {
@@ -116,9 +127,13 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
     if(rt.indexOf("edit") !== -1 && params.hasOwnProperty("email")){
         organizer.import(params.email);
         scope.newUser = organizer;
-        setFields(organizer.working_fields);
         scope.view_data.page_title = "Edit Organizer";
         edit_mode = true;
+        intID = setInterval(function(){
+            if(scope.newUser.workingfields){
+                setFields(scope.newUser.workingfields);
+            }
+        } , 1000);
     }else if(rt.indexOf("search") !== -1 && !scope.view_data.orgs.length){
         request.set("url" , "/organizers").set("verb" , "get").send().then(function(resp){
             scope.view_data.orgs = resp.data;
