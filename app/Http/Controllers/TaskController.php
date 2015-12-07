@@ -54,7 +54,7 @@ class TaskController extends Controller {
 	 */
 	public function store()
 	{
-		$inputs=Input::all();
+		 $inputs=Input::all();
 
 		/*make validation for all inputs */
 
@@ -78,11 +78,9 @@ class TaskController extends Controller {
 			/*insert new token related to task */
 
 			$Email_token = new Email_token;
-
 			$token_mail = str_random(32);
-
 			$Email_token->token = $token_mail;
-			$Email_token->task_id = Input::get('task_id');
+			$Email_token->task_id = $task->id;
 			$Email_token->organizer_id=Input::get('organizer_id');
 			$Email_token->save();
 
@@ -135,7 +133,7 @@ class TaskController extends Controller {
 					'organizer_name'=>$organizer->name,
 					'organizer_id'=>$organizer->id_number,
 					'organizer_email'=>$organizer->email,
-					'organizer_phone'=>$organizer->cell_phone,
+					'organizer_phone'=>$organizer->cell_phone
 			);
 
 			/*send email to organizer */
@@ -149,8 +147,7 @@ class TaskController extends Controller {
 
 				$message->subject("ICOM Organizer _ send confirm message to organizer");
 
-
-                $message->from('aliredamis@gmail.com');
+                $message->from('info@tooonme.com');
 
 				$message->to($organizer_email);
 
@@ -159,20 +156,22 @@ class TaskController extends Controller {
 
 			self::$teamleader_email = Input::get('teamleader_email');
 
-			Mail::send('view',$teamleader_data, function ($message){
+			Mail::send('teamleader_mail',$teamleader_data, function ($message){
 
 				$teamleader_email = self::$teamleader_email;
 
 				$message->subject("ICOM Organizer _ send email to teamleader ");
 
-                                $message->to($teamleader_email);
+				$message->from('info@tooonme.com');
+
+				$message->to($teamleader_email);
 
 			});
 		}
 	}
 
-                        }
-                }
+
+
 
 
 	public function check_email($flag,$token)
@@ -187,56 +186,58 @@ class TaskController extends Controller {
 
 
 			if ($flag == 'yes') {
-				$task_id = $emailtoken->task_id;
-
 
 				/*change the value of confirmed attribute from 0 to 1 */
 
 				$task_id = $emailtoken->task_id;
 				$task = Task::find($task_id);
 				$task->confirmed = 1;
-                
+
 				$task->save();
 
 				/* return the name of organizer */
 
 				$organizer_id = $emailtoken->organizer_id;
-				$organizer_name = Organizer::select('name')->where('id','=',$organizer_id)
-											->get()->first();
+				$organizer_name = Organizer::select('name')->where('id', '=', $organizer_id)
+						->get()->first();
 
 				/* return the teamleader email  */
 
 				$teamleader_email = Task::select('teamleader_email')
-										->where('organizer_id','=',$organizer_id)
-										->get()
-										->first();
+						->where('organizer_id', '=', $organizer_id)
+						->get()
+						->first();
 
 				/* data which send to teamleader email  */
 
 				$data = array(
-					'organizer_name' => $organizer_name,
-						'flag'       => $flag
+						'organizer_name' => $organizer_name,
+						'flag' => $flag
 
 				);
 
 				self::$teamleader_email = $teamleader_email;
-				Mail::send('view',$data, function ($message){
+				Mail::send('view', $data, function ($message) {
 
 					$teamleader_email = self::$teamleader_email;
 
 					$message->subject("Welcome to site name");
+
+					$message->from('info@tooonme.com');
 
 					$message->to($teamleader_email);
 
 				});
 
-			}else{
+			} else {
 
-				Mail::send('view',$flag, function ($message){
+				Mail::send('view', $flag, function ($message) {
 
 					$teamleader_email = self::$teamleader_email;
 
 					$message->subject("Welcome to site name");
+
+					$message->from('info@tooonme.com');
 
 					$message->to($teamleader_email);
 
@@ -247,6 +248,7 @@ class TaskController extends Controller {
 
 		}
 	}
+
 
 
 	/**
