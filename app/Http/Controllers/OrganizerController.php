@@ -116,6 +116,7 @@ class OrganizerController extends Controller {
 
 		}
 
+
 		if(isset($filename)){
 			$inputs['agreement'] = $filename.'.'.$file;
 		}
@@ -124,12 +125,12 @@ class OrganizerController extends Controller {
 
 		$organizer = Organizer::create($inputs);
 
-		$working_field = Input::get('working_field');
-		$organizer = Organizer::find($organizer->id);
+		$working_fields = Input::get('working_fields');
 
-		$organizer->workingfields()->attach($organizer->id,$working_field);
+		$organizer->workingfields()->attach($working_fields);
 
-		//return "true";
+
+
 	}
 
 	/**
@@ -210,12 +211,9 @@ class OrganizerController extends Controller {
 
 		$organizer->update($inputs);
 
-		$organizer->departments()->detach();
+		$working_fields = Input::get('working_fields');
 
-		$working_field = Input::get('working_field');
-		$organizer_id = $organizer->id;
-		$organizer->workingfields()->detach();
-		$organizer->workingfields()->attach($organizer_id,$working_field);
+		$organizer->workingfields()->sync($working_fields);
 
 
 
