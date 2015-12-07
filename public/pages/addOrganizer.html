@@ -16,7 +16,11 @@
             <div class="from-group"><label class="control-label">ID Number <sup>*</sup></label><input type="text" class="form-control" ng-model="newUser.id_number" required></div>
             <div class="from-group">
                 <label class="control-label">Working Fields <sup>*</sup></label>
-                <input type="text" ng-model="newUser.working_fields" required class="form-control">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6" ng-repeat="f in fields" style="padding: 5px;">
+                        <input type="checkbox" name="fields[]" data-f="{{f.id}}" ng-click="appendField($event)">{{f.name}}
+                    </div>
+                </div>
                 
             </div>
             <div class="from-group"><label class="control-label">Language</label><input type="text" class="form-control" ng-model="newUser.language"></div>

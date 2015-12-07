@@ -33,10 +33,7 @@
                     <li><a href="#/create_organizer">Add Organizer</a></li>
                     <li><a href="#/search_organizer">Manage Organizers</a></li>
                     <li><a href="#/request_organizers">Request Organizers</a></li>
-<<<<<<< HEAD
-=======
                     <li><a href="#/requests">View Requests</a></li>
->>>>>>> origin/master
                     <li><a href="#/assign_tasks">Assign Tasks</a></li>
                     <li><a href="#/grade">Grade Organizers</a></li>
 <!--                    <li><a href="#">Organizers Attendance</a></li>-->
