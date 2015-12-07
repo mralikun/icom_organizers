@@ -19,7 +19,17 @@
     
     <body>
         <h2>ICOM Organizers</h2>
-        <p>Organizer {{organizer_name}}[<em><strong>ID: {{$organizer_id}}</strong></em>] has joined your team to participate as organizer.</p>
+        @if(isset($flag))
+            @if($flag == 'yes')
+            <p>Organizer {{$organizer_name}}[<em><strong>ID: {{$organizer_id}}</strong></em>] has joined your team to participate as organizer.</p>
+            @else
+            <p>Organizer {{$organizer_name}} has refused the task.</p>
+            @endif
+        
+        @else
+        <p>Organizer {{$organizer_name}} has been sent an invitation to join your team and we are awaiting the reply.</p>
+        @endif
+        
         <div class="contact-info">
             <table>
                 <thead>
