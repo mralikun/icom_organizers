@@ -13,11 +13,20 @@
                 padding: 10px;
             }
             
+            h4 {
+                padding: 5px;
+            }
+            
+            a {
+                padding: 5px 15px;
+                
+            }
+            
         </style>
     </head>
     <body>
         <h2>ICOM Organizers</h2>
-        <p>Dear {{$organizer_name}}, You been selected as a nominee to participate with us as <mark><em><strong><u>{{$workingfields}}</u></strong></em></mark> organizer, Please check the details below.</p>
+        <p>Dear {{$organizer_name}}, You been selected as a nominee to participate with us as <mark><em><strong><u>{{$workingfield->name}} Organizer</u></strong></em></mark>, Please check the details below.</p>
         <div>
            
            @if(isset($conference_name))
@@ -39,11 +48,11 @@
                    </tr>
                    <tr>
                        <th>From</th>
-                       <td>{{$conference_from}}</td>
+                       <td>{{date("d-m-Y" , strtotime($conference_from))}}</td>
                    </tr>
                    <tr>
                        <th>To</th>
-                       <td>{{$conference_to}}</td>
+                       <td>{{date("d-m-Y" , strtotime($conference_to))}}</td>
                    </tr>
                </tbody>
            </table>
@@ -67,11 +76,11 @@
                     </tr>
                     <tr>
                         <th>From</th>
-                        <td>{{$task_from}}</td>
+                        <td>{{date("d-m-Y" , strtotime($task_from))}}</td>
                     </tr>
                     <tr>
                         <th>To</th>
-                        <td>{{$task_to}}</td>
+                        <td>{{date("d-m-Y" , strtotime($task_to))}}</td>
                     </tr>
                 </tbody>
             </table>
