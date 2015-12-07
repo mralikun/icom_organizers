@@ -14,8 +14,8 @@ class CreateAttendanceTable extends Migration {
 	{
 		Schema::create("attendance",function($table){
 		    $table->increments('id');
-		    $table->date("check_in");
-		    $table->date("check_out");
+		    $table->time("check_in");
+		    $table->time("check_out");
 		    $table->integer("organizer_id")->unsigned();
 		    $table->integer("task_id")->unsigned();
 

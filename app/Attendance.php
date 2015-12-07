@@ -4,9 +4,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Attendance extends Model {
 
-    protected $table = 'organizer';
+    protected $table = 'attendance';
 
-    protected $fillable = ['id','check_in','check_out','organizer_id','task_id'];
+    public $timestamps = false;
+
+    protected $fillable = ['id','organizer_id','task_id'];
+
 
 
 

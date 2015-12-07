@@ -4,6 +4,8 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\Task;
+use App\Attendance;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Input;
@@ -134,10 +136,12 @@ class OrganizerController extends Controller {
 	public function edit($id)
 	{
 		$organizer = Organizer::findByEmailOrFail($id);
+		$organizer->workingfields;
 
 		return $organizer;
 
 	}
+
 
 	/**
 	 *
@@ -228,19 +232,43 @@ class OrganizerController extends Controller {
 	public function check_in(){
 
 		$organizer_id = 1;
+
 		$date = Carbon::today()->format('Y-m-d');
-		$task = Task::where('organizer_id','=','organizer_id')
-				->where('from','<=','$date')
-				->where('to','>=','$date')
+
+		$task = Task::where('organizer_id','=',$organizer_id)
+				->where('from','<=',$date)
+				->where('to','>=',$date)
 				->get()->first();
+
 		$task_id = $task->id;
 		$attendance = new Attendance;
+		$attendance->check_in ="10:00:00" ;
 		$attendance->organizer_id =$organizer_id ;
 		$attendance->task_id =$task_id ;
-		$attendance->check_in ="2015-12-13" ;
+
 		$attendance->save();
 
+	}
 
+	public function check_out(){
+
+		$organizer_id = 1;
+
+		$date = Carbon::today()->format('Y-m-d');
+
+		$attendances = Attendance::where('organizer_id','=',$organizer_id)
+				->get()
+				->first();
+
+		$checkin = $attendances->check_in;
+
+
+		if(!Empty($checkin)){
+			$attendance_id = $attendances->id;
+			$attendance = Attendance::find($attendance_id);
+			$attendance->check_out = "10:00:00";
+			$attendance->save();
+		}
 
 	}
 

@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Validator;
 
 class TaskController extends Controller {
 
-	public static  $email = "";
+	public static  $organizer_email = "";
 	public static  $teamleader_email = "";
 	/**
 	 * Display a listing of the resource.
@@ -55,130 +55,182 @@ class TaskController extends Controller {
 	{
 		$inputs=Input::all();
 
+		/*make validation for all inputs */
+
 		$validator = Validator::make($inputs,[  'title' => "required" ,
 												'description' => "required" ,
-												'type'	=>	"required"
+												'from'	=>	"required",
+												'to'	=>	"required",
+												'type'	=>	"required",
+												'teamleader_email'	=>	"required"
 											]
 		);
 		if($validator->fails()){
 
 			return $validator->messages();
 		}else {
-			$task = new Task;
 
-			$task->title = Input::get('title');
-			$task->description = Input::get('description');
-			$task->from = Input::get('from');
-			$task->to = Input::get('to');
-			$task->type = Input::get('type');
-			$task->confirmed = 0;
-			$task->organizer_id =Input::get('organizer_id');
-			$task->working_fields_id =Input::get('working_fields_id');
-			if ($task->type === 'conferance') {
-				$task->conference_id =Input::get('conference_id');
-				$conferances = Conference::where('id', '=', $task->conference_id)->get()->first();
-			}
+			/* create new task */
+			$task = Task::create($inputs);
 
-			$task->save();
+			/*insert new token related to task */
+
 			$Email_token = new Email_token;
-			$token_mail =csrf_token();
+			$token_mail =str_random(32);
 			$Email_token->token = $token_mail;
-			$Email_token->task_id = $task->id;
-			$Email_token->organizer_id=$task->organizer_id;
+			$Email_token->task_id = Input::get('task_id');
+			$Email_token->organizer_id=Input::get('organizer_id');
 			$Email_token->save();
 
-			$workingfields = WorkingFields::where('id','=',$task->working_fields_id)->get()->first();
-			$organizer = Organizer::where('id','=',$task->organizer_id)->get()->first();
+			/*return data of conference to send them in email */
 
-                        $organizer_data=array();
+			$conference_id =Input::get('conference_id');
+			$conferances = Conference::where('id', '=', $conference_id)->get()->first();
 
-                            if($task->type === 'conferance'){
-                                $organizer_data =[
-                                        'title' => $task->title,
-                                        'description' => $task->description,
-                                        'task_from' => $task->from,
-                                        'task_to' => $task->to,
-                                        'teamleader' =>$workingfields->teamleader,
-                                        'workingfield' => $workingfields->name,
-                                        'conference_name'=>$conferances->name,
-                                        'conference_from'=>$conferances->from,
-                                        'conference_to'=>$conferances->to,
-                                        'conference_venue'=>$conferances->venue,
-										'token_mail'=>$token_mail
-                                ];
+			/* return the name of workingfield related to this task*/
 
-                            }else{
-                                $organizer_data =[
-                                        'title' => $task->title,
-                                        'description' => $task->description,
-                                        'task_from' => $task->from,
-                                        'task_to' => $task->to,
-                                        'teamleader' =>$workingfields->teamleader,
-                                        'workingfield' => $workingfields->name,
-										'token_mail'=>$token_mail
-                                ];
-                            }
+			$workingfield_name = WorkingFields::select('name')
+												->where('id','=',Input::get('working_fields_id'))
+												->get()->first();
 
-                            $teamleader_data = array(
-                                'organizer_name'=>$organizer->name
-                            );
+			/* return the data of Organizer related to this task*/
 
-                           self::$email = $organizer->email ;
+			$organizer = Organizer::where('id','=',Input::get('organizer_id'))->get()->first();
 
-                                Mail::send('sendemail', $organizer_data, function ($message) {
+			$organizer_data=array();
 
-                                    $organizer_email = self::$email;
+				if($task->type === 'conference'){
+					$organizer_data =[
+							'title' => Input::get('title'),
+							'description' => Input::get('description'),
+							'task_from' => Input::get('from'),
+							'task_to' => Input::get('to'),
+							'workingfield' => $workingfield_name,
+							'conference_name'=>$conferances->name,
+							'conference_from'=>$conferances->from,
+							'conference_to'=>$conferances->to,
+							'conference_venue'=>$conferances->venue,
+							'organizer_name'=>$organizer->name,
+							'token_mail'=>$token_mail
+					];
 
-                                    $message->subject("Welcome to site name");
+				}else{
+					$organizer_data =[
+							'title' => Input::get('title'),
+							'description' => Input::get('description'),
+							'task_from' => Input::get('from'),
+							'task_to' => Input::get('to'),
+							'organizer_name'=>$organizer->name,
+							'workingfield' => $workingfield_name,
+							'token_mail'=>$token_mail
+					];
+				}
 
-                                    $message->to($organizer_email);
+			$teamleader_data = array(
+					'organizer_name'=>$organizer->name,
+					'organizer_id'=>$organizer->id_number,
+					'organizer_email'=>$organizer->email,
+					'organizer_phone'=>$organizer->cell_phone,
+			);
 
-                                });
+			/*send email to organizer */
 
+			self::$organizer_email = $organizer->email ;
 
-                            self::$teamleader_email = $workingfields->teamleader_email ;
+			Mail::send('sendemail', $organizer_data, function ($message) {
 
-                            Mail::send('sendemail',$teamleader_data, function ($message){
+				$organizer_email = self::$organizer_email;
 
-                                $teamleader_email = self::$teamleader_email;
+				$message->subject("ICOM Organizer _ send confirm message to organizer");
 
-                                $message->subject("Welcome to site name");
+				$message->to($organizer_email);
+
+			});
+
+			self::$teamleader_email = Input::get('teamleader_email');
+
+			Mail::send('view',$teamleader_data, function ($message){
+
+				$teamleader_email = self::$teamleader_email;
+
+				$message->subject("ICOM Organizer _ send email to teamleader ");
 
                                 $message->to($teamleader_email);
 
-                            });
-                        }
-                }
+			});
+		}
+	}
 
 	public function check_email($flag,$token)
 	{
 		$emailtoken = Email_token::where('token', '=', $token)->get()->first();
 
+		if (empty($emailtoken)) {
 
-		if (isEmpty($emailtoken)) {
 			abort(404);
-		} else {
-			if ($flag === 'yes') {
-				$task_id = $emailtoken->task_id;
 
+		} else {
+
+			if ($flag === 'yes') {
+
+				/*change the value of confirmed attribute from 0 to 1 */
+
+				$task_id = $emailtoken->task_id;
 				$task = Task::find($task_id);
 				$task->confirmed = 1;
 				$task->save();
-				$data = "you said yes";
+
+				/* return the name of organizer */
+
+				$organizer_id = $emailtoken->organizer_id;
+				$organizer_name = Organizer::select('name')->where('id','=',$organizer_id)
+											->get()->first();
+
+				/* return the teamleader email  */
+
+				$teamleader_email = Task::select('teamleader_email')
+										->where('organizer_id','=',$organizer_id)
+										->get()
+										->first();
+
+				/* data which send to teamleader email  */
+
+				$data = array(
+					'organizer_name' => $organizer_name,
+						'flag'       => $flag
+
+				);
+
+				self::$teamleader_email = $teamleader_email;
+				Mail::send('view',$data, function ($message){
+
+					$teamleader_email = self::$teamleader_email;
+
+					$message->subject("Welcome to site name");
+
+					$message->to($teamleader_email);
+
+				});
 
 			}else{
-				$data = "you said no";
+
+				Mail::send('view',$flag, function ($message){
+
+					$teamleader_email = self::$teamleader_email;
+
+					$message->subject("Welcome to site name");
+
+					$message->to($teamleader_email);
+
+				});
+
 			}
 			$emailtoken->delete();
 
 		}
-		return $data;
-
 	}
 
-/*
 
-*/
 	/**
 	 * Display the specified resource.
 	 *

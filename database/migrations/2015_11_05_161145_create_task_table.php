@@ -21,10 +21,9 @@ class CreateTaskTable extends Migration {
 			$table->date("to");
 			$table->string("type");
 			$table->boolean("confirmed");
+			$table->string("teamleader_email");
 			$table->integer("organizer_id")->unsigned();
-			$table->integer("conference_id")->
-
-			unsigned()->nullable();
+			$table->integer("conference_id")->unsigned()->nullable();
 			$table->integer("working_fields_id")->unsigned()->nullable();
 
 			$table->foreign("organizer_id")

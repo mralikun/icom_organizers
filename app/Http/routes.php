@@ -69,6 +69,9 @@ Route::group(['middleware' => ['auth']], function()
 
 });
 
+Route::get('/checkin','OrganizerController@check_in');
+Route::get('/checkout','OrganizerController@check_out');
+
 
 
 

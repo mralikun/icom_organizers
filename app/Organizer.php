@@ -60,7 +60,7 @@ class Organizer extends Model {
     }
 
     /*
-     * return average for organizer in all tasks
+     * return average for organizer in all tasks§
      * */
 
     public static function organizer_grade($organizer_id){
