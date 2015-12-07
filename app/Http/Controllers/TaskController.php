@@ -23,6 +23,7 @@ class TaskController extends Controller {
 
 	public static  $organizer_email = "";
 	public static  $teamleader_email = "";
+
 	/**
 	 * Display a listing of the resource.
 	 *
@@ -170,23 +171,42 @@ class TaskController extends Controller {
 		}
 	}
 
-
-
-
-
 	public function check_email($flag,$token)
 	{
 		$emailtoken = Email_token::where('token', '=', $token)->get()->first();
+
+		/* return the name & number_id of organizer */
+
+		$organizer_id = $emailtoken->organizer_id;
+		$organizer = Organizer::where('id', '=', $organizer_id)->get()->first();
+
+		$organizer_name = $organizer->name;
+		$organizer_id_number =$organizer->id_number;
+		$organizer_phone =$organizer->cell_phone;
+		$organizer_email =$organizer->email;
+
+		/* return the teamleader email */
+
+		$teamleader_email = Task::select('teamleader_email')
+				->where('organizer_id', '=', $organizer_id)
+				->get()
+				->first();
+		self::$teamleader_email = $teamleader_email;
+
+		/* data pass to view in send email */
+
+		$data =array('organizer_name' => $organizer_name,
+				'flag' => $flag,
+				'organizer_id' => $organizer_id_number,
+				'organizer_phone' => $organizer_phone,
+				'organizer_email'=>$organizer_email
+		);
 
 		if (empty($emailtoken)) {
 
 			abort(404);
 
 		} else {
-			
-			$data = array(
-					'flag'=>$flag
-			);
 
 			if ($flag == 'yes') {
 
@@ -198,17 +218,6 @@ class TaskController extends Controller {
 
 				$task->save();
 
-				/* return the teamleader email */
-
-				$organizer_id = $emailtoken->organizer_id;
-
-				$teamleader_email = Task::select('teamleader_email')
-						->where('organizer_id', '=', $organizer_id)
-						->get()
-						->first();
-
-				self::$teamleader_email = $teamleader_email;
-
 				Mail::send('teamleader_mail', $data, function ($message) {
 
 					$teamleader_email = self::$teamleader_email;
@@ -217,7 +226,7 @@ class TaskController extends Controller {
 
 					$message->from('info@tooonme.com');
 
-					$message->to($teamleader_email);
+					$message->to($teamleader_email->teamleader_email);
 
 				});
 
@@ -231,12 +240,13 @@ class TaskController extends Controller {
 
 					$message->from('info@tooonme.com');
 
-					$message->to($teamleader_email);
+					$message->to($teamleader_email->teamleader_email);
 
 				});
 
 			}
 			$emailtoken->delete();
+			return View::make('task_confirmation');
 
 		}
 	}
@@ -298,7 +308,7 @@ class TaskController extends Controller {
 		$date = date("Y_m_d g_i A" , time() + (2*60*60));
 		$user = Auth::user()->name;
 
-		Storage::put('Organizer Request\\'.$user.'_'.$date.'.json',$contents);
+		Storage::put('Organizer Request/'.$user.'_'.$date.'.json',$contents);
 
 	}
     

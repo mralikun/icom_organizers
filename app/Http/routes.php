@@ -40,19 +40,12 @@ Route::group(['middleware' => ['auth', 'operation']], function()
 
 	Route::resource('/task', 'TaskController');
 
-	Route::resource('/workingfields', 'WorkingFieldsController');
-
-	Route::resource('/conferences', 'ConferanceController');
-
-	Route::post('/organizerrequest', 'TaskController@organizer_request');
-    
-    Route::get("/getRequests" , "TaskController@get_all_organizers_requests");
-
 	Route::get('/getOrganizerrequest/{file_name}', 'TaskController@get_organizer_request');
+
+    Route::get("/getRequests" , "TaskController@get_all_organizers_requests");
 
 	Route::get('/workingfields/organizers/{id}', 'WorkingFieldsController@organizers_work_in_workfields');
 
-	Route::get('/task/mailresponse/{flag}/{token}', 'TaskController@check_email');
 
 });
 
@@ -61,6 +54,9 @@ Route::group(['middleware' => ['auth']], function()
 {
 	//these routes are accessable by any user (operations , department , or the Admin)
 
+	Route::post('/organizerrequest', 'TaskController@organizer_request');
+
+	Route::resource('/conferences', 'ConferanceController');
 
 	Route::get('/user/{username}', 'UsersController@Home');
 
@@ -68,7 +64,10 @@ Route::group(['middleware' => ['auth']], function()
 
 	Route::get('/auth/onlineUser', 'AuthController@onlineUser');
 
+	Route::resource('/workingfields', 'WorkingFieldsController');
+
 });
+Route::get('/task/mailresponse/{flag}/{token}', 'TaskController@check_email');
 
 Route::get('/checkin','OrganizerController@check_in');
 Route::get('/checkout','OrganizerController@check_out');

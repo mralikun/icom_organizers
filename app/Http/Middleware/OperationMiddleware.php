@@ -15,6 +15,7 @@ class OperationMiddleware {
 	public function handle($request, Closure $next)
 	{
 		if(Auth::user()->role != "admin" && Auth::user()->role != "operations"){
+			abort(404);
 		}
 
 		return $next($request);

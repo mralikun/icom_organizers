@@ -210,8 +210,7 @@ class OrganizerController extends Controller {
 
 		$organizer->update($inputs);
 
-
-		return $working_fields = Input::get('working_fields');
+		$working_fields = Input::get('working_fields');
 
 		$organizer->workingfields()->sync($working_fields);
 
