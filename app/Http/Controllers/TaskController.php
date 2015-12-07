@@ -183,7 +183,10 @@ class TaskController extends Controller {
 			abort(404);
 
 		} else {
-
+			
+			$data = array(
+					'flag'=>$flag
+			);
 
 			if ($flag == 'yes') {
 
@@ -205,7 +208,8 @@ class TaskController extends Controller {
 						->first();
 
 				self::$teamleader_email = $teamleader_email;
-				Mail::send('teamleader_mail', $flag, function ($message) {
+
+				Mail::send('teamleader_mail', $data, function ($message) {
 
 					$teamleader_email = self::$teamleader_email;
 
@@ -219,7 +223,7 @@ class TaskController extends Controller {
 
 			} else {
 
-				Mail::send('teamleader_mail', $flag, function ($message) {
+				Mail::send('teamleader_mail', $data, function ($message) {
 
 					$teamleader_email = self::$teamleader_email;
 

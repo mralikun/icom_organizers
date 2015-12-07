@@ -161,10 +161,10 @@ class OrganizerController extends Controller {
 		$inputEmail = Input::get('email');
 
 		if($inputEmail == $organizer->email){
-			$inputs = Input::except("agreement","departments","working_field");
+			$inputs = Input::except("agreement","departments");
 			$inputs['email'] = 'faker123@faker.com';
 		}else{
-			$inputs = Input::except("agreement","departments","working_field");
+			$inputs = Input::except("agreement","departments");
 		}
 
 		//  validating Inputs
@@ -176,7 +176,7 @@ class OrganizerController extends Controller {
 
 		}
 
-		$inputs = Input::except("agreement","departments","working_field");
+		$inputs = Input::except("agreement","departments");
 
 		// upload and validating img if Exists in Inputs
 		if (Input::has('agreement'))
@@ -200,7 +200,6 @@ class OrganizerController extends Controller {
 
 		}
 
-
 		// start updating data
 
 		if(isset($filename)){
@@ -211,7 +210,8 @@ class OrganizerController extends Controller {
 
 		$organizer->update($inputs);
 
-		$working_fields = Input::get('working_fields');
+
+		return $working_fields = Input::get('working_fields');
 
 		$organizer->workingfields()->sync($working_fields);
 
