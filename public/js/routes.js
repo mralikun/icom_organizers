@@ -27,6 +27,11 @@ app.config(["$routeProvider" , function(route){
     .when("/grade" , {
         templateUrl: "/pages/grades.html",
         controller: "UserController"
+    })
+    
+    .when("/request_organizers" , {
+        templateUrl: "/pages/request_form.html",
+        controller: "RequestController"
     });
     
 }]);

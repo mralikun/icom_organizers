@@ -27,7 +27,7 @@ app.controller("TaskController" , ["$scope" , "$rootScope" , "Patcher" , functio
     scope.load_organizer = function(event){
         scope.loaded_organizers = false;
         scope.no_organizers = false;
-        request.set("url" , "/workingfields/organizers"+scope.task.working_field).set("verb" , "get").send().then(function(resp){
+        request.set("url" , "/workingfields/organizers"+scope.task.working_fields_id).set("verb" , "get").send().then(function(resp){
             scope.organizers = resp.data;
             scope.loaded_organizers = true;
             if(!resp.data.length){
@@ -39,7 +39,7 @@ app.controller("TaskController" , ["$scope" , "$rootScope" , "Patcher" , functio
     }
     
     scope.getConferences = function(){
-        if(scope.start instanceof Date){
+        if(scope.start instanceof Date && scope.end instanceof Date){
             if(scope.end < scope.start){
                 scope.wrong_dates = true;
                 return false;
@@ -55,6 +55,19 @@ app.controller("TaskController" , ["$scope" , "$rootScope" , "Patcher" , functio
         }
     }
     
+    scope.setUp = function(){
+        var choosen_conf = $(scope.confs).filter(function(ind , el){
+            return el.id == scope.task.conference_id;
+        })[0];
+        scope.task.from = new Date(choosen_conf.from);
+        scope.task.to = new Date(choosen_conf.to);
+    }
+    
+    scope.reset = function(){
+        if(scope.task.conference_id)
+            delete scope.task.conference_id;
+    }
+    
     scope.create = function(){
         if(!("type" in scope.task)){
             alert("Please choose a task type!");
@@ -62,8 +75,12 @@ app.controller("TaskController" , ["$scope" , "$rootScope" , "Patcher" , functio
         }
         var data = angular.copy(scope.task);
         data.type = types[data.type - 1];
-        console.log(data);
-//            request.set("url" , "/task").set("verb" , "post").set("data" , {}).send().then(function(resp){} , function(err){});
+        request.set("url" , "/task").set("verb" , "post").set("data" , data).send().then(function(resp){
+            if(resp.data instanceof Object){
+                alert("There're some errors, Please review the list below the form!");
+                scope.errors = resp.data;
+            }
+        } , function(err){});
     }
     
 }]);
