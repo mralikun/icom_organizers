@@ -9,6 +9,7 @@ class Organizer extends Model {
     protected $fillable = ['name','gender' ,'address' ,'dob', 'email', 'cell_phone','college','id_number','language','activity','agreement'];
 
     public function conferences(){
+
     	return $this->belongsToMany('App\Conference','conference_organizer', 'organizer_id' , 'conference_id');
     }
 
@@ -59,10 +60,11 @@ class Organizer extends Model {
         return $this->belongsToMany('App\WorkingFields','organizer_workingfields', 'organizer_id', 'workingfields_id' );
     }
 
-    /*
+    /**
+     * @param $organizer_id
+     * @return float
      * return average for organizer in all tasks§
-     * */
-
+     */
     public static function organizer_grade($organizer_id){
 
         $tasks = Task::where('organizer_id','=',$organizer_id)->get();
