@@ -43,10 +43,13 @@
     <div class="col-xs-12 col-sm-10 col-md-8 col-lg-6 col-sm-offset-1 col-md-offset-2 col-lg-offset-3">
         
         <h1 class="text-center">Welcome to ICOM Organizers</h1>
-        <ul class="features">
+        <ul class="features" ng-hide="role == 'department'">
             <span><strong>Working Features of this web app so far are:</strong></span>
             <li><a href="#/create_organizer">Add Organizers</a></li>
-            <li><a href="#/edit_organizer">Edit Organizers</a></li>
+            <li><a href="#/search_organizer">Edit Organizers</a></li>
+            <li><a href="#/request_organizers">Request Organizers</a></li>
+            <li><a href="#/requests">View Organizers Requests</a></li>
+            <li><a href="#/assign_tasks">Assign Tasks</a></li>
         </ul>
         
     </div>

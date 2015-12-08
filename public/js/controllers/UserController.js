@@ -93,7 +93,9 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
     
     scope.$on("$routeChangeSuccess" , function(ev , next , prev){
         
-        var to = next.originalPath;
+        var to = "";
+        if(next.originalPath)
+            to = next.originalPath;
         if(to.indexOf("search_organizer") !== -1)
             changeTitle("Search Organizer");
         else if(to.indexOf("edit_organizer") !== -1)
@@ -142,6 +144,10 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
         } , function(err){});
     }else if(rt.indexOf("grade") !== -1){
         root.$emit("changeTitle" , "Grade Organizers");
+    }else if(rt === "/"){
+        request.set("url" , "/auth/onlineUser").set("verb" , "get").send().then(function(resp){
+            scope.role = resp.data.role;
+        } , function(){});
     }
     
     var reader = new FileReader();
