@@ -21,9 +21,6 @@ use Illuminate\Support\Facades\Validator;
 
 class TaskController extends Controller {
 
-	public static  $organizer_email = "";
-	public static  $teamleader_email = "";
-
 	/**
 	 * Display a listing of the resource.
 	 *
@@ -78,12 +75,9 @@ class TaskController extends Controller {
 
 			/*insert new token related to task */
 
-			$Email_token = new Email_token;
 			$token_mail = str_random(32);
-			$Email_token->token = $token_mail;
-			$Email_token->task_id = $task->id;
-			$Email_token->organizer_id=Input::get('organizer_id');
-			$Email_token->save();
+			$organizer_id = Input::get('organizer_id');
+			Email_token::save_token($token_mail,$organizer_id,$task->id);
 
 			/*return data of conference to send them in email */
 
@@ -139,35 +133,15 @@ class TaskController extends Controller {
 
 			/*send email to organizer */
 
-			self::$organizer_email = $organizer->email ;
+			$subject = "ICOM Organizer _ send confirm message to organizer";
+			Task::sendemail('sendemail',$organizer_data,$organizer->email,$subject);
 
-			Mail::send('sendemail', $organizer_data, function ($message) {
+			/*send email to teamleader */
 
-				$organizer_email = self::$organizer_email;
+			$subject = "ICOM Organizer _ send email to teamleader ";
+			$teamleader_email = Input::get('teamleader_email');
+			Task::sendemail('teamleader_mail',$teamleader_data,$teamleader_email,$subject);
 
-
-				$message->subject("ICOM Organizer _ send confirm message to organizer");
-
-                $message->from('info@tooonme.com');
-
-				$message->to($organizer_email);
-
-			});
-
-
-			self::$teamleader_email = Input::get('teamleader_email');
-
-			Mail::send('teamleader_mail',$teamleader_data, function ($message){
-
-				$teamleader_email = self::$teamleader_email;
-
-				$message->subject("ICOM Organizer _ send email to teamleader ");
-
-				$message->from('info@tooonme.com');
-
-				$message->to($teamleader_email);
-
-			});
 		}
 	}
 
@@ -175,32 +149,6 @@ class TaskController extends Controller {
 	{
 		$emailtoken = Email_token::where('token', '=', $token)->get()->first();
 
-		/* return the name & number_id of organizer */
-
-		$organizer_id = $emailtoken->organizer_id;
-		$organizer = Organizer::where('id', '=', $organizer_id)->get()->first();
-
-		$organizer_name = $organizer->name;
-		$organizer_id_number =$organizer->id_number;
-		$organizer_phone =$organizer->cell_phone;
-		$organizer_email =$organizer->email;
-
-		/* return the teamleader email */
-
-		$teamleader_email = Task::select('teamleader_email')
-				->where('organizer_id', '=', $organizer_id)
-				->get()
-				->first();
-		self::$teamleader_email = $teamleader_email;
-
-		/* data pass to view in send email */
-
-		$data =array('organizer_name' => $organizer_name,
-				'flag' => $flag,
-				'organizer_id' => $organizer_id_number,
-				'organizer_phone' => $organizer_phone,
-				'organizer_email'=>$organizer_email
-		);
 
 		if (empty($emailtoken)) {
 
@@ -208,43 +156,50 @@ class TaskController extends Controller {
 
 		} else {
 
+			$organizer_id = $emailtoken->organizer_id;
+
+			/* return the data of organizer */
+
+			$organizer = Organizer::where('id', '=', $organizer_id)->get()->first();
+
+			$organizer_name = $organizer->name;
+			$organizer_id_number =$organizer->id_number;
+			$organizer_phone =$organizer->cell_phone;
+			$organizer_email =$organizer->email;
+
+			/* data pass to view in send email */
+
+			$data =array('organizer_name' => $organizer_name,
+					'flag' => $flag,
+					'organizer_id' => $organizer_id_number,
+					'organizer_phone' => $organizer_phone,
+					'organizer_email'=>$organizer_email
+			);
+
+			/* return the teamleader email */
+
+			$task = Task::find($emailtoken->task_id);
+			$teamleader_email = $task->teamleader_email;
+
 			if ($flag == 'yes') {
+			/*change the value of confirmed attribute from 0 to 1 */
 
-				/*change the value of confirmed attribute from 0 to 1 */
+				Task::update_confirmed($emailtoken->task_id);
 
-				$task_id = $emailtoken->task_id;
-				$task = Task::find($task_id);
-				$task->confirmed = 1;
+			/* send email to teamleader if organizer accept task */
 
-				$task->save();
+				$subject = "ICOM Organizer _ confirmid message from organizer";
+				Task::sendemail('teamleader_mail',$data,$teamleader_email,$subject);
 
-				Mail::send('teamleader_mail', $data, function ($message) {
-
-					$teamleader_email = self::$teamleader_email;
-
-					$message->subject("Welcome to site name");
-
-					$message->from('info@tooonme.com');
-
-					$message->to($teamleader_email->teamleader_email);
-
-				});
 
 			} else {
 
-				Mail::send('teamleader_mail', $data, function ($message) {
+				/* send email to teamleader if organizer refuse task */
 
-					$teamleader_email = self::$teamleader_email;
-
-					$message->subject("Welcome to site name");
-
-					$message->from('info@tooonme.com');
-
-					$message->to($teamleader_email->teamleader_email);
-
-				});
-
+				$subject = "ICOM Organizer _ confirmid message from organizer";
+				Task::sendemail('teamleader_mail',$data,$teamleader_email,$subject);
 			}
+
 			$emailtoken->delete();
 			return View::make('task_confirmation');
 
@@ -296,9 +251,6 @@ class TaskController extends Controller {
 	{
 		//
 	}
-	/*
-	 	select all conferances between two givien date.
-	 */
 
 
 	public function organizer_request(){
@@ -313,6 +265,7 @@ class TaskController extends Controller {
 	}
     
     public function get_all_organizers_requests(){
+
         $files = Storage::files('Organizer Request/');
         return $files;
     }

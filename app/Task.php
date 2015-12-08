@@ -2,10 +2,15 @@
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Mail;
 use App\grading;
 
 
 class Task extends Model {
+
+    public static  $email = "";
+    public static  $subject = "";
+
 
     protected $table = 'task';
 
@@ -19,6 +24,7 @@ class Task extends Model {
     /*
      * return workingfield related to task
      * */
+
     public function working_field()
     {
         return $this->belongsTo('App\WorkingFields');
@@ -54,8 +60,36 @@ class Task extends Model {
         return $tasks;
 
     }
+    /*
+     * send email to someone
+     */
+    public static function sendemail($view,$data,$email_to,$subject_email){
+
+        self::$email = $email_to;
+        self::$subject = $subject_email;
+
+        Mail::send($view,$data,function ($message) {
+
+            $email = self::$email;
+            $subject_email = self::$subject;
 
 
+            $message->subject($subject_email);
+
+            $message->from('info@tooonme.com');
+
+            $message->to($email);
+
+        });
+    }
+
+    /* update confirmed column if accepted task */
+
+    public static function update_confirmed($task_id){
+        $task = Task::find($task_id);
+        $task->confirmed = 1;
+        $task->save();
+    }
 
 
 

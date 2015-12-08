@@ -129,8 +129,6 @@ class OrganizerController extends Controller {
 
 		$organizer->workingfields()->attach($working_fields);
 
-
-
 	}
 
 	/**
@@ -214,10 +212,6 @@ class OrganizerController extends Controller {
 
 		$organizer->workingfields()->sync($working_fields);
 
-
-
-		//return "true";
-
 	}
 	/**
 	 * Remove the specified resource from storage.
@@ -271,8 +265,7 @@ class OrganizerController extends Controller {
 
 		$checkin = $attendances->check_in;
 
-
-		if(!Empty($checkin)){
+		if(!empty($checkin)){
 			$attendance_id = $attendances->id;
 			$attendance = Attendance::find($attendance_id);
 			$attendance->check_out = "10:00:00";
