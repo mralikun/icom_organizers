@@ -13,21 +13,24 @@
          </div>
           <div class="form-group text-center" ng-show="task.type == 1">
               <span><strong><em><u>Choose a date range to show all conferences in that range.</u></em></strong></span>
-               <div class="col-sm-4 col-sm-offset-2 text-left">
-                    <label class="control-label col-sm-4">From</label>
-                    <div class="col-sm-8">
+              <div class="row">
+                  <div class="col-sm-6 col-md-6 col-lg-6 col-lg-offset-3 col-sm-offset-3 col-md-offset-3">
+                    <label class="control-label col-sm-2">From</label>
+                    <div class="col-sm-10">
                         <input type="date" name="start" ng-model="start" class="form-control" ng-change="getConferences()">
                     </div>
-                </div>
-                <div class="col-sm-4 text-left">
-                    <label class="control-label col-sm-4">To</label>
-                    <div class="col-sm-8">
+                  </div>
+                  
+                  <div class="col-sm-6 col-md-6 col-lg-6 col-lg-offset-3 col-sm-offset-3 col-md-offset-3">
+                    <label class="control-label col-sm-2">To</label>
+                    <div class="col-sm-10">
                         <input type="date" name="end" ng-model="end" class="form-control" ng-change="getConferences()">
                     </div>
-                </div>
-                <div class="text-danger text-center" ng-show="wrong_dates">
-                    <span>The ending date can't come before the starting date.</span>
-                </div>
+                  </div>
+                  <div class="text-danger text-center" ng-show="wrong_dates">
+                        <span>The ending date can't come before the starting date.</span>
+                    </div>
+              </div>
             </div>
             <div class="form-group" ng-show="task.type == 1">
                 <label class="control-label col-sm-2">Choose Conference</label>
