@@ -39,9 +39,14 @@ class Task extends Model {
             ->where('organizer_id','=',$organizer_id)
             ->get();
         $number_of_criteria = count($grads);
-        $total =  $grads->sum('grade');
+        if($number_of_criteria == 0){
+            return " not set ";
+        }else{
+            $total =  $grads->sum('grade');
 
-        return $average = $total/($number_of_criteria * 5);
+            return $average = $total/($number_of_criteria * 5);
+
+        }
 
     }
 
@@ -91,6 +96,23 @@ class Task extends Model {
         $task->save();
     }
 
+    /*generate message and send it to admin */
+
+    public static function generate_message($data,$task_id,$teamleader){
+        switch($data['flag']){
+
+            case "yes":
+               return $msg = "the". $data['organizer_name']." who choice to the".$task_id." accepted ,the task belongs to". $teamleader;
+                break;
+
+            case "no":
+                return $msg = "the". $data['organizer_name']." who choice to the".$task_id." refused ,the task belongs to". $teamleader;
+                break;
+
+        }
+
+
+    }
 
 
 

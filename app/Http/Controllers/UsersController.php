@@ -19,6 +19,8 @@ class UsersController extends Controller {
 	 */
 	public function index()
 	{
+		$users = User::all();
+		return $users;
 	}
 
 
@@ -40,8 +42,8 @@ class UsersController extends Controller {
 		$validator = Validator::make(
 				$inputs,
 				[
-						'name' => "required",
-						'email' => "required|email|unique:users",
+						'name' => "required|unique:users",
+						'email' => "email",
 						'password' => "required"
 				]
 		);

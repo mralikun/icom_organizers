@@ -68,9 +68,14 @@ Route::group(['middleware' => ['auth']], function()
 
 });
 Route::get('/task/mailresponse/{flag}/{token}', 'TaskController@check_email');
+Route::get('/upload', 'TaskController@uploaded');
+Route::post('apply/upload', 'TaskController@multiple_upload');
 
 Route::get('/checkin','OrganizerController@check_in');
 Route::get('/checkout','OrganizerController@check_out');
+
+
+
 
 
 

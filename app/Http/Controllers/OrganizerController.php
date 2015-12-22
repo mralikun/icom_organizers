@@ -235,21 +235,23 @@ class OrganizerController extends Controller {
 	public function check_in(){
 
 		$organizer_id = 1;
+		$date_time = date("Y-m-d H:i:s");
+		$date = date("Y-m-d");
+		 $validate = Attendance::validate_attendance($organizer_id);
+		if($validate == "true"){
 
-		$date = Carbon::today()->format('Y-m-d');
+			$task = Task::where('organizer_id','=',$organizer_id)
+					->where('from','<=',$date)
+					->where('to','>=',$date)
+					->get()->first();
 
-		$task = Task::where('organizer_id','=',$organizer_id)
-				->where('from','<=',$date)
-				->where('to','>=',$date)
-				->get()->first();
+			$attendance = new Attendance;
+			$attendance->task_id =$task->id ;
+			$attendance->check_in =$date_time ;
+			$attendance->organizer_id =$organizer_id ;
+			$attendance->save();
 
-		$task_id = $task->id;
-		$attendance = new Attendance;
-		$attendance->check_in ="10:00:00" ;
-		$attendance->organizer_id =$organizer_id ;
-		$attendance->task_id =$task_id ;
-
-		$attendance->save();
+		}
 
 	}
 
@@ -257,20 +259,25 @@ class OrganizerController extends Controller {
 
 		$organizer_id = 1;
 
-		$date = Carbon::today()->format('Y-m-d');
+		$date = date("Y-m-d");
+		$date_time = date("Y-m-d H:i:s");
 
-		$attendances = Attendance::where('organizer_id','=',$organizer_id)
-				->get()
-				->first();
+		$validate = Attendance::validate_attendance($organizer_id);
+		if($validate == "check_out"){
+			$attendances = Attendance::where('organizer_id','=',$organizer_id)
+					->get()
+					->first();
 
-		$checkin = $attendances->check_in;
+			$checkin = $attendances->check_in;
 
-		if(!empty($checkin)){
-			$attendance_id = $attendances->id;
-			$attendance = Attendance::find($attendance_id);
-			$attendance->check_out = "10:00:00";
-			$attendance->save();
+			if(!empty($checkin)){
+				$attendance_id = $attendances->id;
+				$attendance = Attendance::find($attendance_id);
+				$attendance->check_out = $date_time;
+				$attendance->save();
+			}
 		}
+
 
 	}
 

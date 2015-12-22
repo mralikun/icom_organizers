@@ -66,22 +66,32 @@ class Organizer extends Model {
      * return average for organizer in all tasks§
      */
     public static function organizer_grade($organizer_id){
-
         $tasks = Task::where('organizer_id','=',$organizer_id)->get();
 
         $number_of_task = count($tasks);
+        if($number_of_task == 0){
+            return "not set ";
+        }else{
+            $total_of_tasks = 0;
+            foreach($tasks as $task){
 
-        $total_of_tasks = 0;
+                $task_id = $task->id;
+                $average_for_task = Task::grading_average($task_id,$organizer_id);
 
-        foreach($tasks as $task){
+                $total_of_tasks += $average_for_task;
+            }
 
-            $task_id = $task->id;
-            $average_for_task = grading::grading_average($task_id,$organizer_id);
+           $average_for_tasks = $total_of_tasks/$number_of_task;
+            if($average_for_tasks == 0){
+                return "not set ";
+            }else{
 
-            $total_of_tasks += $average_for_task;
+                return $average_for_tasks;
+            }
+
+
         }
-        return $average_for_tasks = $total_of_tasks/$number_of_task;
-
     }
+
 
 }

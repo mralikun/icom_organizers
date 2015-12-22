@@ -34,9 +34,6 @@ class CreateTaskTable extends Migration {
 				  ->references("id")->on("conference")
 				  ->onDelete("cascade");
 
-			$table->foreign("working_fields_id")
-					->references("id")->on("working_fields")
-					->onDelete("cascade");
 
 
 		});
