@@ -75,6 +75,7 @@ Route::get('/checkin','OrganizerController@check_in');
 Route::post('/organizer_grade ','OrganizerController@organizer_grade');
 Route::get('/conferance/organizers/{conferance_id} ','OrganizerController@organizers');
 Route::get('/check/grade/{organizer_id}/{conference_id}','GradeController@grade_of_organizer');
+Route::get('/tasks/{organizer_id}/{conference_id}', 'TaskController@organizer_tasks');
 
 Route::get('/checkout','OrganizerController@check_out');
 

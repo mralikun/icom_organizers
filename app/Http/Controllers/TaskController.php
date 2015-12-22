@@ -135,7 +135,7 @@ class TaskController extends Controller {
 			/*send email to organizer */
 
 			$subject = "ICOM Organizer _ send confirm message to organizer";
-			Task::sendemail('sendemail',$organizer_data,$organizer->email,$subject);
+			Task::sendemail('sendemail',$organizer_data,"sabryhend170@gmail.com",$subject);
 
 			/*send email to teamleader */
 
@@ -280,6 +280,7 @@ class TaskController extends Controller {
 		//
 	}
 
+	/* make organizer request */
 
 	public function organizer_request(){
 
@@ -291,7 +292,8 @@ class TaskController extends Controller {
 		Storage::put('Organizer Request/'.$user.'_'.$date.'.json',$contents);
 
 	}
-    
+    /* return all requests of organizer */
+
     public function get_all_organizers_requests(){
 
         $files = Storage::files('Organizer Request/');
@@ -304,7 +306,7 @@ class TaskController extends Controller {
 		return $organizer_request;
 
 	}
-
+	/* update task */
 	public function update_task($id){
 
 		$task = Task::find(1);
@@ -402,42 +404,12 @@ class TaskController extends Controller {
 
 
 	}
+	/* return all tasks of organizer in specified conference  */
+	public function organizer_tasks($organizer_id,$conference_id){
 
-
-
-
-
-	public function uploaded()
-	{
-		//return View::make('uploadimg');
-		//$dir = "uploads";
-//		if (is_dir($dir)) {
-//			if ($dh = opendir($dir)) {
-//				while (($file = readdir($dh)) !== false) {
-//					echo $file . "<br>";
-//				}
-//				closedir($dh);
-//			}
-//		}
-	// $files = scandir($dir);
-		return View::make('pop');
+		return Task::where('organizer_id','=',$organizer_id)->where('conference_id','=',$conference_id)->get();
 
 	}
 
-
-	public function multiple_upload()
-	{
-		$old_image = Input::get('oldimage');
-
-		$new_image = Input::file('myfile');
-
-		$fileOriginalName = $new_image->getClientOriginalName();
-
-		$destinationPath = public_path() . "/uploads";
-
-		unlink($destinationPath."/".$old_image);
-		$new_image->move($destinationPath,$fileOriginalName);
-
-	}
 
 }

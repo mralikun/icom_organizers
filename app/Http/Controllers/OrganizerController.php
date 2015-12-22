@@ -234,9 +234,10 @@ class OrganizerController extends Controller {
 
 		$organizer->delete();
 	}
+
 	public function check_in(){
 
-		$organizer_id = 1;
+		$organizer_id = Input::get('organizer_id');
 		$date_time = date("Y-m-d H:i:s");
 		$date = date("Y-m-d");
 		 $validate = Attendance::validate_attendance($organizer_id);
@@ -259,7 +260,7 @@ class OrganizerController extends Controller {
 
 	public function check_out(){
 
-		$organizer_id = 1;
+		$organizer_id = Input::get('organizer_id');
 
 		$date = date("Y-m-d");
 		$date_time = date("Y-m-d H:i:s");
@@ -283,20 +284,24 @@ class OrganizerController extends Controller {
 
 	}
 	/*return all organizers in specified conference */
+
 	public function organizers($conferance_id){
 		$organizers = Conference::find($conferance_id)->organizers;
 		return $organizers;
 	}
+	/* store the grade of organizer in task imto database */
 
 	public function organizer_grade(){
 
 		$grades =Input::get('grades');
 
-		$task_id = Input::get('conferance_id');
+
+		$task_id = (int)Input::get('task_id');
 
 		$organizer_id = Input::get('organizer_id');
 
-		grading::save_grading($task_id, $organizer_id, $grades);
+		return grading::save_grading(Input::get('conference_id'), $organizer_id, $grades);
+
 
 		}
 
