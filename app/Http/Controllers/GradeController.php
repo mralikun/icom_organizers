@@ -88,7 +88,14 @@ class GradeController extends Controller {
 
 	public function grade_of_organizer($organizer_id,$conference_id){
 
-		return grading::where('task_id','=',$conference_id)->where('organizer_id','=',$organizer_id)->get();
+		$grades =grading::where('task_id','=',$conference_id)->where('organizer_id','=',$organizer_id)->get();
+
+		if(!empty($grades)){
+			return $grades;
+		}else{
+			return "false";
+		}
+
 	}
 
 
