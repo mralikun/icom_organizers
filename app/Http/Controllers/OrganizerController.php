@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 use App\Conference;
+use App\grading;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
@@ -286,9 +287,17 @@ class OrganizerController extends Controller {
 		$organizers = Conference::find($conferance_id)->organizers;
 		return $organizers;
 	}
-	public function organizer_grade(){
-		$input =Input::all();
 
-	}
+	public function organizer_grade(){
+
+		$grades =Input::get('grades');
+
+		$task_id = Input::get('conferance_id');
+
+		$organizer_id = Input::get('organizer_id');
+
+		grading::save_grading($task_id, $organizer_id, $grades);
+
+		}
 
 }
