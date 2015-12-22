@@ -24,8 +24,13 @@ app.config(["$routeProvider" , function(route){
         controller: "TaskController"
     })
     
-    .when("/grade" , {
+    .when("/post_grading/:conf_id" , {
         templateUrl: "/pages/grades.html",
+        controller: "UserController"
+    })
+    
+    .when("/grade" , {
+        templateUrl: "/pages/get_organizers_in_conference.html",
         controller: "UserController"
     })
     

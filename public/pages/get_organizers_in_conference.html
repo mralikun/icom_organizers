@@ -1,0 +1,27 @@
+<div class="row">
+    <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-6 col-lg-offset-3">
+        <div>
+           <div class="form-group col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <label>From</label>
+                <input type="date" ng-model="start" class="form-control" ng-change="grading_conferences()">
+            </div>
+            <div class="form-group col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <label>To</label>
+                <input type="date" ng-model="end" class="form-control" ng-change="grading_conferences()">
+            </div>
+            <div ng-show="wrong_dates" class="text-danger">
+                The ending date can't be before the starting date.
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Conference</label><img src="/icons/loading.gif" ng-show="view_data.processing_request" alt="">
+            <select class="form-control" ng-model="confID" ng-disabled="!confs.length || confs.length == 0">
+                <option ng-repeat="conf in confs" value="{{conf.id}}">{{conf.name}}</option>
+            </select>
+        </div>
+        <div class="form-group text-center">
+            <a href="#/post_grading/{{confID}}" class="btn btn-icom" ng-disabled="!confID">Show Organizers</a>
+        </div>
+    </div>
+</div>

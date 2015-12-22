@@ -80,12 +80,18 @@ app.controller("TaskController" , ["$scope" , "$rootScope" , "Patcher" , functio
         data.type = types[data.type - 1];
         request.set("url" , "/task").set("verb" , "post").set("data" , data).send().then(function(resp){
             scope.loading = false;
-            scope.msg = "Task has been assigned successfully!";
             if(resp.data instanceof Object){
-                alert("There're some errors, Please review the list below the form!");
+                scope.msg = "There're some errors, Please review the list below the form!";
                 scope.errors = resp.data;
+                $("#notify").modal("show");
+            }else {
+                scope.msg = "Task has been assigned successfully!";
+                $("#notify").modal("show");
             }
-        } , function(err){});
+        } , function(err){
+            scope.msg = "Couldn't assign the task toorganizer due to connection error!";
+            $("#notify").modal("show");
+        });
     }
     
 }]);

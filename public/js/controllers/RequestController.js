@@ -70,7 +70,6 @@ app.controller("RequestController" , ["$scope" , "Patcher" , "$rootScope" , "$lo
                 request.set("url" , "/conferences?"+params).set("verb" , "get").send().then(function(resp){
                     scope.confs = resp.data;
                 } , function(err){
-                    alert("Something went wrong while retrieving conferences data, Please refresh and try again!");
                 });
             }
         }
@@ -87,12 +86,12 @@ app.controller("RequestController" , ["$scope" , "Patcher" , "$rootScope" , "$lo
             data.meeting_date = date_formater(data.meeting_date);
         }
         request.set("url" , "/organizerrequest").set("verb" , "post").set("data" , data).send().then(function(resp){
-            console.log(resp.data);
             scope.loading = false;
             scope.msg = "Request has been sent!";
-            timeout(function(){ scope.msg = undefined; } , 2000);
+            $("#notify").modal("show");
         } , function(err){
-            alert("Something went wrong, Please refresh the page and try again!");
+            scope.msg = "Request couldn't be sent due to connection error!";
+            $("#notify").modal("show");
         });
     }
     

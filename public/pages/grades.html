@@ -1,3 +1,20 @@
+<div class="modal fade" id="notify">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Notification</h4>
+            </div>
+            <div class="modal-body text-center">
+                <span><strong>{{view_data.success_msg}}</strong></span>
+            </div>
+            <div class="modal-footer text-right">
+                <button class="btn btn-icom" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="row">
     
     <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-6 col-lg-offset-3 text-center">
@@ -6,7 +23,6 @@
             <strong>From: </strong>date1
             <strong>To: </strong>date2
         </div>
-        <strong>Department: </strong>Organizers in this department.
     </div>
     
 </div>
@@ -14,7 +30,10 @@
     
     <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-6 col-lg-offset-3">
         
-        <table class="table table-bordered text-center" id="grading-table">
+        <div class="text-warning text-center" style="padding: 10px;" ng-show="!grade_organizers || !grade_organizers.length">
+            <h3>There're no organizers assigned for this conference.</h3>
+        </div>
+        <table class="table table-bordered text-center" id="grading-table" ng-show="grade_organizers && grade_organizers.length">
             <thead>
                 <tr>
                     <th colspan="2">Organizers</th>
@@ -23,9 +42,9 @@
             
             <tbody>
                <!-- This row will be repeated for each organizer (in a certain conference ?)! -->
-                <tr>
-                    <td>Organizer 1</td>
-                    <td><button class="btn btn-primary" data-id="5" ng-click="showGradingSheet($event)">Grade</button></td>
+                <tr ng-repeat="organ in grade_organizers">
+                    <th class="text-center" style="vertical-align: middle;">{{organ.name}}</th>
+                    <td><button class="btn btn-primary" data-name="{{organ.name}}" data-id="{{organ.id}}" ng-click="showGradingSheet($event)">Grade</button></td>
                 </tr>
             </tbody>
         </table>
@@ -43,21 +62,52 @@
             <thead>
                 <tr>
                     <th>Organizer: </th>
-                    <td>Ali Reda</td>
+                    <td>{{grade_org_name}}</td>
                 </tr>
             </thead>
             
             <tbody>
                <!-- Will be repeated for each criteria ( fixed number ? ) -->
                 <tr>
-                    <th style="vertical-align:middle;text-align:center;">Crit 1</th>
-                    <td><input type="number" min="0" value="0" class="form-control" style="display:block;width: 68px;margin: 0 auto;"></td>
+                    <th style="vertical-align:middle;text-align:center;">Availability upon request</th>
+                    <td><input type="number" min="0" value="0" class="form-control" style="display:block;width: 68px;margin: 0 auto;" ng-model="grades.availability"></td>
                 </tr>
+                <tr>
+                    <th style="vertical-align:middle;text-align:center;">Dress code</th>
+                    <td><input type="number" min="0" value="0" class="form-control" style="display:block;width: 68px;margin: 0 auto;" ng-model="grades.dress"></td>
+                </tr>
+                <tr>
+                    <th style="vertical-align:middle;text-align:center;">Commitment to rules</th>
+                    <td><input type="number" min="0" value="0" class="form-control" style="display:block;width: 68px;margin: 0 auto;" ng-model="grades.commitment"></td>
+                </tr>
+                <tr>
+                    <th style="vertical-align:middle;text-align:center;">Performance</th>
+                    <td><input type="number" min="0" value="0" class="form-control" style="display:block;width: 68px;margin: 0 auto;" ng-model="grades.performance"></td>
+                </tr>
+                <tr>
+                    <th style="vertical-align:middle;text-align:center;">Hospitality</th>
+                    <td><input type="number" min="0" value="0" class="form-control" style="display:block;width: 68px;margin: 0 auto;" ng-model="grades.hospitality"></td>
+                </tr>
+                <tr>
+                    <th style="vertical-align:middle;text-align:center;">Attendance</th>
+                    <td><input type="number" min="0" value="0" class="form-control" style="display:block;width: 68px;margin: 0 auto;" ng-model="grades.attendance"></td>
+                </tr>
+                <tr>
+                    <th style="vertical-align:middle;text-align:center;">Appearance</th>
+                    <td><input type="number" min="0" value="0" class="form-control" style="display:block;width: 68px;margin: 0 auto;" ng-model="grades.apperance"></td>
+                </tr>
+                <tr>
+                    <th style="vertical-align:middle;text-align:center;">Multi tasking abilities</th>
+                    <td><input type="number" min="0" value="0" class="form-control" style="display:block;width: 68px;margin: 0 auto;" ng-model="grades.multi_task"></td>
+                </tr>
+                
+                
+                
             </tbody>
             
         </table>
         <div class="row text-right">
-            <button class="btn btn-icom">Submit</button>
+            <button class="btn btn-icom" ng-click="setGrades()">Submit</button>
         </div>
     </div>
     

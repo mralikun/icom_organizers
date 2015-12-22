@@ -8,6 +8,22 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
         orgs: [],
         crits: []
     };
+    function date_formater(d){
+        var day = d.getDate();
+        var month = d.getMonth();
+        var year = d.getFullYear();
+        return year + "-" + ((month < 10) ? "0"+month : month) + "-" + ((day < 10) ? "0"+day : day);
+    }
+    scope.grades = {
+        availability: 0,
+        dress: 0,
+        commitment: 0,
+        performance: 0,
+        hospitality: 0,
+        attendance: 0,
+        apperance: 0,
+        multi_task: 0
+    }
     var myMap = function(arr , cb){
         var a = [];
         for(var i = 0; i < arr.length; i++){
@@ -18,34 +34,30 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
     var intID = 0;
     var choosen_fields = [];
     // Grading an Organizer
-    var Grades = {
-        data : {},
-        assign: function(crit , grade){
-            this.data[crit] = grade;
-        },
-        userID: 0,
-        patch: function(){
-            // the data to a link // the data object {each key is the id of the criteria => the value is the grade}.
-            // we might also need the conference ID
-            request.set("url" , "/organizer/setGrades").set("verb" , "POST").set("data" , this.data).send().then(function(resp){
-                
-            } , function(err){
-                alert("Something wrong happened when connecting to server, Please refresh and try again!");
-            });
-        },
-        init: function(){
-            if(scope.view_data.crits.length){
-                for(var i = 0; i < scope.view_data.crits.length ; i++){
-                    this.data[scope.view_data.crits[i].name.toLowerCase()] = 0;
-                }
+    scope.grading_conferences = function(){
+        if(scope.start instanceof Date && scope.end instanceof Date){
+            if(scope.end < scope.start){
+                scope.wrong_dates = true;
+                return false;
+            }else{
+                scope.wrong_dates = false;
+                scope.view_data.processing_request = true;
+                var params = "from="+date_formater(scope.start)+"&to="+date_formater(scope.end);
+                request.set("url" , "/conferences?"+params).set("verb" , "get").send().then(function(resp){
+                    scope.confs = resp.data;
+                    scope.view_data.processing_request = false;
+                } , function(err){
+                    alert("Something went wrong while retrieving conferences data, Please refresh and try again!");
+                    scope.view_data.processing_request = false;
+                });
             }
         }
-    };
-    ///
+    }
     
     request.set("url" , "/workingfields").set("verb" , "get").send().then(function(resp){
         scope.fields = resp.data;
     } , function(err){
+        // MODAL
         alert("Something went wrong, Please refresh the page and try again!");
     });
     
@@ -62,7 +74,6 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
         var f = myMap(arr , function(e){
             return e.id;
         });
-        console.log(f instanceof Array);
         for(var i = 0; i< f.length; i++){
             $("input[type='checkbox'][data-f='"+f[i]+"']").attr("checked" , true);
         }
@@ -71,20 +82,40 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
     
     scope.appendField = function(event){
         var id = parseInt(event.target.getAttribute("data-f") , 10);
-        console.log(typeof choosen_fields);
         if(choosen_fields.indexOf(id) !== -1){
             choosen_fields.splice(choosen_fields.indexOf(id) , 1);
         }else {
             choosen_fields.push(id);
         }
-        console.log(choosen_fields);
     }
     
     scope.showGradingSheet = function(event){
-        $(".cover").show();
         var tar = event.target;
         var id = parseInt(tar.getAttribute("data-id") , 10);
-        console.log(id);
+        var name = tar.getAttribute("data-name");
+        scope.grade_org_id = id;
+        scope.grade_org_name = name;
+        request.set("verb" , "GET").set("url" , "/check/grade/" + id + "/" + params.conf_id).send().then(function(resp){
+            console.log(resp.data.length);
+        } , function(){
+            scope.view_data.success_msg = "Connection Error!, Couldn't check if the organizer has previous grades!";
+            $("#notify").modal("show");
+        });
+        $(".cover").show();
+    }
+    
+    scope.setGrades = function(){
+        request.set("url" , "/organizer_grade").set("verb" , "POST").set("data" , {
+            organizer_id: scope.grade_org_id,
+            conference_id: params.conf_id,
+            grades: scope.grades
+        }).send().then(function(resp){
+            scope.view_data.success_msg = "Grades has been saved!";
+            $("#notify").modal("show");
+        } , function(){
+            scope.view_data.success_msg = "Error! , Couldn't save your grade selection.";
+            $("#notify").modal("show");
+        });
     }
     
     scope.hideGradingSheet = function(){
@@ -141,13 +172,26 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
     }else if(rt.indexOf("search") !== -1 && !scope.view_data.orgs.length){
         request.set("url" , "/organizers").set("verb" , "get").send().then(function(resp){
             scope.view_data.orgs = resp.data;
-        } , function(err){});
-    }else if(rt.indexOf("grade") !== -1){
+        } , function(err){
+            // MODAL
+        });
+    }else if(rt.indexOf("grade") !== -1 || rt.indexOf("post_grading") !== -1){
         root.$emit("changeTitle" , "Grade Organizers");
+        if(params.conf_id){
+            request.set("url" , "/conferance/organizers/" + params.conf_id).set("verb" , "get").send().then(function(resp){
+               scope.grade_organizers = resp.data;
+            } , function(err){
+                scope.view_data.success_msg = "Connection Error! , Couldn't retrive organizers data.";
+                $("#notify").modal("show");
+            });
+        }
+
     }else if(rt === "/"){
         request.set("url" , "/auth/onlineUser").set("verb" , "get").send().then(function(resp){
             scope.role = resp.data.role;
-        } , function(){});
+        } , function(){
+            // MODAL
+        });
     }
     
     var reader = new FileReader();
@@ -192,39 +236,35 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
             scope.view_data.processing_request = false;
             var response = resp.data;
             if(response instanceof Object){
-                alert("Some error occurred, Please review the list of errors below!");
                 scope.view_data.errors = response;
+                scope.view_data.success_msg = "We encountered some errors, Please review the list of errors given below the form.";
             }else {
                 scope.view_data.encoding_status = "It might take a few seconds to encode the agreement image after you choose it, Please wait for the encoding to finish before submitting!";
                 scope.view_data.success_msg = "Created Successfully!";
-                // cycle ?!
-                timeout(function(){
-                    scope.view_data.success_msg = undefined;
-                    scope.clear();
-                } , 2000);
             }
-        } , function(){
-            
+            $("#notify").modal("show");
+        } , function(err){
+            // MODAL
+            scope.view_data.success_msg = "The connection didn't complete successfully, Please try again.";
+            $("#notify").modal("show");
         });
     }
     
     scope.editUser = function(){
-        console.log(scope.newUser);
         request.set("url" , "/organizer/update/" + scope.newUser.id).set("verb" , "post").set("data" , scope.newUser).send().then(function(response){
             scope.view_data.processing_request = false;
             var response = response.data;
             if(response instanceof Object){
-                alert("Some error occurred, Please review the list of errors below!");
                 scope.view_data.errors = response;
+                scope.view_data.success_msg = "We encountered some errors, Please review the list of errors given below the form.";
+                $("#notify").modal("show");
             }else {
                 scope.view_data.success_msg = "Edited Successfully!";
-                // reseting the user to null ?!
-                timeout(function(){
-                    scope.view_data.success_msg = undefined;
-                } , 2000);
+                $("#notify").modal("show");
             }
         } , function(err){
-            console.log(err);
+            scope.view_data.success_msg = "The connection didn't complete successfully, Please try again.";
+            $("#notify").modal("show");
         });
     }
     
@@ -232,16 +272,18 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
         var btn = ev.target;
         var email = btn.getAttribute("data-uni");
         request.set("url" , "/organizers/"+email).set("verb" , "delete").send().then(function(resp){
-            $(".del-msg").show();
-            setTimeout(function(){
-                $(".del-msg").hide();
-            } , 2000);
+            // MODAL
+            scope.view_data.success_msg = "The Account has been deleted!";
+            $("#notify").modal("show");
             var acc = $(scope.view_data.orgs).filter(function(ind , el){
                 return el.email == email;
             })[0];
             scope.which = "";
             scope.view_data.orgs.splice(scope.view_data.orgs.indexOf(acc) , 1);
-        } , function(err){});
+        } , function(err){
+            scope.view_data.success_msg = "Couldn't delete the account, Something has went wrong with the connection!";
+            $("#notify").modal("show");
+        });
     }
             
 }]);
