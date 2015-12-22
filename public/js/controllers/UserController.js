@@ -105,10 +105,20 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
     }
     
     scope.setGrades = function(){
+        
+        var the_grades = [];
+        
+        for(var k in scope.grades){
+            the_grades.push({
+                criteria: k,
+                grade: scope.grades[k]
+            });
+        }
+        
         request.set("url" , "/organizer_grade").set("verb" , "POST").set("data" , {
             organizer_id: scope.grade_org_id,
             conference_id: params.conf_id,
-            grades: scope.grades
+            grades: the_grades
         }).send().then(function(resp){
             scope.view_data.success_msg = "Grades has been saved!";
             $("#notify").modal("show");
