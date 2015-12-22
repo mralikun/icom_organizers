@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers;
 
+use App\Conference;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
@@ -278,6 +279,15 @@ class OrganizerController extends Controller {
 			}
 		}
 
+
+	}
+	/*return all organizers in specified conference */
+	public function organizers($conferance_id){
+		$organizers = Conference::find($conferance_id)->organizers;
+		return $organizers;
+	}
+	public function organizer_grade(){
+		$input =Input::all();
 
 	}
 
