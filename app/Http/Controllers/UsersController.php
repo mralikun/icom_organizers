@@ -38,7 +38,7 @@ class UsersController extends Controller {
 	 * Validate the inputs
 	 * */
 
-	private function validate_inputs($inputs){
+	public function validate_inputs($inputs){
 		$validator = Validator::make(
 				$inputs,
 				[
@@ -51,11 +51,11 @@ class UsersController extends Controller {
 
 		if($validator->fails()){
 
-			return false;
+			return "false";
 
 		}else{
 
-			return true;
+			return "true";
 		}
 	}
 
@@ -116,20 +116,7 @@ class UsersController extends Controller {
 	 */
 	public function update($id)
 	{
-		$inputs =Input::all();
 
-		if($this->validate_inputs($inputs)){
-
-			if(Input::get('role') == "department" ||Input::get('role') == "operations" ){
-
-				$user = User::find($id);
-				$user->update($inputs);
-
-			}else{
-
-				return "error";
-			}
-		}
 	}
 
 	/**
@@ -154,7 +141,7 @@ class UsersController extends Controller {
 
 	public function update_user($id)
 	{
-		$inputs =Input::all();
+		 $inputs =Input::all();
 
 		if($this->validate_inputs($inputs)){
 
