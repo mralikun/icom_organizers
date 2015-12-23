@@ -83,6 +83,11 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
     }
     
     scope.check_in = function(ev){
+        if(!scope.personToCheck){
+            scope.view_data.success_msg = "Please choose an organizer first";
+            $("#notify").modal("show");
+            return false;
+        }
         request.set("url" , "/checkin?organizer_id="+scope.personToCheck).set("verb" , "get").send().then(function(resp){
             scope.att_org_status.checked_in = "true";
             if(resp.data == "error"){
@@ -92,7 +97,7 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
             }
             $("#notify").modal("show");
         } , function(){
-            scope.view_data.success_msg = "Connection Error! , Something went wrong trying to check this organizer in.";
+            scope.view_data.success_msg = "There was an error checking this organizer in, Please make sure that this organizers is assigned and accepted a task in this conference and that task is due time is now.";
             $("#notify").modal("show");
         });
     }
@@ -153,6 +158,7 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
             return false;
         }
         
+        
         for(var k in scope.grades){
             the_grades.push({
                 criteria: k,
@@ -160,15 +166,18 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
             });
         }
         
+        scope.view_data.processing_request = true;
         request.set("url" , url).set("verb" , "POST").set("data" , {
             organizer_id: scope.grade_org_id,
             task_id: parseInt(scope.task_to_grade , 10),
             grades: the_grades
         }).send().then(function(resp){
+            scope.view_data.processing_request = false;
             scope.has_prev_grades = true;
             scope.view_data.success_msg = "Grades has been saved!";
             $("#notify").modal("show");
         } , function(){
+            scope.view_data.processing_request = false;
             scope.view_data.success_msg = "Error! , Couldn't save your grade selection.";
             $("#notify").modal("show");
         });
@@ -206,8 +215,6 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
     });
     
     scope.clear = function(){
-        // clears the data and the view and resets everything to 
-        // its default state;
         scope.newUser = {
             gender: 0
         }
@@ -218,11 +225,14 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
     }
     
     scope.create_new_user = function(){
+        scope.view_data.processing_request = true;
         request.set("verb" , "POST").set("url" , "/users").set("data" , scope.the_user).send().then(function(){
+            scope.view_data.processing_request = false;
             scope.view_data.success_msg = "User created successfully!";
             $("#notify").modal("show");
             delete scope.the_user;
         } , function(){
+            scope.view_data.processing_request = false;
             scope.view_data.success_msg = "Connection Error! , Couldn't create the new user!";
             $("#notify").modal("show");
         });
@@ -292,8 +302,8 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
     }else if(rt.indexOf("attendance") !== -1){
         root.$emit("changeTitle" , "Organizers Attendance.");
         scope.att_org_status = {
-            checked_in: false,
-            checked_out: false
+            checked_in: "true",
+            checked_out: "true"
         };
         if(params.att_conf_id){
             request.set("url" , "/conferance/organizers/" + params.att_conf_id).set("verb" , "get").send().then(function(resp){
@@ -304,7 +314,7 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
         }
         
     }else if(rt.indexOf("create_organizer") !== -1){
-        request.set("url" , "/workingfieldss").set("verb" , "get").send().then(function(resp){
+        request.set("url" , "/workingfields").set("verb" , "get").send().then(function(resp){
             scope.fields = resp.data;
         } , function(err){
             scope.view_data.success_msg = "Error! , Something went wrong trying to retrieve working fields data.";
@@ -326,6 +336,7 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
         root.$emit("changeTitle" , "Edit User");
         request.set("verb" , "get").set("url" , "/users/"+params.user_ID).send().then(function(resp){
             scope.the_user = resp.data;
+            delete scope.the_user.password;
         } , function(){
             scope.view_data.success_msg = "Connection Error , Couldn't retrieve user data";
             $("#notify").modal("show");
@@ -359,10 +370,15 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
     }
     
     scope.update_user = function(){
+        scope.view_data.processing_request = true;
         request.set("verb" , "POST").set("url" , "/update_user/"+scope.the_user.id).set("data" , scope.the_user).send().then(function(resp){
-            console.log(resp.data);
+            scope.view_data.success_msg = "User has been updated successfully!";
+            $("#notify").modal("show");
+            scope.view_data.processing_request = false;
         } , function(){
             scope.view_data.success_msg = "Connection Error! , Couldn't update the user information.";
+            $("#notify").modal("show");
+            scope.view_data.processing_request = false;
         });
     }
     
