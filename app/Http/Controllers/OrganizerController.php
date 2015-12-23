@@ -292,15 +292,14 @@ class OrganizerController extends Controller {
 	/* store the grade of organizer in task imto database */
 
 	public function organizer_grade(){
-
 		$grades =Input::get('grades');
 
 
-		$task_id = (int)Input::get('task_id');
+		 $task_id = Input::get('task_id');
 
 		$organizer_id = Input::get('organizer_id');
 
-		return grading::save_grading(Input::get('conference_id'), $organizer_id, $grades);
+		return grading::save_grading($task_id, $organizer_id, $grades);
 
 
 		}
