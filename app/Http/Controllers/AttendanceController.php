@@ -86,7 +86,7 @@ class AttendanceController extends Controller {
         if(empty($attendance)) {
             $value = ['checkin' => 'false',
                 'checkout'=>'false'];
-        }elseif(!empty($attendance->check_in) && empty($attendance->check_out)){
+        }elseif(!empty($attendance->check_in) && is_null($attendance->check_out)){
 
             $value = ['checkin' => 'true',
                 'checkout'=>'false'];
