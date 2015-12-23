@@ -60,7 +60,7 @@
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <td style="vertical-align: middle;text-align: center;width: 50%;"><h4>{{grade_org_name}}</h4></td>
+                    <td style="vertical-align: middle;text-align: center;width: 50%;"><h4><u>{{grade_org_name}}</u></h4></td>
                     <td>
                        <label>Task</label>
                         <select class="form-control" ng-model="task_to_grade" ng-change="checkPreviousGrading()">
@@ -73,35 +73,35 @@
                <!-- Will be repeated for each criteria ( fixed number ? ) -->
                 <tr>
                     <th style="vertical-align:middle;text-align:center;">Availability upon request</th>
-                    <td><input type="number" min="0" value="0" class="form-control" style="display:block;width: 68px;margin: 0 auto;" ng-model="grades.availability"></td>
+                    <td><input type="number" min="0" max="5" value="0" class="form-control" style="display:block;width: 68px;margin: 0 auto;" ng-model="grades.availability"></td>
                 </tr>
                 <tr>
                     <th style="vertical-align:middle;text-align:center;">Dress code</th>
-                    <td><input type="number" min="0" value="0" class="form-control" style="display:block;width: 68px;margin: 0 auto;" ng-model="grades.dress"></td>
+                    <td><input type="number" min="0" max="5" value="0" class="form-control" style="display:block;width: 68px;margin: 0 auto;" ng-model="grades.dress"></td>
                 </tr>
                 <tr>
                     <th style="vertical-align:middle;text-align:center;">Commitment to rules</th>
-                    <td><input type="number" min="0" value="0" class="form-control" style="display:block;width: 68px;margin: 0 auto;" ng-model="grades.commitment"></td>
+                    <td><input type="number" min="0" max="5" value="0" class="form-control" style="display:block;width: 68px;margin: 0 auto;" ng-model="grades.commitment"></td>
                 </tr>
                 <tr>
                     <th style="vertical-align:middle;text-align:center;">Performance</th>
-                    <td><input type="number" min="0" value="0" class="form-control" style="display:block;width: 68px;margin: 0 auto;" ng-model="grades.performance"></td>
+                    <td><input type="number" min="0" max="5" value="0" class="form-control" style="display:block;width: 68px;margin: 0 auto;" ng-model="grades.performance"></td>
                 </tr>
                 <tr>
                     <th style="vertical-align:middle;text-align:center;">Hospitality</th>
-                    <td><input type="number" min="0" value="0" class="form-control" style="display:block;width: 68px;margin: 0 auto;" ng-model="grades.hospitality"></td>
+                    <td><input type="number" min="0" max="5" value="0" class="form-control" style="display:block;width: 68px;margin: 0 auto;" ng-model="grades.hospitality"></td>
                 </tr>
                 <tr>
                     <th style="vertical-align:middle;text-align:center;">Attendance</th>
-                    <td><input type="number" min="0" value="0" class="form-control" style="display:block;width: 68px;margin: 0 auto;" ng-model="grades.attendance"></td>
+                    <td><input type="number" min="0" max="5" value="0" class="form-control" style="display:block;width: 68px;margin: 0 auto;" ng-model="grades.attendance"></td>
                 </tr>
                 <tr>
                     <th style="vertical-align:middle;text-align:center;">Appearance</th>
-                    <td><input type="number" min="0" value="0" class="form-control" style="display:block;width: 68px;margin: 0 auto;" ng-model="grades.apperance"></td>
+                    <td><input type="number" min="0" max="5" value="0" class="form-control" style="display:block;width: 68px;margin: 0 auto;" ng-model="grades.apperance"></td>
                 </tr>
                 <tr>
                     <th style="vertical-align:middle;text-align:center;">Multi tasking abilities</th>
-                    <td><input type="number" min="0" value="0" class="form-control" style="display:block;width: 68px;margin: 0 auto;" ng-model="grades.multi_task"></td>
+                    <td><input type="number" min="0" max="5" value="0" class="form-control" style="display:block;width: 68px;margin: 0 auto;" ng-model="grades.multi_task"></td>
                 </tr>
                 
                 
@@ -110,7 +110,7 @@
             
         </table>
         <div class="row text-right">
-            <button class="btn btn-icom" ng-click="setGrades()">Submit</button>
+            <button class="btn btn-icom" ng-click="setGrades()" ng-disabled="view_data.processing_request">Submit</button><img src="/icons/loading.gif" alt="Loading Image" ng-hide="!view_data.processing_request">
         </div>
     </div>
     

@@ -37,7 +37,7 @@
                 </div>
             </div>
             <div class="form-group text-right">
-                <input type="submit" class="btn btn-icom">
+                <input type="submit" class="btn btn-icom" ng-disabled="view_data.processing_request"><img src="/icons/loading.gif" alt="Loading Image" ng-hide="!view_data.processing_request">
             </div>
         </form>
     </div>
