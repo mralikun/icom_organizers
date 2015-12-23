@@ -22,6 +22,7 @@ Route::group(['middleware' => ['auth', 'admin']], function()
 	Route::resource('Admin', 'AdminController');
 
 	Route::resource('/users', 'UsersController');
+	Route::post('/update_user/{id}', 'UsersController@update_user');
 });
 
 Route::group(['middleware' => ['auth', 'operation']], function()

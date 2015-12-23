@@ -152,4 +152,22 @@ class UsersController extends Controller {
 		return View::make("templates.master");
 	}
 
+	public function update_user($id)
+	{
+		$inputs =Input::all();
+
+		if($this->validate_inputs($inputs)){
+
+			if(Input::get('role') == "department" ||Input::get('role') == "operations" ){
+
+				$user = User::find($id);
+				$user->update($inputs);
+
+			}else{
+
+				return "error";
+			}
+		}
+	}
+
 }
