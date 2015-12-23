@@ -67,6 +67,11 @@ app.config(["$routeProvider" , function(route){
     .when("/manage_users" , {
         templateUrl: "/pages/manage_users.html",
         controller: "UserController"
+    })
+    
+    .when("/edit_user/:user_ID" ,{
+        templateUrl: "/pages/edit_user.html",
+        controller: "UserController"
     });
     
 }]);

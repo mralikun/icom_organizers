@@ -84,7 +84,7 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
     
     scope.check_in = function(ev){
         request.set("url" , "/checkin?organizer_id="+scope.personToCheck).set("verb" , "get").send().then(function(resp){
-            scope.att_org_status.checked_in = true;
+            scope.att_org_status.checked_in = "true";
             if(resp.data == "error"){
                 scope.view_data.success_msg = "Check in failed! , No tasks for this organizer at the moment.";
             }else {
@@ -99,7 +99,7 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
     
     scope.check_out = function(){
         request.set("url" , "/checkout?organizer_id="+scope.personToCheck).set("verb" , "get").send().then(function(resp){
-            scope.att_org_status.checked_out = true;
+            scope.att_org_status.checked_out = "true";
             scope.view_data.success_msg = "Checked out successfully!";
             $("#notify").modal("show");
         } , function(){
@@ -322,6 +322,14 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
             scope.view_data.success_msg = "Connection Error! , Couldn't retrieve users data.";
             $("#notify").modal("show");
         });
+    }else if(rt.indexOf("edit_user") !== -1){
+        root.$emit("changeTitle" , "Edit User");
+        request.set("verb" , "get").set("url" , "/users/"+params.user_ID).send().then(function(resp){
+            scope.the_user = resp.data;
+        } , function(){
+            scope.view_data.success_msg = "Connection Error , Couldn't retrieve user data";
+            $("#notify").modal("show");
+        });
     }else if(rt === "/"){
         request.set("url" , "/auth/onlineUser").set("verb" , "get").send().then(function(resp){
             scope.role = resp.data.role;
@@ -348,6 +356,14 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
     
     if(!edit_mode) {
         scope.clear();   
+    }
+    
+    scope.update_user = function(){
+        request.set("verb" , "POST").set("url" , "/update_user/"+scope.the_user.id).set("data" , scope.the_user).send().then(function(resp){
+            console.log(resp.data);
+        } , function(){
+            scope.view_data.success_msg = "Connection Error! , Couldn't update the user information.";
+        });
     }
     
     scope.createOrganizer = function(){

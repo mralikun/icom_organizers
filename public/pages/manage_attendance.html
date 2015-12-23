@@ -25,6 +25,6 @@
         <option ng-repeat="o in att_organizers" value="{{o.id}}">{{o.name}}</option>
     </select>
     <div class="text-center">
-       <button class="btn btn-icom" ng-click="check_in($event)" style="margin: 5px;">Check In</button><button class="btn btn-icom" ng-click="check_out($event)" style="margin: 5px;">Check Out</button>
+       <button class="btn btn-icom" ng-click="check_in($event)" style="margin: 5px;" ng-disabled="att_org_status.checked_in == 'true'">Check In</button><button class="btn btn-icom" ng-click="check_out($event)" style="margin: 5px;" ng-disabled="att_org_status.checked_in == 'true' && att_org_status.checked_out == 'true'">Check Out</button>
     </div>
 </div>

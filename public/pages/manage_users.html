@@ -29,7 +29,7 @@
                 <tr ng-repeat="us in all_users">
                     <td>{{us.name}}</td>
                     <td class="text-center">
-                        <button class="btn btn-icom" data-id="{{us.id}}" style="margin: 5px;">Edit</button><button class="btn btn-danger" data-id="{{us.id}}" style="margin: 5px;" ng-click="delete_user($event)">Delete</button>
+                        <a href="#/edit_user/{{us.id}}" class="btn btn-icom" style="margin: 5px;">Edit</a><button class="btn btn-danger" data-id="{{us.id}}" style="margin: 5px;" ng-click="delete_user($event)">Delete</button>
                     </td>
                 </tr>
             </tbody>
