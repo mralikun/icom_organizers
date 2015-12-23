@@ -148,13 +148,15 @@ class UsersController extends Controller {
 		if($this->validate_inputs($inputs)){
 
 			if(Input::get('role') == "department" ||Input::get('role') == "operations" ){
-				
-				$password_hashed = Hash::make(Input::get('password'));
+				$password = Input::get('password') ;
 
 				$user = User::find($id);
 				$user->name =Input::get('name');
 				$user->email =Input::get('email');
-				$user->password =$password_hashed;
+				if($password != ""){
+					$password_hashed = Hash::make($password);
+					$user->password =$password_hashed;
+				}
 				$user->role =Input::get('role');
 				$user->save();
 
