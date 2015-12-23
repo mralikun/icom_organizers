@@ -63,8 +63,8 @@
                     <td style="vertical-align: middle;text-align: center;width: 50%;"><h4>{{grade_org_name}}</h4></td>
                     <td>
                        <label>Task</label>
-                        <select class="form-control">
-                            <option value="">--</option>
+                        <select class="form-control" ng-model="task_to_grade">
+                            <option ng-repeat="t in tasks" value="{{t.id}}">{{t.title}}</option>
                         </select>
                     </td>
                 </tr>

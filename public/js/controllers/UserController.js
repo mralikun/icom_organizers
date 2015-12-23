@@ -107,8 +107,7 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
         scope.grade_org_id = id;
         scope.grade_org_name = name;
         request.set("verb" , "get").set("url" , "/tasks/"+scope.grade_org_id+"/"+params.conf_id).send().then(function(resp){
-            // all tasks of the organizer in a conference ....
-            console.log(resp.data);
+            scope.tasks = resp.data;
         
         } , function(){});
         request.set("verb" , "GET").set("url" , "/check/grade/" + id + "/" + params.conf_id).send().then(function(resp){
@@ -135,7 +134,7 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
         
         request.set("url" , "/organizer_grade").set("verb" , "POST").set("data" , {
             organizer_id: scope.grade_org_id,
-            conference_id: params.conf_id,
+            task_id: parseInt(scope.task_to_grade , 10),
             grades: the_grades
         }).send().then(function(resp){
             scope.view_data.success_msg = "Grades has been saved!";
