@@ -98,7 +98,7 @@ class GradeController extends Controller {
 		}
 
 	}
-	
+
 	/* store the grade of organizer in task imto database */
 
 	public function organizer_grade(){

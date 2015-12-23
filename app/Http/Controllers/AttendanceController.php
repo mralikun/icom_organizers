@@ -28,7 +28,7 @@ class AttendanceController extends Controller {
         $validate = Attendance::validate_attendance($organizer_id);
         if($validate == "true"){
 
-            return $task = Task::where('organizer_id','=',$organizer_id)
+           $task = Task::where('organizer_id','=',$organizer_id)
                 ->where('from','<=',$date)
                 ->where('to','>=',$date)
                 ->get()->first();

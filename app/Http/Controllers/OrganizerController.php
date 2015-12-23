@@ -244,5 +244,4 @@ class OrganizerController extends Controller {
 	}
 
 
-
 }
