@@ -56,5 +56,14 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $departments;
 
     }
+    public static function save_user($name,$email,$password,$role){
+
+        $user = new User;
+        $user->name =$name;
+        $user->email =$email;
+        $user->password =$password;
+        $user->role =$role;
+        $user->save();
+    }
 
 }

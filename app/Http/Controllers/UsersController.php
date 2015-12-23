@@ -5,6 +5,7 @@ use App\User;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Auth;
@@ -72,7 +73,8 @@ class UsersController extends Controller {
 
 			if(Input::get('role') == "department" ||Input::get('role') == "operations" ){
 
-				User::create($inputs);
+				$password_hashed = Hash::make(Input::get('password'));
+				User::save_user(Input::get('name'),Input::get('email'),$password_hashed,Input::get('role'));
 
 			}else{
 
@@ -141,14 +143,20 @@ class UsersController extends Controller {
 
 	public function update_user($id)
 	{
-		 $inputs =Input::all();
+		$inputs =Input::all();
 
 		if($this->validate_inputs($inputs)){
 
 			if(Input::get('role') == "department" ||Input::get('role') == "operations" ){
+				
+				$password_hashed = Hash::make(Input::get('password'));
 
 				$user = User::find($id);
-				$user->update($inputs);
+				$user->name =Input::get('name');
+				$user->email =Input::get('email');
+				$user->password =$password_hashed;
+				$user->role =Input::get('role');
+				$user->save();
 
 			}else{
 
