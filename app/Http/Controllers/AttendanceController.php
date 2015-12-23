@@ -18,6 +18,7 @@ use App\User;
 
 class AttendanceController extends Controller {
 
+    /* make checkin for organizer in specifed task */
 
     public function check_in(){
 
@@ -41,6 +42,8 @@ class AttendanceController extends Controller {
         }
 
     }
+
+    /* make ckeckout for organizer in specifed task  */
 
     public function check_out(){
 
@@ -67,6 +70,8 @@ class AttendanceController extends Controller {
 
 
     }
+
+    /* check the status of organizer make checkin or not & make checkout or not */
 
     public function status(){
         $organizer_id = Input::get('organizer_id');

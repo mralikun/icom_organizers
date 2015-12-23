@@ -3,6 +3,7 @@
 use App\grading;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Input;
 
 use Illuminate\Http\Request;
 
@@ -97,6 +98,23 @@ class GradeController extends Controller {
 		}
 
 	}
+	
+	/* store the grade of organizer in task imto database */
+
+	public function organizer_grade(){
+		$grades =Input::get('grades');
+
+
+		$task_id = Input::get('task_id');
+
+		$organizer_id = Input::get('organizer_id');
+
+		return grading::save_grading($task_id, $organizer_id, $grades);
+
+
+	}
+
+	/* update the grade of organizer */
 
 	public function update_grade(){
 
