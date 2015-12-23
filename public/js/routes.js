@@ -57,6 +57,16 @@ app.config(["$routeProvider" , function(route){
     .when("/view_request/:file" , {
         templateUrl: "/pages/view_request.html",
         controller: "RequestController"
+    })
+    
+    .when("/add_user" , {
+        templateUrl: "/pages/add_user.html",
+        controller: "UserController"
+    })
+    
+    .when("/manage_users" , {
+        templateUrl: "/pages/manage_users.html",
+        controller: "UserController"
     });
     
 }]);

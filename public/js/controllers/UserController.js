@@ -84,7 +84,13 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
     
     scope.check_in = function(ev){
         request.set("url" , "/checkin?organizer_id="+scope.personToCheck).set("verb" , "get").send().then(function(resp){
-            
+            scope.att_org_status.checked_in = true;
+            if(resp.data == "error"){
+                scope.view_data.success_msg = "Check in failed! , No tasks for this organizer at the moment.";
+            }else {
+                scope.view_data.success_msg = "Checked in successfully!";
+            }
+            $("#notify").modal("show");
         } , function(){
             scope.view_data.success_msg = "Connection Error! , Something went wrong trying to check this organizer in.";
             $("#notify").modal("show");
@@ -93,7 +99,9 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
     
     scope.check_out = function(){
         request.set("url" , "/checkout?organizer_id="+scope.personToCheck).set("verb" , "get").send().then(function(resp){
-            
+            scope.att_org_status.checked_out = true;
+            scope.view_data.success_msg = "Checked out successfully!";
+            $("#notify").modal("show");
         } , function(){
             scope.view_data.success_msg = "Connection Error! , Something went wrong trying to check this organizer out.";
             $("#notify").modal("show");
@@ -110,20 +118,40 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
             scope.tasks = resp.data;
         
         } , function(){});
-        request.set("verb" , "GET").set("url" , "/check/grade/" + id + "/" + params.conf_id).send().then(function(resp){
+        $(".cover").show();
+    }
+    
+    scope.checkPreviousGrading = function(){
+        request.set("verb" , "GET").set("url" , "/check/grade/" + scope.grade_org_id + "/" + scope.task_to_grade).send().then(function(resp){
             //checking the grades of the organizer .... 
-            console.log(resp.data.length);
+            if(resp.data.length){
+                scope.has_prev_grades = true;
+                for(var i = 0; i < resp.data.length; i++){
+                    scope.grades[resp.data[i].criteria] = resp.data[i].grade;
+                }
+            }else {
+                scope.has_prev_grades = false;
+                for(var k in scope.grades){
+                    scope.grades[k] = 0;
+                }
+            }
+
         
         } , function(){
             scope.view_data.success_msg = "Connection Error!, Couldn't check if the organizer has previous grades!";
             $("#notify").modal("show");
         });
-        $(".cover").show();
     }
     
     scope.setGrades = function(){
         
+        var url = (scope.has_prev_grades) ? "/update_grade" : "/organizer_grade";
         var the_grades = [];
+        if(!scope.task_to_grade){
+            scope.view_data.success_msg = "Please choose a task to grade!";
+            $("#notify").modal("show");
+            return false;
+        }
         
         for(var k in scope.grades){
             the_grades.push({
@@ -132,11 +160,12 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
             });
         }
         
-        request.set("url" , "/organizer_grade").set("verb" , "POST").set("data" , {
+        request.set("url" , url).set("verb" , "POST").set("data" , {
             organizer_id: scope.grade_org_id,
             task_id: parseInt(scope.task_to_grade , 10),
             grades: the_grades
         }).send().then(function(resp){
+            scope.has_prev_grades = true;
             scope.view_data.success_msg = "Grades has been saved!";
             $("#notify").modal("show");
         } , function(){
@@ -146,6 +175,10 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
     }
     
     scope.hideGradingSheet = function(){
+        for(var k in scope.grades){
+            scope.grades[k] = 0;
+        }
+        delete scope.task_to_grade;
         $(".cover").hide();
     }
     
@@ -184,6 +217,41 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
         choosen_fields = [];
     }
     
+    scope.create_new_user = function(){
+        request.set("verb" , "POST").set("url" , "/users").set("data" , scope.the_user).send().then(function(){
+            scope.view_data.success_msg = "User created successfully!";
+            $("#notify").modal("show");
+            delete scope.the_user;
+        } , function(){
+            scope.view_data.success_msg = "Connection Error! , Couldn't create the new user!";
+            $("#notify").modal("show");
+        });
+    }
+    
+    scope.delete_user = function(ev){
+        var id = parseInt(ev.target.getAttribute("data-id") ,10);
+        request.set("verb" , "delete").set("url" , "/users/"+id).send().then(function(resp){
+            scope.view_data.success_msg = "User deleted successfully!";
+            $("#notify").modal("show");
+            $(ev.target).parents("tr").remove();
+        } , function(){
+            scope.view_data.success_msg = "Connection Error! ,User couldn't be deleted!";
+            $("#notify").modal("show");
+        });
+    }
+    
+    scope.checkStatus = function(){
+        request.set("verb" , "get").set("url" , "/status?organizer_id="+scope.personToCheck).send().then(function(resp){
+            console.log(resp.data);
+            scope.att_org_status.checked_in = resp.data.checkin;
+            scope.att_org_status.checked_out = resp.data.checkout;
+            console.log(scope.att_org_status);
+        } , function(){
+            scope.view_data.success_msg = "Connection Error! , Couldn't check the organizer's status";
+            $("#notify").modal("show");
+        });
+    }
+    
     var edit_mode = false;
     var rt = loc.path();
     if(rt.indexOf("edit") !== -1 && params.hasOwnProperty("email")){
@@ -205,6 +273,14 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
     }else if(rt.indexOf("grade") !== -1 || rt.indexOf("post_grading") !== -1){
         root.$emit("changeTitle" , "Grade Organizers");
         if(params.conf_id){
+            request.set("url" , "/conferences/"+params.conf_id).set("verb" , "GET").send().then(function(resp){
+                scope.grading_conf = resp.data[0];
+                scope.grading_conf.from = scope.grading_conf.from.split("-").reverse().join("-");
+                scope.grading_conf.to = scope.grading_conf.to.split("-").reverse().join("-");
+            } , function(){
+                scope.view_data.success_msg = "Connection Error, Couldn't retrive conference data.";
+                $("#notify").modal("show");
+            });
             request.set("url" , "/conferance/organizers/" + params.conf_id).set("verb" , "get").send().then(function(resp){
                scope.grade_organizers = resp.data;
             } , function(err){
@@ -215,6 +291,10 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
 
     }else if(rt.indexOf("attendance") !== -1){
         root.$emit("changeTitle" , "Organizers Attendance.");
+        scope.att_org_status = {
+            checked_in: false,
+            checked_out: false
+        };
         if(params.att_conf_id){
             request.set("url" , "/conferance/organizers/" + params.att_conf_id).set("verb" , "get").send().then(function(resp){
                 scope.att_organizers = resp.data;
@@ -228,6 +308,18 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
             scope.fields = resp.data;
         } , function(err){
             scope.view_data.success_msg = "Error! , Something went wrong trying to retrieve working fields data.";
+            $("#notify").modal("show");
+        });
+    }else if(rt.indexOf("add_user") !== -1) {
+        root.$emit("changeTitle" , "Create New Users");
+    }else if(rt.indexOf("manage_users") !== -1){
+        root.$emit("changeTitle" , "Mange Users");
+        request.set("url" , "/users").set("verb" , "get").send().then(function(resp){
+            scope.all_users = $(resp.data).filter(function(ind , e){
+                return e.role != "admin";
+            });
+        } , function(){
+            scope.view_data.success_msg = "Connection Error! , Couldn't retrieve users data.";
             $("#notify").modal("show");
         });
     }else if(rt === "/"){
