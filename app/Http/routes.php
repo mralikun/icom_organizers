@@ -21,7 +21,7 @@ Route::group(['middleware' => ['auth', 'admin']], function()
 
 	Route::resource('Admin', 'AdminController');
 
-	Route::resource('/users', 'UsersController',array('except' => array('show')));
+	Route::resource('/users', 'UsersController');
 });
 
 Route::group(['middleware' => ['auth', 'operation']], function()
