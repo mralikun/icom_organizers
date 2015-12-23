@@ -58,14 +58,17 @@
         <button class="btn close" style="padding: 5px;" ng-click="hideGradingSheet()">X</button>
         <h1 class="text-center">Grading Sheet</h1>
         <table class="table table-bordered">
-            
             <thead>
                 <tr>
-                    <th>Organizer: </th>
-                    <td>{{grade_org_name}}</td>
+                    <td style="vertical-align: middle;text-align: center;width: 50%;"><h4>{{grade_org_name}}</h4></td>
+                    <td>
+                       <label>Task</label>
+                        <select class="form-control">
+                            <option value="">--</option>
+                        </select>
+                    </td>
                 </tr>
             </thead>
-            
             <tbody>
                <!-- Will be repeated for each criteria ( fixed number ? ) -->
                 <tr>

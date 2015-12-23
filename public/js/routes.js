@@ -39,6 +39,16 @@ app.config(["$routeProvider" , function(route){
         controller: "RequestController"
     })
     
+    .when("/attendance" , {
+        templateUrl: "/pages/attendance.html",
+        controller: "UserController"
+    })
+    
+    .when("/manage_attendance/:att_conf_id" , {
+        templateUrl: "/pages/manage_attendance.html",
+        controller: "UserController"
+    })
+    
     .when("/requests" , {
         templateUrl: "/pages/all_requests.html",
         controller: "RequestController"

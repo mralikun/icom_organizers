@@ -45,7 +45,7 @@
                     
 
                     <li><a href="#/grade">Grade Organizers</a></li>
-<!--                    <li><a href="#">Organizers Attendance</a></li>-->
+                    <li><a href="#/attendance">Organizers Attendance</a></li>
                     <li><a href="/auth/logout">Logout</a></li>
 
                 </ul>

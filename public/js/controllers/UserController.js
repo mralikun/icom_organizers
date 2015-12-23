@@ -54,13 +54,6 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
         }
     }
     
-    request.set("url" , "/workingfields").set("verb" , "get").send().then(function(resp){
-        scope.fields = resp.data;
-    } , function(err){
-        // MODAL
-        alert("Something went wrong, Please refresh the page and try again!");
-    });
-    
     root.$on("changeTitle" , function(events , title){
         changeTitle(title);
     });
@@ -89,14 +82,39 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
         }
     }
     
+    scope.check_in = function(ev){
+        request.set("url" , "/checkin?organizer_id="+scope.personToCheck).set("verb" , "get").send().then(function(resp){
+            
+        } , function(){
+            scope.view_data.success_msg = "Connection Error! , Something went wrong trying to check this organizer in.";
+            $("#notify").modal("show");
+        });
+    }
+    
+    scope.check_out = function(){
+        request.set("url" , "/checkout?organizer_id="+scope.personToCheck).set("verb" , "get").send().then(function(resp){
+            
+        } , function(){
+            scope.view_data.success_msg = "Connection Error! , Something went wrong trying to check this organizer out.";
+            $("#notify").modal("show");
+        });
+    }
+    
     scope.showGradingSheet = function(event){
         var tar = event.target;
         var id = parseInt(tar.getAttribute("data-id") , 10);
         var name = tar.getAttribute("data-name");
         scope.grade_org_id = id;
         scope.grade_org_name = name;
+        request.set("verb" , "get").set("url" , "/tasks/"+scope.grade_org_id+"/"+params.conf_id).send().then(function(resp){
+            // all tasks of the organizer in a conference ....
+            console.log(resp.data);
+        
+        } , function(){});
         request.set("verb" , "GET").set("url" , "/check/grade/" + id + "/" + params.conf_id).send().then(function(resp){
+            //checking the grades of the organizer .... 
             console.log(resp.data.length);
+        
         } , function(){
             scope.view_data.success_msg = "Connection Error!, Couldn't check if the organizer has previous grades!";
             $("#notify").modal("show");
@@ -196,6 +214,23 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
             });
         }
 
+    }else if(rt.indexOf("attendance") !== -1){
+        root.$emit("changeTitle" , "Organizers Attendance.");
+        if(params.att_conf_id){
+            request.set("url" , "/conferance/organizers/" + params.att_conf_id).set("verb" , "get").send().then(function(resp){
+                scope.att_organizers = resp.data;
+            } , function(){
+                
+            });
+        }
+        
+    }else if(rt.indexOf("create_organizer") !== -1){
+        request.set("url" , "/workingfieldss").set("verb" , "get").send().then(function(resp){
+            scope.fields = resp.data;
+        } , function(err){
+            scope.view_data.success_msg = "Error! , Something went wrong trying to retrieve working fields data.";
+            $("#notify").modal("show");
+        });
     }else if(rt === "/"){
         request.set("url" , "/auth/onlineUser").set("verb" , "get").send().then(function(resp){
             scope.role = resp.data.role;
