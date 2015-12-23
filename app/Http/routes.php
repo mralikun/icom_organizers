@@ -21,7 +21,7 @@ Route::group(['middleware' => ['auth', 'admin']], function()
 
 	Route::resource('Admin', 'AdminController');
 
-	Route::resource('users', 'UsersController',array('except' => array('index', 'show')));
+	Route::resource('users', 'UsersController',array('except' => array('show')));
 });
 
 Route::group(['middleware' => ['auth', 'operation']], function()
@@ -60,6 +60,7 @@ Route::group(['middleware' => ['auth']], function()
 
 	Route::get('/user/{username}', 'UsersController@Home');
 
+
 	Route::get('/auth/logout', 'AuthController@logout');
 
 	Route::get('/auth/onlineUser', 'AuthController@onlineUser');
@@ -78,6 +79,7 @@ Route::get('/check/grade/{organizer_id}/{conference_id}','GradeController@grade_
 Route::get('/tasks/{organizer_id}/{conference_id}', 'TaskController@organizer_tasks');
 
 Route::get('/checkout','OrganizerController@check_out');
+Route::get('/status','OrganizerController@status');
 
 
 

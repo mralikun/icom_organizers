@@ -240,10 +240,10 @@ class OrganizerController extends Controller {
 		$organizer_id = Input::get('organizer_id');
 		$date_time = date("Y-m-d H:i:s");
 		$date = date("Y-m-d");
-		 $validate = Attendance::validate_attendance($organizer_id);
+		$validate = Attendance::validate_attendance($organizer_id);
 		if($validate == "true"){
 
-			$task = Task::where('organizer_id','=',$organizer_id)
+			return $task = Task::where('organizer_id','=',$organizer_id)
 					->where('from','<=',$date)
 					->where('to','>=',$date)
 					->get()->first();
@@ -303,5 +303,38 @@ class OrganizerController extends Controller {
 
 
 		}
+
+	public function status(){
+		$organizer_id = Input::get('organizer_id');
+		$date_time = date("Y-m-d H:i:s");
+		$date = date("Y-m-d");
+		$task = Task::where('organizer_id','=',$organizer_id)
+					->where('from','<=',$date)
+					->where('to','>=',$date)
+					->get()->first();
+		$attendance = Attendance::where('organizer_id','=',$organizer_id)->where('task_id','=',$task->id)->get()->first();
+		$value =array();
+		if(empty($attendance)) {
+			$value = ['checkin' => 'false',
+						'checkout'=>'false'];
+		}elseif(!empty($attendance->check_in) && empty($attendance->check_out)){
+
+				$value = ['checkin' => 'true',
+						'checkout'=>'false'];
+		}elseif(!empty($attendance->check_in) && !empty($attendance->check_out)){
+			$value = ['checkin' => 'true',
+					'checkout'=>'true'];
+		}
+		else{
+			$value = [];
+		}
+
+		return $value;
+		}
+
+
+
+
+
 
 }
