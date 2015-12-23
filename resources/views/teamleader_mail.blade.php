@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html>
-    
+
     <head>
         <meta charset="utf-8">
         <title>Teamleader Notification</title>
         <style>
-        
+
             tr {
                 margin: 10px 25px;
             }
-            
+
             th , td {
                 padding: 10px;
             }
-            
+
         </style>
     </head>
-    
+
     <body>
         <h2>ICOM Organizers</h2>
         @if(isset($flag))
@@ -25,11 +25,11 @@
             @else
             <p>Organizer {{$organizer_name}} has refused the task.</p>
             @endif
-        
+
         @else
         <p>Organizer {{$organizer_name}} has been sent an invitation to join your team and we are awaiting the reply.</p>
         @endif
-        
+
         <div class="contact-info">
             <table>
                 <thead>
@@ -50,5 +50,5 @@
             </table>
         </div>
     </body>
-    
+
 </html>

@@ -1,4 +1,5 @@
-<form method="post" action="/task">
+
+<form method="post" action="/users/1">
     <input type="hidden" name="_token" value="{{csrf_token()}}">
     <label>title</label>
     <input type="text" name="title">

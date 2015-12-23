@@ -135,7 +135,7 @@ class TaskController extends Controller {
 			/*send email to organizer */
 
 			$subject = "ICOM Organizer _ send confirm message to organizer";
-			Task::sendemail('sendemail',$organizer_data,"sabryhend170@gmail.com",$subject);
+			Task::sendemail('sendemail',$organizer_data,$organizer->email,$subject);
 
 			/*send email to teamleader */
 
@@ -394,7 +394,7 @@ class TaskController extends Controller {
 		/*send email to organizer */
 
 		$subject = "ICOM Organizer _ send confirm message to organizer";
-		Task::sendemail('sendemail',$organizer_data,"sabryhend170@gmail.com",$subject);
+		Task::sendemail('sendemail',$organizer_data,$organizer->email,$subject);
 
 		/*send email to teamleader */
 
