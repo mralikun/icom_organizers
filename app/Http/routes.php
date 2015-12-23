@@ -21,7 +21,7 @@ Route::group(['middleware' => ['auth', 'admin']], function()
 
 	Route::resource('Admin', 'AdminController');
 
-	Route::resource('users', 'UsersController',array('except' => array('show')));
+	Route::resource('/users', 'UsersController',array('except' => array('show')));
 });
 
 Route::group(['middleware' => ['auth', 'operation']], function()
@@ -72,14 +72,16 @@ Route::get('/task/mailresponse/{flag}/{token}', 'TaskController@check_email');
 Route::get('/upload', 'TaskController@uploaded');
 Route::post('apply/upload', 'TaskController@multiple_upload');
 
-Route::get('/checkin','OrganizerController@check_in');
+Route::get('/checkin','AttendanceController@check_in');
 Route::post('/organizer_grade ','OrganizerController@organizer_grade');
 Route::get('/conferance/organizers/{conferance_id} ','OrganizerController@organizers');
-Route::get('/check/grade/{organizer_id}/{conference_id}','GradeController@grade_of_organizer');
+Route::get('/check/grade/{organizer_id}/{task_id}','GradeController@grade_of_organizer');
+Route::get('/update_grade','GradeController@update_grade');
 Route::get('/tasks/{organizer_id}/{conference_id}', 'TaskController@organizer_tasks');
 
-Route::get('/checkout','OrganizerController@check_out');
-Route::get('/status','OrganizerController@status');
+Route::get('/checkout','AttendanceController@check_out');
+Route::get('/status','AttendanceController@status');
+
 
 
 

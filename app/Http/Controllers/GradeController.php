@@ -98,5 +98,20 @@ class GradeController extends Controller {
 
 	}
 
+	public function update_grade(){
+
+		$grades =Input::get('grades');
+		$task_id = Input::get('task_id');
+		$organizer_id = Input::get('organizer_id');
+		 $grades_data = grading::where('organizer_id','=',$organizer_id)->where('task_id','=',$task_id)->get();
+		foreach($grades_data as $grade){
+			$grade_data = grading::find($grade->id);
+			$grade_data->delete();
+		}
+		return grading::save_grading($task_id, $organizer_id, $grades);
+
+	}
+
+
 
 }
