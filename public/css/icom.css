@@ -35,6 +35,12 @@ header {
     background-color: transparent;
 }
 
+.number-row {
+    border-top: 1px solid #aaa;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
 .menu-button:focus ~ nav {
     transform: translateX(0);
 }
@@ -110,10 +116,6 @@ form {
 
 label {
     padding: 5px;
-}
-
-input {
-    margin: 5px;
 }
 
 .errors {

@@ -17,13 +17,17 @@
 
 <h1 class="text-center">Organizers Request</h1>
 <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-6 col-lg-offset-3">
-   <div class="form-group">
+   <div class="form-group text-center">
         <label>What type of request would you like to make ?</label>
-        <select ng-model="request.type" class="form-control" ng-change="requestChanged()">
-            <option value="1">Conference</option>
-            <option value="2">Office Hours</option>
-            <option value="3">One Time Errand</option>
-        </select>
+        <div class="row">
+            <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-6 col-lg-offset-3">
+                <select ng-model="request.type" class="form-control" ng-change="requestChanged()">
+                    <option value="1">Conference</option>
+                    <option value="2">Office Hours</option>
+                    <option value="3">One Time Errand</option>
+                </select>
+            </div>
+        </div>
     </div>
     <form style="margin-top: 0;" ng-submit="sendRequest()" ng-show="request.type == 1">
         <div class="panel panel-primary">
@@ -33,47 +37,41 @@
                    <div>Choose a date range to show all conferences in that range.</div>
                    <div class="col-sm-6" style="padding: 15px;">
                        <label>From</label>
-                       <input type="date" class="form-control" ng-model="start" ng-change="getConferences()">
+                       <input type="text" class="form-control" ng-model="start" ng-focus="initPicker($event)" ng-change="getConferences()">
                    </div>
                     <div class="col-sm-6" style="padding: 15px;">
                        <label>To</label>
-                       <input type="date" class="form-control" ng-model="end" ng-change="getConferences()">
+                       <input type="text" class="form-control" ng-model="end" ng-focus="initPicker($event)" ng-change="getConferences()">
                    </div>
                    <div class="col-sm-12 text-danger text-center" ng-show="wrong_dates">
                        <span>The ending date can't come before the starting date.</span>
                    </div>
                </div>
-                <div class="form-group">
-                    <label class="control-label">Conference</label>
-                    <select class="form-control" ng-model="request.conference_id" ng-change="setUp()">
-                        <option ng-repeat="conf in confs" value="{{conf.id}}">{{conf.name}}</option>
-                    </select>
-                </div>
+               
+               <div class="row">
+                   <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        <label class="control-label">Conference</label>
+                        <select class="form-control" ng-model="request.conference_id" ng-change="setUp()">
+                            <option ng-repeat="conf in confs" value="{{conf.id}}">{{conf.name}}</option>
+                        </select>
+                    </div>
+                   <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
 
-                <div class="form-group">
+                        <label class="control-label">Venue</label>
+                        <input type="text" readonly class="form-control" ng-model="request.venue">
 
-                    <label class="control-label">Venue</label>
-                    <input type="text" readonly class="form-control" ng-model="request.venue">
-
-                </div>
-
-                <div class="form-group">
-
-                    <label class="control-label">Congress Account Manager</label>
-                    <input type="text" class="form-control" ng-model="request.cam">
-
-                </div>
-
-                <div class="form-group">
+                    </div>
+               </div>
+               <div class="form-group">
 
                     <div class="row">
                         <div class="col-sm-6 col-md-6 col-lg-6" style="padding: 15px;">
                             <label class="control-label">Start Date</label>
-                            <input type="date" readonly class="form-control" ng-model="request.from">
+                            <input type="text" readonly class="form-control" ng-focus="initPicker($event)" ng-model="request.from">
                         </div>
                         <div class="col-sm-6 col-md-6 col-lg-6" style="padding: 15px;">
                             <label class="control-label">End Date</label>
-                            <input type="date col-md-6" readonly class="form-control" ng-model="request.to">
+                            <input type="date col-md-6" readonly class="form-control" ng-focus="initPicker($event)" ng-model="request.to">
                         </div>
                         <div class="col-sm-6 col-md-6 col-lg-6" style="padding: 15px;">
                             <label class="control-label">Gathering Time</label>
@@ -85,6 +83,14 @@
                         </div>
                     </div>
                 </div>
+                <div class="form-group">
+
+                    <label class="control-label">Congress Account Supervisor</label>
+                    <input type="text" class="form-control" ng-model="request.cam">
+
+                </div>
+
+
                 
             </div>
         </div>
@@ -99,66 +105,86 @@
                 <div class="panel panel-warning" style="border-color: rgba(0,0,0,.3)">
                     <div class="panel-heading"><h4 class="text-center"><em>Registration</em></h4></div>
                     <div class="panel-body">
-                        <div class="row">
-                            <div class="col-sm-6" style="padding: 15px;">
-                                <label>Registration Organizers</label>
-                                <input type="number" min="0" class="form-control" ng-model="request.registration_organizers_number">
-                            </div>
-                            <div class="col-sm-6" style="padding: 15px;">
-                                <label>Chairpersons and Speakers registration organizers</label>
-                                <input type="number" class="form-control" min="0" ng-model="request.chairpersons_speaker_registration_organizers_number">
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="control-label">Registration Manager</label>
-                            <input type="text" class="form-control" ng-model="request.registration_manager">
-                        </div>
+                       
+                       <div class="row">
+                           <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-6 col-lg-offset-3">
+                               <div class="form-group">
+                                    <label class="control-label">Registration Supervisor</label>
+                                    <input type="text" class="form-control" ng-model="request.registration_manager">
+                                </div>
+                           </div>
+                           <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-6 col-lg-offset-3">
+                                <div class="row number-row">
+                                    <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8"><label>Registration Organizers</label></div>
+                                    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"><input type="number" min="0" class="form-control" ng-model="request.registration_organizers_number"></div>
+                                </div>
+                                <div class="row number-row">
+                                    <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8"><label>Chairpersons and Speakers registration organizers</label></div>
+                                    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"><input type="number" class="form-control" min="0" ng-model="request.chairpersons_speaker_registration_organizers_number"></div>
+                                </div>
+                                <div class="row number-row">
+                                    <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8"><label>Total</label></div>
+                                    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"><input type="text" class="form-control" readonly></div>
+                                </div>
+                           </div>
+                       </div>
                     </div>
                 </div>
                 
                 <div class="panel panel-warning" style="border-color: rgba(0,0,0,.3)">
-                    <div class="panel-heading"><h4 class="text-center"><em>Hall</em></h4></div>
+                    <div class="panel-heading"><h4 class="text-center"><em>Hall Management</em></h4></div>
                     <div class="panel-body">
-                        <div class="form-group">
-                            <label class="control-label">Barcode Organizers</label>
-                            <input type="number" class="form-control" min="0" ng-model="request.barcode_organizers">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="control-label">Hall Organizers</label>
-                            <input type="number" class="form-control" min="0" ng-model="request.hall_organizers">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="control-label">Hall Manager</label>
-                            <input type="text" class="form-control" ng-model="request.hall_manager">
-                        </div>
+                       
+                       <div class="row">
+                           <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-6 col-lg-offset-3">
+                               <div class="form-group">
+                                    <label class="control-label">Hall Management Supervisor</label>
+                                    <input type="text" class="form-control" ng-model="request.hall_manager">
+                                </div>
+                           </div>
+                           <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-6 col-lg-offset-3">
+                               <div class="row number-row">
+                                   <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8"><label class="control-label">Barcode Organizers</label></div>
+                                   <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"><input type="number" class="form-control" min="0" ng-model="request.barcode_organizers"></div>
+                               </div>
+                               <div class="row number-row">
+                                   <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8"><label class="control-label">Hall Management Organizers</label></div>
+                                   <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"><input type="number" class="form-control" min="0" ng-model="request.hall_organizers"></div>
+                               </div>
+                               <div class="row number-row">
+                                   <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8"><label>Total</label></div>
+                                   <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"><input type="text" class="form-control" readonly></div>
+                               </div>
+                           </div>
+                       </div>
                     </div>
                 </div>
 
                 <div class="panel panel-warning" style="border-color: rgba(0,0,0,.3)">
-                    <div class="panel-heading"><h4 class="text-center"><em>A / V</em></h4></div>
+                    <div class="panel-heading"><h4 class="text-center"><em>Audiovisual</em></h4></div>
                     <div class="panel-body">
-                        <div class="form-group">
-                            <label class="control-label">Audio Visual Organizers(Center + Podium)</label>
-                            <input type="number" class="form-control" min="0" ng-model="request.av_organizers_total">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="control-label">Center</label>
-                            <input type="number" class="form-control" min="0" ng-model="request.av_center_organizers">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="control-label">Podium</label>
-                            <input type="number" class="form-control" min="0" ng-model="request.av_podium_organizer">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="control-label">IT Manager</label>
-                            <input type="text" class="form-control" ng-model="request.it_manager">
-                        </div>
+                       <div class="row">
+                           <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-3 col-md-6 col-md-offset-3 col-lg-6 col-lg-offset-3">
+                               <div class="form-group">
+                                    <label class="control-label">Audiovisual Supervisor</label>
+                                    <input type="text" class="form-control" ng-model="request.it_manager">
+                                </div>
+                           </div>
+                           <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-3 col-md-6 col-md-offset-3 col-lg-6 col-lg-offset-3">
+                               <div class="row number-row">
+                                   <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8"><label class="control-label">Center</label></div>
+                                   <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"><input type="number" class="form-control" min="0" ng-model="request.av_center_organizers"></div>
+                               </div>
+                               <div class="row number-row">
+                                   <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8"><label class="control-label">Podium</label></div>
+                                   <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"><input type="number" class="form-control" min="0" ng-model="request.av_podium_organizer"></div>
+                               </div>
+                               <div class="row number-row">
+                                   <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8"><label class="control-label">Total</label></div>
+                                   <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"><input type="number" class="form-control" min="0" ng-model="request.av_organizers_total" readonly></div>
+                               </div>
+                           </div>
+                       </div>
                     </div>
                 </div>
 
@@ -186,7 +212,7 @@
 
                    <div class="form-group">
                        <label class="control-label">Meeting Date</label>
-                       <input type="date" class="form-control" ng-model="request.meeting_date">
+                       <input type="text" class="form-control" ng-focus="initPicker($event)" ng-model="request.meeting_date">
                    </div>
                    
                     <div class="form-group">
@@ -235,7 +261,7 @@
         </div>
         
         <div class="form-group">
-            <label class="control-label">Task Manager</label>
+            <label class="control-label">Task Supervisor</label>
             <input type="text" class="form-control" ng-model="request.task_manager">
         </div>
         <div class="form-group text-right">

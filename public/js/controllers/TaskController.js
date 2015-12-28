@@ -41,19 +41,22 @@ app.controller("TaskController" , ["$scope" , "$rootScope" , "Patcher" , functio
     }
     
     scope.getConferences = function(){
-        if(scope.start instanceof Date && scope.end instanceof Date){
-            if(scope.end < scope.start){
+        var start = (scope.start) ? $.datepicker.parseDate("dd-mm-yy" , scope.start) : "";
+        var end = (scope.end) ? $.datepicker.parseDate("dd-mm-yy" , scope.end) : "";
+        if(start instanceof Date && end instanceof Date){
+            if(end < start){
                 scope.wrong_dates = true;
                 return false;
             }else{
                 scope.wrong_dates = false;
-                var params = "from="+date_formater(scope.start)+"&to="+date_formater(scope.end);
+                var params = "from="+date_formater(start)+"&to="+date_formater(end);
                 request.set("url" , "/conferences?"+params).set("verb" , "get").send().then(function(resp){
                     scope.confs = resp.data;
                 } , function(err){
-                    alert("Something went wrong while retrieving conferences data, Please refresh and try again!");
                 });
             }
+        }else {
+            console.log("NO");
         }
     }
     
@@ -61,8 +64,8 @@ app.controller("TaskController" , ["$scope" , "$rootScope" , "Patcher" , functio
         var choosen_conf = $(scope.confs).filter(function(ind , el){
             return el.id == scope.task.conference_id;
         })[0];
-        scope.task.from = new Date(choosen_conf.from);
-        scope.task.to = new Date(choosen_conf.to);
+        scope.task.from = $.datepicker.formatDate("dd-mm-yy" , new Date(choosen_conf.from));
+        scope.task.to = $.datepicker.formatDate("dd-mm-yy" , new Date(choosen_conf.to));
     }
     
     scope.reset = function(){
@@ -78,6 +81,8 @@ app.controller("TaskController" , ["$scope" , "$rootScope" , "Patcher" , functio
         scope.loading = true;
         var data = angular.copy(scope.task);
         data.type = types[data.type - 1];
+        data.from = date_formater($.datepicker.parseDate("dd-mm-yy" , data.from));
+        data.to = date_formater($.datepicker.parseDate("dd-mm-yy" , data.to));
         request.set("url" , "/task").set("verb" , "post").set("data" , data).send().then(function(resp){
             scope.loading = false;
             if(resp.data instanceof Object){

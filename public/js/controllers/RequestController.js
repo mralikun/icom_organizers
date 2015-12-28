@@ -26,13 +26,13 @@ app.controller("RequestController" , ["$scope" , "Patcher" , "$rootScope" , "$lo
         scope.loading = true;
         request.set("url" , "/getOrganizerrequest/" + params.file + ".json").set("verb" , "get").send().then(function(resp){
             
-            resp.data.from = new Date(resp.data.from);
+            resp.data.from = $.datepicker.formatDate("dd-mm-yy" , new Date(resp.data.from));
             resp.data.gathering_time = new Date(resp.data.gathering_time);
-            resp.data.meeting_date = new Date(resp.data.meeting_date);
+            resp.data.meeting_date = $.datepicker.formatDate("dd-mm-yy" , new Date(resp.data.meeting_date));
             resp.data.meeting_ending_time = new Date(resp.data.meeting_ending_time);
             resp.data.meeting_starting_time = new Date(resp.data.meeting_starting_time);
             resp.data.start_time = new Date(resp.data.start_time);
-            resp.data.to = new Date(resp.data.to);
+            resp.data.to = $.datepicker.formatDate("dd-mm-yy" , new Date(resp.data.to));
             
             request.set("url" , "/conferences/" + resp.data.conference_id).set("verb" , "get").send().then(function(resp){
                 scope.confs = resp.data;
@@ -54,37 +54,47 @@ app.controller("RequestController" , ["$scope" , "Patcher" , "$rootScope" , "$lo
         var choosen_conf = $(scope.confs).filter(function(ind , el){
             return el.id == scope.request.conference_id;
         })[0];
-        scope.request.from = new Date(choosen_conf.from);
-        scope.request.to = new Date(choosen_conf.to);
+        scope.request.from = $.datepicker.formatDate("dd-mm-yy" , new Date(choosen_conf.from));
+        scope.request.to = $.datepicker.formatDate("dd-mm-yy" , new Date(choosen_conf.to));
         scope.request.venue = choosen_conf.venue;
     }
     
     scope.getConferences = function(){
-        if(scope.start instanceof Date && scope.end instanceof Date){
-            if(scope.end < scope.start){
+        var start = (scope.start) ? $.datepicker.parseDate("dd-mm-yy" , scope.start) : "";
+        var end = (scope.end) ? $.datepicker.parseDate("dd-mm-yy" , scope.end) : "";
+        if(start instanceof Date && end instanceof Date){
+            if(end < start){
                 scope.wrong_dates = true;
                 return false;
             }else{
                 scope.wrong_dates = false;
-                var params = "from="+date_formater(scope.start)+"&to="+date_formater(scope.end);
+                var params = "from="+date_formater(start)+"&to="+date_formater(end);
                 request.set("url" , "/conferences?"+params).set("verb" , "get").send().then(function(resp){
+                    
                     scope.confs = resp.data;
                 } , function(err){
                 });
             }
+        }else {
+            console.log("NO");
         }
     }
     
     scope.sendRequest = function(){
-        scope.loading = true;
         var data = angular.copy(scope.request);
+        scope.loading = true;
         if("from" in data){
-            data.from = date_formater(data.from);
-        }else if("to" in data){
-            data.to = date_formater(data.to);
-        }else if("meeting_date" in data){
-            data.meeting_date = date_formater(data.meeting_date);
+            data.from = date_formater($.datepicker.parseDate("dd-mm-yy" , data.from));
         }
+        
+        if("to" in data){
+            data.to = date_formater($.datepicker.parseDate("dd-mm-yy" , data.to));
+        }
+        
+        if("meeting_date" in data){
+            data.meeting_date = date_formater($.datepicker.parseDate("dd-mm-yy" , data.meeting_date));
+        }
+        
         request.set("url" , "/organizerrequest").set("verb" , "post").set("data" , data).send().then(function(resp){
             scope.loading = false;
             scope.msg = "Request has been sent!";
@@ -93,6 +103,7 @@ app.controller("RequestController" , ["$scope" , "Patcher" , "$rootScope" , "$lo
             scope.msg = "Request couldn't be sent due to connection error!";
             $("#notify").modal("show");
         });
+        
     }
     
     scope.requestChanged = function(){
@@ -100,6 +111,12 @@ app.controller("RequestController" , ["$scope" , "Patcher" , "$rootScope" , "$lo
         scope.request = {
             type: t
         };
+    }
+    
+    scope.initPicker = function(ev){
+        $(ev.target).datepicker({
+            dateFormat: "dd-mm-yy"
+        });
     }
     
 }]);
