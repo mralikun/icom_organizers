@@ -107,7 +107,7 @@ class ExcelController extends Controller
     }
 
     public function organizer(){
-        $email = "kayli.mcglynn@okuneva.com" ;
+        $email = Input::get('organizer_email') ;
 
         /* return organizer */
 

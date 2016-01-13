@@ -89,6 +89,10 @@ Route::post('/update_grade','GradeController@update_grade');
 Route::get('/checkin','AttendanceController@check_in');
 Route::get('/checkout','AttendanceController@check_out');
 Route::get('/status','AttendanceController@status');
+Route::get('/conference_sheet','ExcelController@conference');
+Route::get('/organizer_sheet','ExcelController@organizer');
+Route::get('/all_organizer_sheet','ExcelController@all_organizer');
+
 
 
 
