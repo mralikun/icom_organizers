@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/fa/css/font-awesome.min.css">
     <link rel="stylesheet" href="/css/icom.css">
+    <link rel="stylesheet" href="/js/jqueryUI/jquery-ui.min.css">
   </head>
 
   <body ng-app="organizers">
@@ -73,6 +74,7 @@
     <script src="/js/controllers/UserController.js"></script>
     <script src="/js/controllers/TaskController.js"></script>
     <script src="/js/controllers/RequestController.js"></script>
+    <script src="/js/jqueryUI/jquery-ui.min.js"></script>
     <script>
       app.constant("_TOKEN" , "{{csrf_token()}}");
       </script>

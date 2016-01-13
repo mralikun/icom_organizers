@@ -35,22 +35,23 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
     var choosen_fields = [];
     // Grading an Organizer
     scope.grading_conferences = function(){
-        if(scope.start instanceof Date && scope.end instanceof Date){
-            if(scope.end < scope.start){
+        var start = (scope.start) ? $.datepicker.parseDate("dd-mm-yy" , scope.start) : "";
+        var end = (scope.end) ? $.datepicker.parseDate("dd-mm-yy" , scope.end) : "";
+        if(start instanceof Date && end instanceof Date){
+            if(end < start){
                 scope.wrong_dates = true;
                 return false;
             }else{
                 scope.wrong_dates = false;
-                scope.view_data.processing_request = true;
-                var params = "from="+date_formater(scope.start)+"&to="+date_formater(scope.end);
+                var params = "from="+date_formater(start)+"&to="+date_formater(end);
                 request.set("url" , "/conferences?"+params).set("verb" , "get").send().then(function(resp){
+                    
                     scope.confs = resp.data;
-                    scope.view_data.processing_request = false;
                 } , function(err){
-                    alert("Something went wrong while retrieving conferences data, Please refresh and try again!");
-                    scope.view_data.processing_request = false;
                 });
             }
+        }else {
+            console.log("NO");
         }
     }
     
@@ -252,10 +253,8 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
     
     scope.checkStatus = function(){
         request.set("verb" , "get").set("url" , "/status?organizer_id="+scope.personToCheck).send().then(function(resp){
-            console.log(resp.data);
             scope.att_org_status.checked_in = resp.data.checkin;
             scope.att_org_status.checked_out = resp.data.checkout;
-            console.log(scope.att_org_status);
         } , function(){
             scope.view_data.success_msg = "Connection Error! , Couldn't check the organizer's status";
             $("#notify").modal("show");
@@ -396,10 +395,14 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
         scope.newUser.working_fields = choosen_fields;
         // we are sending a request depending on the mode! ..... Hold On!
         scope.view_data.processing_request = true;
+        if("dob" in scope.newUser){
+            scope.newUser.dob = date_formater($.datepicker.parseDate("dd-mm-yy" , scope.newUser.dob));
+        }
         if(edit_mode){
             scope.editUser();
             return false;
         }
+
         request.set("url" , "/organizers").set("verb" , "post").set("data" , scope.newUser).send().then(function(resp){
             scope.view_data.processing_request = false;
             var response = resp.data;
@@ -451,6 +454,12 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
         } , function(err){
             scope.view_data.success_msg = "Couldn't delete the account, Something has went wrong with the connection!";
             $("#notify").modal("show");
+        });
+    }
+    
+    scope.initPicker = function(ev){
+        $(ev.target).datepicker({
+            dateFormat: "dd-mm-yy"
         });
     }
             

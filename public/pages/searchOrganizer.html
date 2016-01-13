@@ -24,15 +24,19 @@
             <option ng-repeat="org in view_data.orgs" value="{{org.name}} <{{org.email}}>">
             
         </datalist>
-        <div class="form-group">
-            <label>Search for organizer</label>
-            <input type="text" list="organizers" class="form-control" ng-model="which" placeholder="Organizer Name">
-        </div>
-        <div class="form-group text-center">
-            <a href="#/edit_organizer/{{which.split('').slice(which.split('').lastIndexOf('<')+1 , which.split('').lastIndexOf('>')).join('')}}" class="btn btn-icom">Edit</a>
-            <button type="button" class="btn btn-danger" id="delete" data-uni="{{which.split('').slice(which.split('').lastIndexOf('<')+1 , which.split('').lastIndexOf('>')).join('')}}" ng-click="delete($event)">Delete</button>
+        <div class="row">
+            <div class="form-group col-xs-12 col-sm-12 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2">
+                <label>Search for organizer</label>
+                <input type="text" list="organizers" class="form-control" ng-model="which" placeholder="Organizer Name">
+            </div>
         </div>
         
+        <div class="row">
+            <div class="form-group text-center">
+                <a href="#/edit_organizer/{{which.split('').slice(which.split('').lastIndexOf('<')+1 , which.split('').lastIndexOf('>')).join('')}}" class="btn btn-icom">Edit</a>
+                <button type="button" class="btn btn-danger" id="delete" data-uni="{{which.split('').slice(which.split('').lastIndexOf('<')+1 , which.split('').lastIndexOf('>')).join('')}}" ng-click="delete($event)">Delete</button>
+            </div>
+        </div>
     </div>
     
 </div>
