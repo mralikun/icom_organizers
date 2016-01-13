@@ -16,8 +16,8 @@ class ExcelController extends Controller
     public function conference(){
 
         /* return conferance */
-
-        $conference = Conference::find(2);
+        $id=Input::get('conference_id');
+        $conference = Conference::find($id);
         $conference_id =  $conference->id;
 
         /*return task */
