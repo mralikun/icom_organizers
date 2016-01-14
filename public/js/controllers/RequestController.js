@@ -6,6 +6,10 @@ app.controller("RequestController" , ["$scope" , "Patcher" , "$rootScope" , "$lo
         return year + "-" + ((month < 10) ? "0"+month : month) + "-" + ((day < 10) ? "0"+day : day);
     }
     
+    scope.av_total = 0;
+    scope.hall_total = 0;
+    scope.registration_total = 0;
+    
     scope.loading = false;
     scope.msg = undefined;
     
@@ -117,6 +121,20 @@ app.controller("RequestController" , ["$scope" , "Patcher" , "$rootScope" , "$lo
         $(ev.target).datepicker({
             dateFormat: "dd-mm-yy"
         });
+    }
+    
+    scope.update_total = function(){
+        scope.request.total_organizers_number = scope.av_total + scope.hall_total + scope.registration_total;
+    }
+    
+    scope.update_av_total = function(){
+        scope.av_total = scope.request.av_center_organizers + scope.request.av_podium_organizer
+    }
+    scope.update_hall_total = function(){
+        scope.hall_total = scope.request.barcode_organizers + scope.request.hall_organizers
+    }
+    scope.update_registration_total = function(){
+        scope.registration_total = scope.request.registration_organizers_number + scope.request.chairpersons_speaker_registration_organizers_number
     }
     
 }]);

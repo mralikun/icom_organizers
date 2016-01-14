@@ -24,6 +24,11 @@ header {
     max-width: 351px;
 }
 
+.navbar {
+    background-color: transparent;
+    border: none;
+}
+
 .menu-button {
     position: absolute;
     top: 0;
@@ -136,7 +141,7 @@ sup {
 }
 
 div[ng-view]{
-    padding-top: 5%;
+    padding: 2.5% 0;
 }
 
 .logo-holder {

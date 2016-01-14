@@ -72,6 +72,11 @@ app.config(["$routeProvider" , function(route){
     .when("/edit_user/:user_ID" ,{
         templateUrl: "/pages/edit_user.html",
         controller: "UserController"
+    })
+    
+    .when("/exports" , {
+        templateUrl: "/pages/exports.html",
+        controller: "ExportController"
     });
     
 }]);

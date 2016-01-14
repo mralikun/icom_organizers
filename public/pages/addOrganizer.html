@@ -25,7 +25,7 @@
             
             <div class="from-group"><label class="control-label">Name <sup>*</sup></label><input type="text" class="form-control" ng-model="newUser.name" required></div>
             <div class="from-group"><label class="control-label">E-mail <sup>*</sup></label><input type="email" class="form-control" ng-model="newUser.email" required></div>
-            <div class="from-group"><label class="control-label">Date Of Birth</label><input type="text" class="form-control" ng-model="newUser.dob" ng-focus="initPicker($event)"></div>
+            <div class="from-group"><label class="control-label">Date Of Birth</label><input type="text" class="form-control for-pick" ng-model="newUser.dob"></div>
             <div class="from-group"><label class="control-label">Address</label><input type="text" class="form-control" ng-model="newUser.address"></div>
             <div class="from-group"><label class="control-label">Cell Phone <sup>*</sup></label><input type="tel" class="form-control" ng-model="newUser.cell_phone" required></div>
             <div class="from-group"><label class="control-label">College</label><input type="text" class="form-control" ng-model="newUser.college"></div>
@@ -62,5 +62,11 @@
         </form>
         
     </div>
-    
+    <script>
+        $(document).ready(function(){
+            $(".for-pick").datepicker({
+                dateFormat: "dd-mm-yy"
+            });
+        });
+    </script>
 </div>

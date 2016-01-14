@@ -8,7 +8,7 @@
     <title>ICOM Organizers</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/fa/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/icom.css">
   </head>
 
   <body>

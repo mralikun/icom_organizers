@@ -1,0 +1,83 @@
+<div class="modal fade" id="notify">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Notification</h4>
+            </div>
+            <div class="modal-body text-center">
+                <span><strong>{{view_data.success_msg}}</strong></span>
+            </div>
+            <div class="modal-footer text-right">
+                <button class="btn btn-icom" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="text-center">
+    <button class="btn btn-icom" ng-click="show_conference_panel()">Conference Sheet</button>
+    <button class="btn btn-icom" ng-click="show_organizers_panel()">Organizers Sheets</button>
+</div>
+
+<div ng-show="view_data.export_type == 1">
+    <div class="row">
+        <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-6 col-lg-offset-3 text-center">
+           <h2 class="text-center">Filter Conferences</h2>
+           <p class="text-center">Choose a time span to show all conferences between that time.</p>
+            <div>
+               <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                    <label>From</label>
+                    <input type="text" ng-model="start" class="form-control for-pick" ng-change="grading_conferences()">
+                </div>
+                <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                    <label>To</label>
+                    <input type="text" ng-model="end" class="form-control for-pick" ng-change="grading_conferences()">
+                </div>
+                <div ng-show="wrong_dates" class="text-danger">
+                    The ending date can't be before the starting date.
+                </div>
+            </div>
+
+            <div class="form-group col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-6 col-lg-offset-3">
+                <label>Conference</label><img src="/icons/loading.gif" ng-show="view_data.processing_request" alt="">
+                <select class="form-control" ng-model="confID" ng-disabled="!confs.length || confs.length == 0">
+                    <option ng-repeat="conf in confs" value="{{conf.id}}">{{conf.name}}</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row text-center">
+        <button class="btn btn-icom" ng-click="export_conference(confID)" ng-disabled="!confID">Export Conference Sheet</button>
+    </div>
+</div>
+
+
+<div ng-show="view_data.export_type == 2">
+    <div class="row">
+        <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-6 col-lg-offset-3">
+          <h3 class="text-center">Please choose an organizer to export his / her excel sheet.</h3>
+          <div class="col-xs-12 col-sm-6 col-sm-offset-2 col-md-6 col-md-offset-2 col-lg-6 col-lg-offset-2 text-center">
+            <select class="form-control" ng-model="export_organizer" style="margin-bottom: 5px;">
+                <option ng-repeat="organizer in view_data.organizers" value="{{organizer.email}}">{{organizer.name}}</option>
+            </select>
+          </div>
+          <div class="text-center">
+              <button class="btn btn-icom" ng-click="">Export Sheet</button>
+          </div>
+        </div>
+    </div>
+    <div class="row text-center">
+       <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-6 col-lg-offset-3">
+           <button class="btn btn-icom" style="margin-top: 5px;">Export All Organizers Sheet</button>
+       </div>
+    </div>
+</div>
+<script>
+    jQuery(function(){
+        $(".for-pick").datepicker({
+            dateFormat: "dd-mm-yy",
+            showOn: "focus"
+        });
+    });
+</script>

@@ -4,7 +4,7 @@
 <div class="row">
 <div class="tail">
     
-    <h1 class="title">Login</h1>
+    <h1 class="title text-center">Login</h1>
     
 </div>
 </div>

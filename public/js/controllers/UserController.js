@@ -459,7 +459,8 @@ app.controller("UserController" , ["$scope" , "$rootScope" , "$timeout" , "$loca
     
     scope.initPicker = function(ev){
         $(ev.target).datepicker({
-            dateFormat: "dd-mm-yy"
+            dateFormat: "dd-mm-yy",
+            showOn: "focus"
         });
     }
             
