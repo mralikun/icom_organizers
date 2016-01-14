@@ -23,8 +23,10 @@ class ExcelController extends Controller
 
         // /*return task */
         // $task = Task::where('conference_id','=',$conference_id)->get()->first();
-        $task_id = Input::get('conference_id');
-        $task = Task::find($task_id)->get();
+         $task_id = Input::get('conference_id');
+         $task = Task::find($task_id);
+          $conference_id =  $task->conference_id;
+           $conference = Conference::find($conference_id);
 
         /* check if task confirmed or not */
 
@@ -34,7 +36,7 @@ class ExcelController extends Controller
             $organizers = $conference->organizers;
 
             /* return workingfield which organizer working in it */
-            $workingfields = WorkingFields::find($task->working_fields_id);
+             $workingfields = WorkingFields::find($task->working_fields_id);
 
             $organizer_array = array();
             foreach($organizers as $organizer){
