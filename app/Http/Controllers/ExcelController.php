@@ -17,13 +17,14 @@ class ExcelController extends Controller
     public function conference(){
 
         
-        $id=Input::get('conference_id');
-        $conference = Conference::find($id);
-        $conference_id =  $conference->id;
+        // $id=Input::get('conference_id');
+        // $conference = Conference::find($id);
+        // $conference_id =  $conference->id;
 
-        /*return task */
-        $task = Task::where('conference_id','=',$conference_id)->get()->first();
-        return $task_id = $task->id;
+        // /*return task */
+        // $task = Task::where('conference_id','=',$conference_id)->get()->first();
+        $task_id = Input::get('conference_id');
+        $task = Task::find($task_id)->get();
 
         /* check if task confirmed or not */
 
