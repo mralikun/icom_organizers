@@ -410,6 +410,11 @@ class TaskController extends Controller {
 		return Task::where('organizer_id','=',$organizer_id)->where('conference_id','=',$conference_id)->get();
 
 	}
+	/* return all tasks types is conference */
+	public function conference_tasks(){
+		return Task::where('type','=',"conference")->get();
+
+	}
 
 
 }

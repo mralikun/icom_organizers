@@ -73,6 +73,7 @@ Route::get('/task/mailresponse/{flag}/{token}', 'TaskController@check_email');
 Route::get('/tasks/{organizer_id}/{conference_id}', 'TaskController@organizer_tasks');
 Route::get('/upload', 'TaskController@uploaded');
 Route::post('apply/upload', 'TaskController@multiple_upload');
+Route::get('/conference_tasks','TaskController@conference_tasks');
 
 
 
