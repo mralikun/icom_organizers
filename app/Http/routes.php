@@ -56,6 +56,12 @@ Route::group(['middleware' => ['auth']], function()
 	//these routes are accessable by any user (operations , department , or the Admin)
 
 	Route::post('/organizerrequest', 'TaskController@organizer_request');
+	Route::get('/task/mailresponse/{flag}/{token}', 'TaskController@check_email');
+	Route::get('/tasks/{organizer_id}/{conference_id}', 'TaskController@organizer_tasks');
+	Route::get('/upload', 'TaskController@uploaded');
+	Route::post('apply/upload', 'TaskController@multiple_upload');
+	Route::get('/conference_tasks','TaskController@conference_tasks');
+
 
 	Route::resource('/conferences', 'ConferanceController');
 
@@ -68,31 +74,36 @@ Route::group(['middleware' => ['auth']], function()
 
 	Route::resource('/workingfields', 'WorkingFieldsController');
 
+	Route::get('/conferance/organizers/{conferance_id} ','OrganizerController@organizers');
+
+	Route::get('/check/grade/{organizer_id}/{task_id}','GradeController@grade_of_organizer');
+	Route::post('/organizer_grade ','GradeController@organizer_grade');
+	Route::post('/update_grade','GradeController@update_grade');
+
+	Route::get('/checkin','AttendanceController@check_in');
+	Route::get('/checkout','AttendanceController@check_out');
+	Route::get('/status','AttendanceController@status');
+
+	Route::get('/conference_sheet','ExcelController@conference');
+	Route::get('/organizer_sheet','ExcelController@organizer');
+	Route::get('/all_organizer_sheet','ExcelController@all_organizer');
+
 });
-Route::get('/task/mailresponse/{flag}/{token}', 'TaskController@check_email');
-Route::get('/tasks/{organizer_id}/{conference_id}', 'TaskController@organizer_tasks');
-Route::get('/upload', 'TaskController@uploaded');
-Route::post('apply/upload', 'TaskController@multiple_upload');
-Route::get('/conference_tasks','TaskController@conference_tasks');
+
+Route::get('/unseen_message_numbers','NotificationController@count_of_unseen_messages');
+Route::get('/unseen_messages','NotificationController@unseen_messages');
+Route::post('/update_unseen_message','NotificationController@update_msg_status'); 
 
 
 
-Route::get('/conferance/organizers/{conferance_id} ','OrganizerController@organizers');
 
 
 
-Route::get('/check/grade/{organizer_id}/{task_id}','GradeController@grade_of_organizer');
-Route::post('/organizer_grade ','GradeController@organizer_grade');
-Route::post('/update_grade','GradeController@update_grade');
 
 
 
-Route::get('/checkin','AttendanceController@check_in');
-Route::get('/checkout','AttendanceController@check_out');
-Route::get('/status','AttendanceController@status');
-Route::get('/conference_sheet','ExcelController@conference');
-Route::get('/organizer_sheet','ExcelController@organizer');
-Route::get('/all_organizer_sheet','ExcelController@all_organizer');
+
+
 
 
 

@@ -95,13 +95,13 @@ class NotificationController extends Controller {
 	public function unseen_messages(){
 
 		$messages = Notification::where('seen', '=', 0)->get();
-		return View::make('unseen_message',array('messages'=>$messages));
+		return $messages;
 	}
 
 	/* update the unseen message to seen when admin show it */
 
 	public function update_msg_status($id){
-		Notification::update_unseen_field($id);
+		return Notification::update_unseen_field($id);
 
 	}
 
